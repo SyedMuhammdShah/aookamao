@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aookamao/admin/components/custom_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,6 +35,9 @@ class ProductController extends GetxController {
   RxString gender = ''.obs;  // Gender field
   RxList<File> selectedImages = <File>[].obs; // To store multiple image files
   final Uuid uuid = Uuid();
+  RxBool is_product = false.obs;
+  RxBool is_loading = false.obs;
+
   // Pick multiple images using file picker
   Future<void> pickMultipleImages() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -42,6 +46,9 @@ class ProductController extends GetxController {
     );
 
     if (result != null) {
+      if(is_product.isTrue){
+      is_product.value = false;
+      }
       selectedImages.addAll(result.paths.map((path) => File(path!)).toList());
     }
   }
@@ -66,6 +73,7 @@ class ProductController extends GetxController {
 
   // Method to add product to Firestore
   Future<void> addProduct() async {
+    is_loading.value = true;
     try {
       // Get the current user
       User? user = _auth.currentUser;
@@ -99,11 +107,11 @@ class ProductController extends GetxController {
         'productId': productId,
         'createdAt': FieldValue.serverTimestamp(),
       });
-
-      Get.snackbar('Success', 'Product added successfully!');
+      is_loading.value = false;
+      showSuccessSnackbar('Product added successfully!');  // Show custom snackbar
       clearFields();  // Clear fields after successful submission
     } catch (e) {
-      Get.snackbar('Error', 'Failed to add product: $e');
+      showErrorSnackbar('Failed to add product: $e');  // Show custom snackbar
     }
   }
 
@@ -124,6 +132,7 @@ class ProductController extends GetxController {
     countryOfOriginController.clear();
     gender.value = '';
     selectedImages.clear();
+    is_product.value = false;
     update();  // Update UI
   }
 
@@ -143,6 +152,7 @@ class ProductController extends GetxController {
     stockQuantityController.dispose();
     seasonController.dispose();
     countryOfOriginController.dispose();
+
     super.onClose();
   }
 
