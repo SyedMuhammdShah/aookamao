@@ -6,7 +6,7 @@ import 'package:aookamao/app/data/helpers/product_filter.dart';
 
 class ProductModel {
   String id;
-  String image;
+  List<dynamic> imageUrls;
   String name;
   double oldPrice;
   double currentPrice;
@@ -19,7 +19,7 @@ class ProductModel {
   ProductFilter filter;
   ProductModel({
     required this.id,
-    required this.image,
+    required this.imageUrls,
     required this.name,
     required this.oldPrice,
     required this.currentPrice,
@@ -36,7 +36,11 @@ class ProductModel {
 List<ProductModel> dummyProductList = [
   ProductModel(
     id: '1',
-    image: AppAssets.kDummyProduct1,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'Lokman Sofa Premium',
     oldPrice: 599.99,
     currentPrice: 399.99,
@@ -50,7 +54,11 @@ List<ProductModel> dummyProductList = [
   ),
   ProductModel(
     id: '2',
-    image: AppAssets.kDummyProduct2,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'King Bed Leonard',
     oldPrice: 249.99,
     currentPrice: 199.99,
@@ -64,7 +72,11 @@ List<ProductModel> dummyProductList = [
   ),
   ProductModel(
     id: '3',
-    image: AppAssets.kDummyProduct3,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'Lorem Ipsum Chair',
     oldPrice: 199.99,
     currentPrice: 149.99,
@@ -78,7 +90,11 @@ List<ProductModel> dummyProductList = [
   ),
   ProductModel(
     id: '4',
-    image: AppAssets.kDummyProduct4,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'Classic Desk Lamp',
     oldPrice: 499.99,
     currentPrice: 399.99,
@@ -92,7 +108,11 @@ List<ProductModel> dummyProductList = [
   ),
   ProductModel(
     id: '5',
-    image: AppAssets.kDummyProduct5,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'Vintage Coffee Table',
     oldPrice: 799.99,
     currentPrice: 599.99,
@@ -106,7 +126,11 @@ List<ProductModel> dummyProductList = [
   ),
   ProductModel(
     id: '6',
-    image: AppAssets.kDummyProduct6,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'Leather Sectional Sofa',
     oldPrice: 149.99,
     currentPrice: 99.99,
@@ -120,7 +144,11 @@ List<ProductModel> dummyProductList = [
   ),
   ProductModel(
     id: '7',
-    image: AppAssets.kDummyProduct7,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'Modern Dining Table',
     oldPrice: 39.99,
     currentPrice: 29.99,
@@ -134,7 +162,11 @@ List<ProductModel> dummyProductList = [
   ),
   ProductModel(
     id: '8',
-    image: AppAssets.kDummyProduct8,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'Cozy Armchair',
     oldPrice: 199.99,
     currentPrice: 149.99,
@@ -148,7 +180,11 @@ List<ProductModel> dummyProductList = [
   ),
   ProductModel(
     id: '9',
-    image: AppAssets.kDummyProduct9,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'Modern Premium Sofa',
     oldPrice: 149.99,
     currentPrice: 119.99,
@@ -162,7 +198,11 @@ List<ProductModel> dummyProductList = [
   ),
   ProductModel(
     id: '10',
-    image: AppAssets.kDummyProduct10,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'Rustic Bookshelf',
     oldPrice: 99.99,
     currentPrice: 79.99,
@@ -176,7 +216,11 @@ List<ProductModel> dummyProductList = [
   ),
   ProductModel(
     id: '11',
-    image: AppAssets.kDummyProduct11,
+    imageUrls: [
+      AppAssets.kDummyProduct1,
+      AppAssets.kDummyProduct2,
+      AppAssets.kDummyProduct3,
+    ],
     name: 'Accent Wooden Chairs',
     oldPrice: 29.99,
     currentPrice: 19.99,

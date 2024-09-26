@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:aookamao/admin/components/custom_snackbar.dart';
+import 'package:aookamao/admin/lists/product_detail_screen.dart';
+import 'package:aookamao/admin/lists/products_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,7 +39,9 @@ class ProductController extends GetxController {
   final Uuid uuid = Uuid();
   RxBool is_product = false.obs;
   RxBool is_loading = false.obs;
-
+  //final selected_product = <String,dynamic>{}.obs;
+  RxMap<String,dynamic> selected_product = <String,dynamic>{}.obs;
+  final selected_product_id = ''.obs;
   // Pick multiple images using file picker
   Future<void> pickMultipleImages() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -69,6 +73,85 @@ class ProductController extends GetxController {
     }
 
     return imageUrls;
+  }
+
+  Future<void> updateProduct()async{
+    is_loading.value = true;
+    try {
+      // Get the current user
+      User? user = _auth.currentUser;
+      if (user == null) {
+        Get.snackbar('Error', 'User not logged in');
+        return;
+      }
+
+      if(selectedImages.isNotEmpty){
+        // Upload images to Firebase Storage
+        List<String> imageUrls = await _uploadImagesToStorage();
+        // Add product data to Firestore
+        await _fireStore.collection('products').doc(selected_product_id.value).update({
+          'imageUrls': FieldValue.arrayUnion(imageUrls),  // Store the image URLs
+        });
+        selected_product['imageUrls'].addAll(imageUrls);  // Add new images to the existing list
+      }
+
+      // Update product data in Firestore
+      await _fireStore.collection('products').doc(selected_product_id.value).update({
+        'name': nameController.text,
+        'price': double.tryParse(priceController.text) ?? 0,
+        'fabricType': fabricTypeController.text,
+        'fabricLength': double.tryParse(fabricLengthController.text) ?? 0,
+        'fabricWidth': double.tryParse(fabricWidthController.text) ?? 0,
+        'color': colorController.text,
+        'design': designController.text,
+        'gender': gender.value,
+        'weight': weightController.text,
+        'materialComposition': materialCompositionController.text,
+        'washCare': washCareController.text,
+        'stockQuantity': int.tryParse(stockQuantityController.text) ?? 0,
+        'season': seasonController.text,
+        'countryOfOrigin': countryOfOriginController.text,
+        'createdBy': user.uid,
+        'productId': selected_product_id.value,
+
+  });
+      // Update the selected product data
+      selected_product['name'] = nameController.text;
+      selected_product['price'] = double.tryParse(priceController.text) ?? 0;
+      selected_product['fabricType'] = fabricTypeController.text;
+      selected_product['fabricLength'] = double.tryParse(fabricLengthController.text) ?? 0;
+      selected_product['fabricWidth'] = double.tryParse(fabricWidthController.text) ?? 0;
+      selected_product['color'] = colorController.text;
+      selected_product['design'] = designController.text;
+      selected_product['gender']=gender.value;
+      selected_product['weight']=weightController.text;
+      selected_product['materialComposition']=materialCompositionController.text;
+      selected_product['washCare']=washCareController.text;
+      selected_product['stockQuantity']=int.tryParse(stockQuantityController.text) ?? 0;
+      selected_product['season']=seasonController.text;
+      selected_product['countryOfOrigin']=countryOfOriginController.text;
+      is_loading.value = false;
+      showSuccessSnackbar('Product updated successfully!');  // Show custom snackbar
+      Get.off(ProductDetailScreen());
+      clearFields();// Clear fields after successful submission
+    } catch (e) {
+      print(e);
+      showErrorSnackbar('Failed to update product: $e');  // Show custom snackbar
+    }
+  }
+
+  Future<void> deleteProduct() async {
+    is_loading.value = true;
+    try {
+      // Delete product from Firestore
+      await _fireStore.collection('products').doc(selected_product_id.value).delete();
+      is_loading.value = false;
+      showSuccessSnackbar('Product deleted successfully!');// Show custom snackbar
+      Get.off(ProductsList());
+    } catch (e) {
+      print(e);
+      showErrorSnackbar('Failed to delete product: $e');  // Show custom snackbar
+    }
   }
 
   // Method to add product to Firestore
@@ -114,7 +197,18 @@ class ProductController extends GetxController {
       showErrorSnackbar('Failed to add product: $e');  // Show custom snackbar
     }
   }
-
+  Future<void> removeImagefromStorage(String imageUrl,int index) async {
+    try {
+      await _storage.refFromURL(imageUrl).delete();
+      await _fireStore.collection('products').doc(selected_product_id.value).update({
+        'imageUrls': FieldValue.arrayRemove([imageUrl])
+      });
+      selected_product['imageUrls'].remove(imageUrl);
+      showSuccessSnackbar('Image deleted successfully!');
+    } catch (e) {
+      showErrorSnackbar('Failed to delete image: $e');
+    }
+  }
   // Clear form fields
   void clearFields() {
     nameController.clear();

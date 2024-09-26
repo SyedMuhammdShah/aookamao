@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -27,36 +28,60 @@ class ProductCard extends StatelessWidget {
               padding: EdgeInsets.all(12.h),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10.r),
-                image: DecorationImage(
-                  image: AssetImage(product.image),
-                  fit: BoxFit.cover,
-                ),
               ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              child: Stack(
                 children: [
-                  Transform.rotate(
-                    angle: -0.2,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10.w,
-                        vertical: 5.h,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColors.kPrimary,
-                        borderRadius: BorderRadius.circular(20.r),
-                      ),
-                      child: Text(
-                        product.offPercentage,
-                        style: AppTypography.kSemiBold10,
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      height: 150.h,
+                      autoPlay: true,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: true,
+                      viewportFraction: 1.0,
+                      onPageChanged: (index, reason) {
+                        // Handle image change if needed
+                      },
+                    ),
+                    items: product.imageUrls.map((imageUrl) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(10.r),
+                        child: Image.network(
+                          imageUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  Positioned(
+                    top: 8.h,
+                    left: 8.w,
+                    child: Transform.rotate(
+                      angle: -0.2,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10.w,
+                          vertical: 5.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.kPrimary,
+                          borderRadius: BorderRadius.circular(20.r),
+                        ),
+                        child: Text(
+                          product.offPercentage,
+                          style: AppTypography.kSemiBold10,
+                        ),
                       ),
                     ),
                   ),
-                  const Spacer(),
-                  SizedBox(
-                    height: 20.h,
-                    child: CustomLikeButton(
-                      product: product,
+                  Positioned(
+                    top: 8.h,
+                    right: 8.w,
+                    child: SizedBox(
+                      height: 20.h,
+                      child: CustomLikeButton(
+                        product: product,
+                      ),
                     ),
                   ),
                 ],

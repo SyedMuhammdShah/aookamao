@@ -162,10 +162,10 @@ class ProductsList extends StatelessWidget {
               return GestureDetector(
                 onTap: () {
                   // Navigate to the product detail screen with the selected product
-                  Get.to(() => ProductDetailScreen(
-                    product: productData!,
-                    productId: product['productId'],
-                  ));
+                  productController.selected_product.value = productData!;
+                  productController.selected_product_id.value = productId;
+                  print(productController.selected_product);
+                  Get.to(() => ProductDetailScreen());
                 },
                 child: Card(
                   shape: RoundedRectangleBorder(

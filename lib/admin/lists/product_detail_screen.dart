@@ -1,135 +1,30 @@
+import 'package:aookamao/admin/forms/edit_product.dart';
 import 'package:aookamao/admin/lists/Product_edit_popup.dart';
 import 'package:aookamao/app/data/constants/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-/*
-class ProductDetailScreen extends StatelessWidget {
-  final String productId;
-  final Map<String, dynamic> product;
+import '../controller/product_controller.dart';
 
-  ProductDetailScreen({ required this.product, required this.productId});
+class ProductDetailScreen extends StatefulWidget {
 
-  // Method to update product data in Firestore
-  Future<void> updateProduct(Map<String, dynamic> updatedData) async {
-    try {
-      await FirebaseFirestore.instance.collection('products').doc(productId).update(updatedData);
-      Get.snackbar('Success', 'Product updated successfully!');
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to update product: $e');
-    }
-  }
+  ProductDetailScreen();
 
   @override
-  Widget build(BuildContext context) {
-    // Extract product images safely
-    List<String> imageUrls = product['imageUrls'] is List ? List<String>.from(product['imageUrls']) : [];
-
-    return Scaffold(
-      appBar: AppBar(
-            backgroundColor: AppColors.kPrimary,
-        title: Text(product['name'] ?? 'Product Details'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              // Show the popup dialog with editable fields
-              Get.defaultDialog(
-                title: 'Edit Product',
-                content: ProductEditPopup(product: product, productId: productId),
-              );
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Display product images
-            Text('Images:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            imageUrls.isNotEmpty
-                ? GridView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8.0,
-                      mainAxisSpacing: 8.0,
-                    ),
-                    itemCount: imageUrls.length,
-                    itemBuilder: (context, index) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: Image.network(
-                          imageUrls[index],
-                          fit: BoxFit.cover,
-                        ),
-                      );
-                    },
-                  )
-                : Text('No images available', style: TextStyle(color: Colors.grey)),
-
-            SizedBox(height: 20),
-
-            // Display product details
-            Text('Details:', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 10),
-            Table(
-              children: [
-                TableRow(children: [Text('Name'), Text(product['name'] ?? 'Unknown')]),
-                TableRow(children: [Text('Price'), Text('\$${product['price']?.toStringAsFixed(2) ?? 'Unknown'}')]),
-                TableRow(children: [Text('Fabric Type'), Text(product['fabricType'] ?? 'Unknown')]),
-                TableRow(children: [Text('Fabric Length'), Text('${product['fabricLength'] ?? 'Unknown'}')]),
-                TableRow(children: [Text('Fabric Width'), Text('${product['fabricWidth'] ?? 'Unknown'}')]),
-                TableRow(children: [Text('Color'), Text(product['color'] ?? 'Unknown')]),
-                TableRow(children: [Text('Design'), Text(product['design'] ?? 'Unknown')]),
-                TableRow(children: [Text('Weight'), Text(product['weight'] ?? 'Unknown')]),
-                TableRow(children: [Text('Material Composition'), Text(product['materialComposition'] ?? 'Unknown')]),
-                TableRow(children: [Text('Wash Care'), Text(product['washCare'] ?? 'Unknown')]),
-                TableRow(children: [Text('Stock Quantity'), Text('${product['stockQuantity'] ?? 'Unknown'}')]),
-                TableRow(children: [Text('Season'), Text(product['season'] ?? 'Unknown')]),
-                TableRow(children: [Text('Country of Origin'), Text(product['countryOfOrigin'] ?? 'Unknown')]),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  State<ProductDetailScreen> createState() => _ProductDetailScreenState();
 }
-*/
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:fl_chart/fl_chart.dart';  // For charts
-import 'package:aookamao/app/data/constants/app_colors.dart';
-import 'package:aookamao/admin/lists/Product_edit_popup.dart';
 
-class ProductDetailScreen extends StatelessWidget {
-  final String productId;
-  final Map<String, dynamic> product;
+class _ProductDetailScreenState extends State<ProductDetailScreen> {
+  ProductController productController = Get.find<ProductController>();
 
-  ProductDetailScreen({required this.product, required this.productId});
+   Map<String, dynamic> product = {};
+
+   String productId = '';
 
   // Method to update product data in Firestore
-  Future<void> updateProduct(Map<String, dynamic> updatedData) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('products')
-          .doc(productId)
-          .update(updatedData);
-      Get.snackbar('Success', 'Product updated successfully!');
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to update product: $e');
-    }
-  }
-
-  // Placeholder sales data for demonstration purposes
   final List<Map<String, dynamic>> salesData = [
     {'month': 'Jan', 'sales': 120},
     {'month': 'Feb', 'sales': 180},
@@ -146,27 +41,21 @@ class ProductDetailScreen extends StatelessWidget {
   }
 
   @override
+  void initState() {
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Extract product images safely
-    List<String> imageUrls =
-    product['imageUrls'] is List ? List<String>.from(product['imageUrls']) : [];
-
+    product=productController.selected_product.value;
+    productId=productController.selected_product_id.value;
+    List<String> imageUrls = product['imageUrls'] is List ? List<String>.from(product['imageUrls']) : [];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.kPrimary,
         title: Text(product['name'] ?? 'Product Details'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.edit),
-            onPressed: () {
-              // Show the popup dialog with editable fields
-              Get.defaultDialog(
-                title: 'Edit Product',
-                content: ProductEditPopup(product: product, productId: productId),
-              );
-            },
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -222,31 +111,11 @@ class ProductDetailScreen extends StatelessWidget {
             Text('Images', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
             imageUrls.isNotEmpty
-               /* ? GridView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 8.0,
-                mainAxisSpacing: 8.0,
-                childAspectRatio: 1.5, // Adjust aspect ratio (width:height
-              ),
-              itemCount: imageUrls.length,
-              itemBuilder: (context, index) {
-                return ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    imageUrls[index],
-                    fit: BoxFit.cover,
-                  ),
-                );
-              },
-            )*/? SizedBox(
+               ? SizedBox(
               height: 100,
               child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
-                physics: NeverScrollableScrollPhysics(),
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -301,7 +170,58 @@ class ProductDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-
+            SizedBox(height: 20),
+            // Section 3: Update Product Button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton.icon(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(AppColors.kSuccess),
+                  ),
+                  icon: Icon(Icons.edit, color: Colors.white),
+                  onPressed: () {
+                    /*productController.selected_product = product;
+                    productController.selected_product_id = productId;*/
+                    Get.to(EditProduct());
+                  },
+                  label: Text('Update Product',style:TextStyle(color: Colors.white),),
+                ),
+                ElevatedButton.icon(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(Colors.red),
+                  ),
+                  icon: Icon(Icons.delete,color: Colors.white),
+                  onPressed: () {
+                    // Show delete confirmation dialog
+                    Get.dialog(
+                      AlertDialog(
+                        title: Text('Delete Product'),
+                        content: Text('Are you sure you want to delete this product?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              // Close dialog
+                              Get.back();
+                            },
+                            child: Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                             productController.deleteProduct();
+                              // Close dialog
+                            },
+                            child: Text('Delete'),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                  label: Text('Delete Product',style:TextStyle(color: Colors.white),),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
           ],
         ),
       ),

@@ -38,7 +38,7 @@ class CartItemCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(AppSpacing.radiusTen),
                       image: DecorationImage(
-                        image: AssetImage(product.image),
+                        image: AssetImage(product.imageUrls[0]),
                         fit: BoxFit.cover,
                       ),
                     ),
