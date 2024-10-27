@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aookamao/admin/admin_dashboard.dart';
 import 'package:aookamao/admin/components/custom_snackbar.dart';
 import 'package:aookamao/admin/lists/product_detail_screen.dart';
 import 'package:aookamao/admin/lists/products_list.dart';
@@ -192,6 +193,7 @@ class ProductController extends GetxController {
       });
       is_loading.value = false;
       showSuccessSnackbar('Product added successfully!');  // Show custom snackbar
+            Get.to(AdminDashboard());
       clearFields();  // Clear fields after successful submission
     } catch (e) {
       showErrorSnackbar('Failed to add product: $e');  // Show custom snackbar
