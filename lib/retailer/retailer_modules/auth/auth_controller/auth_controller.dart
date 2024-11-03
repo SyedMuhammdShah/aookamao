@@ -19,7 +19,7 @@ class AuthController extends GetxController {
   final TextEditingController addressController = TextEditingController();
   RxBool isLoading = false.obs;
   Rx<UserModel?> currentUser = Rx<UserModel?>(null);
-
+  
   Future<void> registerUser() async {
     isLoading.value = true;
 
@@ -52,59 +52,58 @@ class AuthController extends GetxController {
     }
   }
 
-  // Function to login user and store data
-  Future<void> loginUser() async {
-    isLoading.value = true; // Show loading indicator
-    try {
-      // Attempt to sign in with email and password
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
+ // Function to login user and store data
+Future<void> loginUser() async {
+  isLoading.value = true; // Show loading indicator
+  try {
+    // Attempt to sign in with email and password
+    UserCredential userCredential = await auth.signInWithEmailAndPassword(
+      email: emailController.text.trim(),
+      password: passwordController.text.trim(),
+    );
+
+    // Get the logged-in user's ID
+    String userId = userCredential.user!.uid;
+
+    // Fetch user details from Firestore
+    DocumentSnapshot userDoc = await fireStore.collection('user_details').doc(userId).get();
+
+    if (userDoc.exists) {
+      // Retrieve role and user_name from Firestore
+      String role = userDoc['role'];
+      String userName = userDoc['user_name']; // Fetch user_name from Firestore
+      String address = userDoc['address']; // Fetch address from Firestore
+
+      print("User Role: $role");
+      print("User Name: $userName");
+
+      // Save user data in the currentUser variable
+      currentUser.value = UserModel(
+        uid: userId,
+        email: userCredential.user!.email!,
+        role: role,
+        user_name: userName, // Use the user_name from Firestore
+        address: address, // Use the address from Firestore
       );
 
-      // Get the logged-in user's ID
-      String userId = userCredential.user!.uid;
-
-      // Fetch user details from Firestore
-      DocumentSnapshot userDoc =
-          await fireStore.collection('user_details').doc(userId).get();
-
-      if (userDoc.exists) {
-        // Retrieve role and user_name from Firestore
-        String role = userDoc['role'];
-        String userName =
-            userDoc['user_name']; // Fetch user_name from Firestore
-        String address = userDoc['address']; // Fetch address from Firestore
-
-        print("User Role: $role");
-        print("User Name: $userName");
-
-        // Save user data in the currentUser variable
-        currentUser.value = UserModel(
-          uid: userId,
-          email: userCredential.user!.email!,
-          role: role,
-          user_name: userName, // Use the user_name from Firestore
-          address: address, // Use the address from Firestore
-        );
-
-        // Navigate based on role
-        if (role == 'admin') {
-          Get.snackbar('Success', 'Welcome Admin');
-          Get.offAll(() => AdminDashboard());
-        } else if (role == 'user') {
-          Get.snackbar('Success', 'Welcome User');
-          Get.to(() => const LandingPage());
-        } else {
-          Get.snackbar('Error', 'Invalid role');
-        }
+      // Navigate based on role
+      if (role == 'admin') {
+        Get.snackbar('Success', 'Welcome Admin');
+        Get.offAll(() => AdminDashboard());
+      } else if (role == 'user') {
+        Get.snackbar('Success', 'Welcome User');
+        Get.to(() => const LandingPage());
       } else {
-        Get.snackbar('Error', 'User data not found');
+        Get.snackbar('Error', 'Invalid role');
       }
-    } catch (e) {
-      Get.snackbar('Error', e.toString());
-    } finally {
-      isLoading.value = false; // Hide loading indicator
+    } else {
+      Get.snackbar('Error', 'User data not found');
     }
+  } catch (e) {
+    Get.snackbar('Error', e.toString());
+  } finally {
+    isLoading.value = false; // Hide loading indicator
   }
+}
+
 }

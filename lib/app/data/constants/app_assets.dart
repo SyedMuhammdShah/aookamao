@@ -1,4 +1,10 @@
 class AppAssets {
+  // retailer Icon
+  static String retailerIcon = 'assets/images/retailer_icon.png';
+ 
+  // user Icon
+  static String customerIcon = 'assets/images/customer_icon.png';
+
   // Images.
   static String kSplashBG = 'assets/images/splash-bg.png';
   static String kOnboardingFirst = 'assets/images/onboarding-first.png';

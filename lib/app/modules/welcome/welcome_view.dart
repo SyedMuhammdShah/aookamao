@@ -1,3 +1,4 @@
+import 'package:aookamao/selection_screen.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -51,7 +52,7 @@ class WelcomeView extends StatelessWidget {
               SizedBox(height: AppSpacing.thirtyVertical),
               PrimaryButton(
                 onTap: () {
-                  Get.to<Widget>(() => const SignInView());
+                  Get.to<Widget>(() => const SelectionScreen());
                 },
                 text: 'Get Started',
               ),
