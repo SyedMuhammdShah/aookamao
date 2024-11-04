@@ -24,6 +24,8 @@ class AppTypography {
       GoogleFonts.plusJakartaSans(fontSize: 16.sp, fontWeight: FontWeight.w400);
   static TextStyle kMedium14 =
       GoogleFonts.plusJakartaSans(fontSize: 14.sp, fontWeight: FontWeight.w400);
+  static TextStyle kMedium12 =
+      GoogleFonts.plusJakartaSans(fontSize: 12.sp, fontWeight: FontWeight.w400);
 
   // SemiBold.
 

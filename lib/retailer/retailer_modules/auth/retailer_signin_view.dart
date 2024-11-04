@@ -1,4 +1,4 @@
-import 'package:aookamao/app/modules/auth/auth/auth_controller.dart';
+import 'package:aookamao/retailer/retailer_modules/auth/auth_controller/auth_controller.dart';
 import 'package:aookamao/retailer/retailer_modules/auth/retailer_signup_view.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class _RetailerSignInViewState extends State<RetailerSignInView> {
   bool isRemember = false;
   @override
   Widget build(BuildContext context) {
-    final AuthController authController = Get.find<AuthController>();
+    final RetailerAuthController authController = Get.find<RetailerAuthController>();
 
     return Scaffold(
       appBar: const AuthAppBar(),

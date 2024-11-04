@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:aookamao/admin/admin_dashboard.dart';
 import 'package:aookamao/app/models/user_model.dart';
 import 'package:aookamao/app/modules/home/home_view.dart';
 import 'package:aookamao/app/modules/landingPage/landing_page.dart';
+import 'package:aookamao/retailer/models/retailer_model.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -9,6 +14,9 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../../retailer/screens/retailer_dashboard.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -16,9 +24,11 @@ class AuthController extends GetxController {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   RxBool isLoading = false.obs;
   Rx<UserModel?> currentUser = Rx<UserModel?>(null);
+
 
   Future<void> registerUser() async {
     isLoading.value = true;
@@ -107,4 +117,7 @@ class AuthController extends GetxController {
       isLoading.value = false; // Hide loading indicator
     }
   }
+
+
+
 }
