@@ -11,6 +11,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
+import '../../widgets/custom_snackbar.dart';
+
 class EditProduct extends StatefulWidget {
   @override
   State<EditProduct> createState() => _EditProductState();

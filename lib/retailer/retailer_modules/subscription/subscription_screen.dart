@@ -1,18 +1,26 @@
-import 'package:aookamao/admin/admin_dashboard.dart';
-import 'package:aookamao/app/data/constants/app_colors.dart';
-import 'package:aookamao/app/data/constants/app_typography.dart';
-import 'package:aookamao/app/modules/widgets/buttons/primary_button.dart';
+
+import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+
+import '../../../app/data/constants/app_colors.dart';
+import '../../../app/data/constants/app_typography.dart';
+import '../../../app/modules/widgets/buttons/primary_button.dart';
+import '../../../enums/subscription_status.dart';
+import '../../../widgets/custom_snackbar.dart';
+import '../../models/subscription_model.dart';
+import '../auth/auth_controller/auth_controller.dart';
 
 class SubscriptionScreen extends StatelessWidget {
   const SubscriptionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final authController = Get.find<RetailerAuthController>();
+    final subscriptionController = Get.find<SubscriptionController>();
     return Scaffold(
       backgroundColor: AppColors.kGrey20,
       body: SafeArea(
@@ -86,7 +94,13 @@ class SubscriptionScreen extends StatelessWidget {
               ],
             ),
             SizedBox(height: 30.h),
-            PrimaryButton(onTap: () {}, text: "Pay Now",width: 0.8.sw,),
+            PrimaryButton(
+              onTap: ()  {
+              SubscriptionModel subscriptiondetails = SubscriptionModel(uid: authController.retailerUser.uid, subscriptionStatus: SubscriptionStatus.pending,subscriptionDate: Timestamp.now());
+              subscriptionController.activateSubscription(subscriptiondetails: subscriptiondetails);
+
+             Get.back();
+            }, text: "Pay Now",width: 0.8.sw,),
           ],
         ),
       ),

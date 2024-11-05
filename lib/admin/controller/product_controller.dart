@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:aookamao/admin/admin_dashboard.dart';
-import 'package:aookamao/admin/components/custom_snackbar.dart';
 import 'package:aookamao/admin/lists/product_detail_screen.dart';
 import 'package:aookamao/admin/lists/products_list.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,6 +13,8 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../widgets/custom_snackbar.dart';
 
 class ProductController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;

@@ -1,9 +1,15 @@
 import 'dart:io';
 
 import 'package:aookamao/admin/admin_dashboard.dart';
+import 'package:aookamao/admin/components/custom_snackbar.dart';
 import 'package:aookamao/app/models/user_model.dart';
 import 'package:aookamao/app/modules/home/home_view.dart';
 import 'package:aookamao/app/modules/landingPage/landing_page.dart';
+import 'package:aookamao/enums/subscription_status.dart';
+import 'package:aookamao/enums/user_roles.dart';
+import 'package:aookamao/retailer/models/subscription_model.dart';
+import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
+import 'package:aookamao/widgets/custom_snackbar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,6 +27,7 @@ class RetailerAuthController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final GlobalKey<FormState> retailer_signup_formKey = GlobalKey<FormState>();
+  final SubscriptionController subscriptionController = Get.find<SubscriptionController>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -46,39 +53,28 @@ class RetailerAuthController extends GetxController {
       );
       await _uploadCnic(userCredential.user!.uid);
       // Save user details in Firestore
-      await fireStore
-          .collection('user_details')
-          .doc(userCredential.user!.uid)
-          .set({
-        'user_name': nameController.text,
-        'user_email': emailController.text,
-        'cnic_number': cnicController.text,
-        'cnic_front_image_url': cnicFrontUrl,
-        'cnic_back_image_url': cnicBackUrl,
-        'registered_at': Timestamp.now(),
-        'role': "retailer",
-      });
-
-      await fireStore
-          .collection('subscription')
-          .doc(userCredential.user!.uid)
-          .set({
-        'user_id': userCredential.user!.uid,
-        'subscription_status': 'none',
-      });
-      retailerUser = RetailerModel(
+     var data = RetailerModel(
         uid: userCredential.user!.uid,
         email: userCredential.user!.email!,
         name: nameController.text,
         cnic_number: cnicController.text,
         cnic_front_image_url: cnicFrontUrl,
         cnic_back_image_url: cnicBackUrl,
-        subscription_status: 'none',
+        role: UserRoles.retailer,
+       registered_at: Timestamp.now(),
       );
+      await fireStore
+          .collection('user_details')
+          .doc(userCredential.user!.uid)
+          .set(data.toMap());
+
+      var subscriptiondetails = SubscriptionModel(uid:data.uid, subscriptionStatus: SubscriptionStatus.none);
+      await subscriptionController.activateSubscription(subscriptiondetails:subscriptiondetails);
+      retailerUser = data;
       Get.offAll(() => RetailerDashboard());
-      Get.snackbar('Success', 'Registration Successful');
+      showSuccessSnackbar('You have successfully registered as a retailer');
     } catch (e) {
-      Get.snackbar('Error', e.toString());
+      showErrorSnackbar('Error ${e.toString()}');
       print("error in registerRetailer: $e");
     } finally {
       isLoading.value = false;
@@ -97,7 +93,7 @@ class RetailerAuthController extends GetxController {
       print("cnicBackUrl: $cnicBackUrl");
     }
     catch(e){
-      Get.snackbar('Error', e.toString());
+      showErrorSnackbar('Error ${e.toString()}');
       print("error in uploadCnic: $e");
     }
   }
@@ -136,7 +132,7 @@ class RetailerAuthController extends GetxController {
  // Function to login user and store data
 Future<void> loginUser() async {
   isLoading.value = true; // Show loading indicator
-  try {
+
     // Attempt to sign in with email and password
     UserCredential userCredential = await auth.signInWithEmailAndPassword(
       email: emailController.text.trim(),
@@ -146,35 +142,20 @@ Future<void> loginUser() async {
     String userId = userCredential.user!.uid;
 
     DocumentSnapshot userDoc = await fireStore.collection('user_details').doc(userId).get();
-    DocumentSnapshot subDoc = await fireStore.collection('subscription').doc(userId).get();
 
     if (userDoc.exists) {
-      String role = userDoc['role'];
-      String userName = userDoc['user_name'];
-      String userEmail = userDoc['user_email'];
-      String cnicNumber = userDoc['cnic_number'];
-      String cnicFrontUrl = userDoc['cnic_front_image_url'];
-      String cnicBackUrl = userDoc['cnic_back_image_url'];
-      String subscriptionStatus = subDoc['subscription_status'];
-
-      retailerUser = RetailerModel(
-        uid: userId,
-        email: userEmail,
-        name: userName,
-        cnic_number: cnicNumber,
-        cnic_front_image_url: cnicFrontUrl,
-        cnic_back_image_url: cnicBackUrl,
-        subscription_status: subscriptionStatus,
-      );
+      print("userDoc: ${userDoc.data()}");
+      retailerUser = RetailerModel.fromMap(userDoc.data() as Map<String, dynamic>);
+      print("retailer: ${retailerUser.name}");
+      retailerUser = retailerUser.copyWith(uid: userId);
+      print("retailer id: ${retailerUser.uid}");
+      await subscriptionController.getSubscriptionDetails(uid: userId);
       Get.offAll(() => RetailerDashboard());
+      showSuccessSnackbar('You have successfully logged in');
     } else {
-      Get.snackbar('Error', 'User data not found');
+      showErrorSnackbar('User not found');
     }
-  } catch (e) {
-    Get.snackbar('Error', e.toString());
-  } finally {
-    isLoading.value = false; // Hide loading indicator
-  }
+
 }
 
 }
