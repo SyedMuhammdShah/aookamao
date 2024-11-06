@@ -1,9 +1,12 @@
+import 'package:aookamao/services/firebase_notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/app/data/constants/constants.dart';
 import 'package:aookamao/app/modules/onboarding/onboarding_view.dart';
+
+import '../../../services/get_server_key.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -16,6 +19,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
+     FirebasePushNotificationService().getDeviceToken();
     Future.delayed(const Duration(seconds: 3), () {
       Get.offAll<Widget>(() => const OnboardingView());
     });

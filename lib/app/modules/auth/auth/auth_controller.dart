@@ -17,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../../retailer/screens/retailer_dashboard.dart';
+import '../../../../services/firebase_notification_service.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -53,7 +54,7 @@ class AuthController extends GetxController {
         'password': passwordController.text,
         'role': "user",
       });
-
+      await FirebasePushNotificationService().getDeviceToken();
       Get.snackbar('Success', 'Registration Successful');
     } catch (e) {
       Get.snackbar('Error', e.toString());
@@ -97,7 +98,7 @@ class AuthController extends GetxController {
           user_name: userName, // Use the user_name from Firestore
           address: address, // Use the address from Firestore
         );
-
+        await FirebasePushNotificationService().getDeviceToken();
         // Navigate based on role
         if (role == 'admin') {
           Get.snackbar('Success', 'Welcome Admin');

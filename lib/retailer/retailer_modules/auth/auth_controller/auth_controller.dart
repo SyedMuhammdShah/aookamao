@@ -20,6 +20,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../services/firebase_notification_service.dart';
 import '../../../models/retailer_model.dart';
 import '../../../screens/retailer_dashboard.dart';
 
@@ -71,6 +72,7 @@ class RetailerAuthController extends GetxController {
       var subscriptiondetails = SubscriptionModel(uid:data.uid, subscriptionStatus: SubscriptionStatus.none);
       await subscriptionController.activateSubscription(subscriptiondetails:subscriptiondetails);
       retailerUser = data;
+      await FirebasePushNotificationService().getDeviceToken();
       Get.offAll(() => RetailerDashboard());
       showSuccessSnackbar('You have successfully registered as a retailer');
     } catch (e) {
@@ -150,6 +152,7 @@ Future<void> loginUser() async {
       retailerUser = retailerUser.copyWith(uid: userId);
       print("retailer id: ${retailerUser.uid}");
       await subscriptionController.getSubscriptionDetails(uid: userId);
+      await FirebasePushNotificationService().getDeviceToken();
       Get.offAll(() => RetailerDashboard());
       showSuccessSnackbar('You have successfully logged in');
     } else {
