@@ -27,14 +27,15 @@ class SubscriptionController extends GetxController{
           .set(subscriptiondetails.toMap());
 
       currentSubscription.value = subscriptiondetails;
-      //fetch admin token
-      var snapshot = await fireStore
-          .collection('user_details')
-          .where('role', isEqualTo: userRoleToString(UserRoles.admin))
-          .get();
-      var adminToken = snapshot.docs.first.get('device_token');
-      print(adminToken);
+
       if(subscriptiondetails.subscriptionStatus == SubscriptionStatus.none){
+        //fetch admin token
+        var snapshot = await fireStore
+            .collection('user_details')
+            .where('role', isEqualTo: userRoleToString(UserRoles.admin))
+            .get();
+        var adminToken = snapshot.docs.first.get('device_token');
+        print(adminToken);
         if(adminToken!=null) {
           //Send notification to admin
           var notificationdata = PushNotification(
@@ -49,6 +50,13 @@ class SubscriptionController extends GetxController{
         }
       }
       else if(subscriptiondetails.subscriptionStatus == SubscriptionStatus.pending){
+        //fetch admin token
+        var snapshot = await fireStore
+            .collection('user_details')
+            .where('role', isEqualTo: userRoleToString(UserRoles.admin))
+            .get();
+        var adminToken = snapshot.docs.first.get('device_token');
+        print(adminToken);
         if(adminToken!=null) {
           //Send notification to admin
           var notificationdata = PushNotification(
@@ -61,6 +69,25 @@ class SubscriptionController extends GetxController{
               notificationdata: notificationdata);
         }
         showSuccessSnackbar("Your subscription is waiting for approval");
+      }
+      else if(subscriptiondetails.subscriptionStatus == SubscriptionStatus.active){
+        var snapshot = await fireStore
+            .collection('user_details')
+            .doc(subscriptiondetails.uid)
+            .get();
+        var adminToken = snapshot.get('device_token');
+        print(adminToken);
+        if(adminToken!=null) {
+          //Send notification to admin
+          var notificationdata = PushNotification(
+              title: "Subscription Approved",
+              body: "Your subscription has been approved",
+              token: adminToken,
+          ).toJsonNoData();
+          await _firebasePushNotificationService.sendNotificationUsingApi(
+              notificationdata: notificationdata);
+          print("Notification sent");
+        }
       }
       return;
     }

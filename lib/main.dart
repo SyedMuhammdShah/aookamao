@@ -1,4 +1,5 @@
 import 'package:aookamao/admin/modules/products/controller/product_controller.dart';
+import 'package:aookamao/admin/modules/retailers/controller/retailer_controller.dart';
 import 'package:aookamao/user/modules/auth/auth/auth_controller.dart';
 import 'package:aookamao/retailer/retailer_modules/auth/auth_controller/auth_controller.dart';
 import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
@@ -34,6 +35,8 @@ void main() async {
  Get.put(ProductController());
  Get.put(SubscriptionController());
  Get.put(RetailerAuthController());
+ Get.put(RetailerController());
+
   SystemChrome.setSystemUIOverlayStyle(defaultOverlay);
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../modules/products/products_list.dart';
+import '../modules/retailers/retailers.dart';
 
 class AdminDrawer extends StatelessWidget {
   const AdminDrawer({super.key});
@@ -22,6 +23,13 @@ class AdminDrawer extends StatelessWidget {
             title: 'Home',
             onTap: () => {},
           ),
+           _buildItem(
+               icon: CupertinoIcons.person_2,
+               title: 'Suppliers',
+               onTap: () => {
+                 Get.to(RetailersScreen()),
+               }
+           ),
            _buildItem(
             icon: CupertinoIcons.add_circled_solid,
             title: 'Add Products',

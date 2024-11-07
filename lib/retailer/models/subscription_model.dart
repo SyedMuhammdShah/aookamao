@@ -28,6 +28,13 @@ class SubscriptionModel {
     };
   }
 
+  Map<String, dynamic> updatesubtoMap() {
+    return {
+      'subscription_status': subscriptionStatusToString(subscriptionStatus),
+      'subscription_date': subscriptionDate??null,
+    };
+  }
+
 
 
 }
