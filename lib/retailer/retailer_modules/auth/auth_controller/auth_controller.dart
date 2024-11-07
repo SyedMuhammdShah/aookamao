@@ -1,10 +1,10 @@
 import 'dart:io';
 
-import 'package:aookamao/admin/admin_dashboard.dart';
+import 'package:aookamao/admin/modules/dashboard/admin_dashboard.dart';
 import 'package:aookamao/admin/components/custom_snackbar.dart';
-import 'package:aookamao/app/models/user_model.dart';
-import 'package:aookamao/app/modules/home/home_view.dart';
-import 'package:aookamao/app/modules/landingPage/landing_page.dart';
+import 'package:aookamao/user/models/user_model.dart';
+import 'package:aookamao/user/modules/home/home_view.dart';
+import 'package:aookamao/user/modules/landingPage/landing_page.dart';
 import 'package:aookamao/enums/subscription_status.dart';
 import 'package:aookamao/enums/user_roles.dart';
 import 'package:aookamao/retailer/models/subscription_model.dart';

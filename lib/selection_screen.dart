@@ -1,8 +1,8 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:aookamao/app/data/constants/app_assets.dart';
-import 'package:aookamao/app/data/constants/app_colors.dart';
-import 'package:aookamao/app/modules/auth/signin_view.dart';
-import 'package:aookamao/app/modules/widgets/buttons/primary_button.dart';
+import 'package:aookamao/user/data/constants/app_assets.dart';
+import 'package:aookamao/user/data/constants/app_colors.dart';
+import 'package:aookamao/user/modules/auth/signin_view.dart';
+import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
 import 'package:aookamao/retailer/retailer_modules/auth/retailer_signin_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

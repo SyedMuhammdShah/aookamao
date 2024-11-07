@@ -1,11 +1,11 @@
 import 'dart:io';
 
-import 'package:aookamao/app/data/constants/app_colors.dart';
+import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobkit_dashed_border/mobkit_dashed_border.dart';
 
-import '../../../../app/data/constants/app_typography.dart';
+import '../../../../user/data/constants/app_typography.dart';
 
 class ImagePickerDashed extends StatelessWidget {
   final VoidCallback onaddpressed;

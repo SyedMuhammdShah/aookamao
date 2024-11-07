@@ -4,12 +4,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:aookamao/app/data/constants/constants.dart';
-import 'package:aookamao/app/modules/auth/components/components.dart';
-import 'package:aookamao/app/modules/auth/forget_password.dart';
-import 'package:aookamao/app/modules/interest/choose_interest_view.dart';
-import 'package:aookamao/app/modules/widgets/buttons/custom_text_button.dart';
-import 'package:aookamao/app/modules/widgets/buttons/primary_button.dart';
+import 'package:aookamao/user/data/constants/constants.dart';
+import 'package:aookamao/user/modules/auth/components/components.dart';
+import 'package:aookamao/user/modules/auth/forget_password.dart';
+import 'package:aookamao/user/modules/interest/choose_interest_view.dart';
+import 'package:aookamao/user/modules/widgets/buttons/custom_text_button.dart';
+import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
 
 class RetailerSignInView extends StatefulWidget {
   const RetailerSignInView({super.key});

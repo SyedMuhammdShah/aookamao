@@ -6,9 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../../app/data/constants/app_colors.dart';
-import '../../../app/data/constants/app_typography.dart';
-import '../../../app/modules/widgets/buttons/primary_button.dart';
+import '../../../user/data/constants/app_colors.dart';
+import '../../../user/data/constants/app_typography.dart';
+import '../../../user/modules/widgets/buttons/primary_button.dart';
 import '../../../enums/subscription_status.dart';
 import '../../../widgets/custom_snackbar.dart';
 import '../../models/subscription_model.dart';

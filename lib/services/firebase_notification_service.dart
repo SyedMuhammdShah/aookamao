@@ -26,11 +26,11 @@ class FirebasePushNotificationService {
   late NotificationSettings _notificationSettings;
   late String _devicetoken;
   late AndroidNotificationChannel _androidNotificationChannel;
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =FlutterLocalNotificationsPlugin();
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   PushNotification get pushNotification => _pushNotification;
-  //String get devicetoken => _devicetoken;
 
+  //String get devicetoken => _devicetoken;
 
 
   Future initialise() async {
@@ -47,16 +47,20 @@ class FirebasePushNotificationService {
       provisional: false,
       sound: true,
     );
-    print('User granted permission: ${_notificationSettings.authorizationStatus}');
+    print('User granted permission: ${_notificationSettings
+        .authorizationStatus}');
 
-    if (_notificationSettings.authorizationStatus == AuthorizationStatus.authorized) {
+    if (_notificationSettings.authorizationStatus ==
+        AuthorizationStatus.authorized) {
       print('User granted permission');
       firebaseInit();
+      setupInteractMessage();
     }
     else {
       print('User declined or has not accepted permission');
     }
   }
+
   void firebaseInit() {
     FirebaseMessaging.onMessage.listen((message) {
       RemoteNotification? notification = message.notification;
@@ -79,6 +83,7 @@ class FirebasePushNotificationService {
       }
     });
   }
+
   //function to initialise flutter local notification plugin to show notifications for android when app is active
   void _initLocalNotifications(RemoteMessage message) async {
     var androidInitializationSettings =
@@ -91,26 +96,28 @@ class FirebasePushNotificationService {
     await flutterLocalNotificationsPlugin.initialize(initializationSetting,
         onDidReceiveNotificationResponse: (payload) {
           // handle interaction when app is active for android
-          handleMessage( message);
+          handleMessage(message);
         });
   }
+
   //handle tap on notification when app is in background or terminated
   Future<void> setupInteractMessage() async {
     // // when app is terminated
-    // RemoteMessage? initialMessage =
-    //     await FirebaseMessaging.instance.getInitialMessage();
+    RemoteMessage? initialMessage =
+        await FirebaseMessaging.instance.getInitialMessage();
 
-    // if (initialMessage != null) {
-    //   handleMessage(context, initialMessage);
-    // }
+    if (initialMessage != null) {
+      handleMessage(initialMessage);
+    }
 
     //when app ins background
     FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      handleMessage( event);
+      handleMessage(event);
     });
 
     // Handle terminated state
-    FirebaseMessaging.instance.getInitialMessage().then((RemoteMessage? message) {
+    FirebaseMessaging.instance.getInitialMessage().then((
+        RemoteMessage? message) {
       if (message != null && message.data.isNotEmpty) {
         handleMessage(message);
       }
@@ -130,8 +137,9 @@ class FirebasePushNotificationService {
 
     AndroidNotificationDetails androidNotificationDetails =
     AndroidNotificationDetails(
-        channel.id.toString(), channel.name.toString(),
-        channelDescription: 'your channel description',
+        channel.id.toString(),
+        channel.name.toString(),
+        channelDescription: Constants.androidchanneldes,
         importance: Importance.high,
         priority: Priority.high,
         playSound: true,
@@ -171,13 +179,12 @@ class FirebasePushNotificationService {
     );
   }
 
-  Future<void> handleMessage(
-      RemoteMessage message,
-      ) async {
+  Future<void> handleMessage(RemoteMessage message,) async {
     print(
-        "Navigating to appointments screen. Hit here to handle the message. Message data: ${message.data}");
+        "Navigating to appointments screen. Hit here to handle the message. Message data: ${message
+            .data}");
 
-   /* Navigator.push(
+    /* Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) => NotificationScreen(message: message),
@@ -201,7 +208,7 @@ class FirebasePushNotificationService {
     // }
   }
 
-  Future<String> getDeviceToken({int maxRetires = 3}) async{
+  Future<String> getDeviceToken({int maxRetires = 3}) async {
     try {
       _devicetoken = await _fcm.getToken() ?? "";
       // await _firebaseService.storePlayerDeviceToken(token: _devicetoken, id: id);
@@ -209,7 +216,7 @@ class FirebasePushNotificationService {
       await saveTokentoFirestore(token: _devicetoken);
       return _devicetoken;
     }
-    catch(e){
+    catch (e) {
       print("failed to get device token: ${e.toString()}");
       if (maxRetires > 0) {
         print("try after 10 sec");
@@ -221,24 +228,28 @@ class FirebasePushNotificationService {
       }
     }
   }
+
   static Future<bool> isLoggedIn() async {
     var user = FirebaseAuth.instance.currentUser;
     return user != null;
   }
 
   Future<void> saveTokentoFirestore({required String token}) async {
-
     bool isUserLoggedin = await isLoggedIn();
     print("User is logged in $isUserLoggedin");
     if (isUserLoggedin) {
-      await _fireStore.collection('user_details').doc(_auth.currentUser!.uid).set({
+      await _fireStore.collection('user_details')
+          .doc(_auth.currentUser!.uid)
+          .set({
         'device_token': token,
-      },SetOptions(merge: true));
+      }, SetOptions(merge: true));
     }
     // also save if token changes
     _fcm.onTokenRefresh.listen((event) async {
       if (isUserLoggedin) {
-        await _fireStore.collection('user_details').doc(_auth.currentUser!.uid).set({
+        await _fireStore.collection('user_details')
+            .doc(_auth.currentUser!.uid)
+            .set({
           'device_token': token,
         });
         print("save to firestore");
@@ -247,105 +258,33 @@ class FirebasePushNotificationService {
   }
 
   Future<void> sendNotificationUsingApi({
-    required  Map<String, dynamic> notificationdata,
+    required Map<String, dynamic> notificationdata,
   }) async {
-    String serverKey = await GetServerKey().getServerKeyToken();
-    print("notification server key => ${serverKey}");
-
-    var headers = <String, String>{
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $serverKey',
-    };
-
-    //hit api
-    final http.Response response = await http.post(
-      Uri.parse(Constants.fcmSendNotificationUrl),
-      headers: headers,
-      body: jsonEncode(notificationdata),
-    );
-    print("notification response => ${response.body}");
-    if (response.statusCode == 200) {
-      print("Notification Send Successfully!");
-    } else {
-      print("Notification not send!");
-    }
-  }
-
-  ///Send Confirmation Message to User
- /* Future sendNotificationToUser({required Player selectedPlayer}) async {
-
-    //Our API Key
-    var serverKey = dotenv.get('Server_key');
-
-    //selected player device token
-    var token= selectedPlayer.device_token;
-
-    print("serverKey: $serverKey");
-
-    if(serverKey.isEmpty&&token.isEmpty)
-    {
-      return;
-    }
-
-    //current player
-    var currentPlayer =_authService.getcurrentPlayer;
-
-    //Create Message with Notification Payload
-    String constructFCMPayload() {
-      return jsonEncode(
-          PushNotification(
-              notification: FNotification(title: "Request For Game",body: "Hi! ${currentPlayer.username} Wants To Play Game With You Online."),
-              data: Data(payloadFor: "Requesting For Game",playerId: currentPlayer.id,playerToken: currentPlayer.device_token,requestedPlayer: currentPlayer.username),
-              token:token).toJson()
-      );
-    }
-
     try {
-      //Send  Message
-      http.Response response =
-      await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
-          headers: <String, String>{
-            'Content-Type': 'application/json',
-            'Authorization': 'key=$serverKey',
-          },
-          body: constructFCMPayload());
+      String serverKey = await GetServerKey().getServerKeyToken();
+      print("notification server key => ${serverKey}");
 
-      print("status: ${response.statusCode} | Message Sent Successfully!");
-      if(response.statusCode == 200)
-      {
-        return true;
+      var headers = <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $serverKey',
+      };
+
+      //hit api
+      final http.Response response = await http.post(
+        Uri.parse(Constants.fcmSendNotificationUrl),
+        headers: headers,
+        body: jsonEncode(notificationdata),
+      );
+      print("notification response => ${response.body}");
+      if (response.statusCode == 200) {
+        print("Notification Send Successfully!");
+      } else {
+        print("Notification not send!");
       }
-
     }
     catch (e) {
-      print("error push notification $e");
-      return e.toString();
+      print("failed to send notification: ${e.toString()}");
     }
   }
-
-  onGameRequest(PushNotification pushNotification) async {
-    if(pushNotification.data?.payloadFor=="Requesting For Game"){
-      _navigationService.navigateToGameBoardView();
-
-      final dialogresponse =await _dialogService.showCustomDialog(
-        variant: DialogType.basic,
-        title: pushNotification.data?.requestedPlayer,
-        description: pushNotification.data?.payloadFor,
-        secondaryButtonTitle: "cancel",
-        mainButtonTitle: "Accept",
-        hasImage: true,
-        imageUrl: "assets/images/logo.png",
-
-      );
-      if(dialogresponse!.confirmed){
-        /// accept
-      }
-      else{
-        _navigationService.back();
-      }
-    }
-  }
-*/
-
 }
 

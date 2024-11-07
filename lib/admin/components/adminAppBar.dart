@@ -1,12 +1,12 @@
-import 'package:aookamao/app/modules/auth/auth/auth_controller.dart';
+import 'package:aookamao/user/modules/auth/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:aookamao/app/data/constants/constants.dart';
-import 'package:aookamao/app/models/user_model.dart';
-import 'package:aookamao/app/modules/checkout/cart_view.dart';
-import 'package:aookamao/app/modules/notification/notification_view.dart';
+import 'package:aookamao/user/data/constants/constants.dart';
+import 'package:aookamao/user/models/user_model.dart';
+import 'package:aookamao/user/modules/checkout/cart_view.dart';
+import 'package:aookamao/user/modules/notification/notification_view.dart';
 
 
 class adminAppBar extends StatelessWidget implements PreferredSizeWidget {

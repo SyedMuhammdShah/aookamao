@@ -1,6 +1,8 @@
 import 'package:aookamao/enums/subscription_status.dart';
+import 'package:aookamao/enums/user_roles.dart';
 import 'package:aookamao/models/push_notification_model.dart';
 import 'package:aookamao/retailer/models/subscription_model.dart';
+import 'package:aookamao/retailer/retailer_modules/auth/auth_controller/auth_controller.dart';
 import 'package:aookamao/services/firebase_notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +17,7 @@ class SubscriptionController extends GetxController{
   final FirebasePushNotificationService _firebasePushNotificationService = FirebasePushNotificationService();
   Rx<SubscriptionModel> currentSubscription = Rx<SubscriptionModel>(SubscriptionModel(uid: '', subscriptionStatus: SubscriptionStatus.none));
 
-  Future activateSubscription({required SubscriptionModel subscriptiondetails})async{
+  Future activateSubscription({required SubscriptionModel subscriptiondetails,String? retailer_name})async{
     //await Firebase.initializeApp();
     try {
       //Activate subscription
@@ -25,17 +27,41 @@ class SubscriptionController extends GetxController{
           .set(subscriptiondetails.toMap());
 
       currentSubscription.value = subscriptiondetails;
-      //Send notification to admin
-      var notificationdata = PushNotification(
-          title: "New Subscription",
-          body: "New subscription request from ${subscriptiondetails.uid}",
-        token: "e2WfmI_9RS6kVOb26S_TlF:APA91bG5Hvi8jBrJQ9ytq3W6QaLwCiaqM7FBRBD47Wt0dIzLzJCRzg5P3G_BlVtnDQE1vrJpEsLRc-kfHUdbzMAy4UswUnd9jfQbcudXNP59SBQi5-Z2jeY",
-      data: subscriptiondetails.toMap()
-      ).toJsonWithData();
-      await _firebasePushNotificationService.sendNotificationUsingApi(notificationdata: notificationdata);
+      //fetch admin token
+      var snapshot = await fireStore
+          .collection('user_details')
+          .where('role', isEqualTo: userRoleToString(UserRoles.admin))
+          .get();
+      var adminToken = snapshot.docs.first.get('device_token');
+      print(adminToken);
+      if(subscriptiondetails.subscriptionStatus == SubscriptionStatus.none){
+        if(adminToken!=null) {
+          //Send notification to admin
+          var notificationdata = PushNotification(
+              title: "New Retailer Registerd",
+              body: "$retailer_name has registered as a retailer",
+              token: adminToken,
+              data: subscriptiondetails.toMap()
+          ).toJsonWithData();
+          await _firebasePushNotificationService.sendNotificationUsingApi(
+              notificationdata: notificationdata);
 
-      showSuccessSnackbar("Your subscription is waiting for approval");
-
+        }
+      }
+      else if(subscriptiondetails.subscriptionStatus == SubscriptionStatus.pending){
+        if(adminToken!=null) {
+          //Send notification to admin
+          var notificationdata = PushNotification(
+              title: "New Subscription Request",
+              body: "New subscription request from $retailer_name",
+              token: adminToken,
+              data: subscriptiondetails.toMap()
+          ).toJsonWithData();
+          await _firebasePushNotificationService.sendNotificationUsingApi(
+              notificationdata: notificationdata);
+        }
+        showSuccessSnackbar("Your subscription is waiting for approval");
+      }
       return;
     }
     catch(e){

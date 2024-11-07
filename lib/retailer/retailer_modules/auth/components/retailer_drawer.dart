@@ -1,7 +1,5 @@
-import 'package:aookamao/admin/forms/add_products.dart';
-import 'package:aookamao/admin/lists/order_list.dart';
-import 'package:aookamao/admin/lists/products_list.dart';
-import 'package:aookamao/app/data/constants/app_colors.dart';
+
+import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/retailer/retailer_modules/auth/auth_controller/auth_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

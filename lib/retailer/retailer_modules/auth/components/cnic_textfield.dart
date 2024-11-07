@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../../app/data/constants/app_colors.dart';
-import '../../../../app/data/constants/app_spacing.dart';
-import '../../../../app/data/constants/app_typography.dart';
+import '../../../../user/data/constants/app_colors.dart';
+import '../../../../user/data/constants/app_spacing.dart';
+import '../../../../user/data/constants/app_typography.dart';
 
 class CNICTextField extends StatefulWidget {
   @override

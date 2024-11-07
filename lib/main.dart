@@ -1,5 +1,5 @@
-import 'package:aookamao/admin/controller/product_controller.dart';
-import 'package:aookamao/app/modules/auth/auth/auth_controller.dart';
+import 'package:aookamao/admin/modules/products/controller/product_controller.dart';
+import 'package:aookamao/user/modules/auth/auth/auth_controller.dart';
 import 'package:aookamao/retailer/retailer_modules/auth/auth_controller/auth_controller.dart';
 import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 import 'package:aookamao/selection_screen.dart';
@@ -11,9 +11,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:aookamao/app/bindings/home_binding.dart';
-import 'package:aookamao/app/data/constants/constants.dart';
-import 'package:aookamao/app/modules/splash/splash_view.dart';
+import 'package:aookamao/user/bindings/home_binding.dart';
+import 'package:aookamao/user/data/constants/constants.dart';
+import 'package:aookamao/user/modules/splash/splash_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'firebase_options.dart';

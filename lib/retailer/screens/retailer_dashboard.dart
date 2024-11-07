@@ -1,7 +1,7 @@
 import 'package:aookamao/admin/components/adminAppBar.dart';
-import 'package:aookamao/app/data/constants/app_colors.dart';
-import 'package:aookamao/app/data/constants/app_typography.dart';
-import 'package:aookamao/app/models/user_model.dart';
+import 'package:aookamao/user/data/constants/app_colors.dart';
+import 'package:aookamao/user/data/constants/app_typography.dart';
+import 'package:aookamao/user/models/user_model.dart';
 import 'package:aookamao/enums/subscription_status.dart';
 import 'package:aookamao/retailer/retailer_modules/auth/auth_controller/auth_controller.dart';
 import 'package:aookamao/retailer/retailer_modules/auth/components/retailer_appbar.dart';

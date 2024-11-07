@@ -1,10 +1,11 @@
-import 'package:aookamao/admin/forms/add_products.dart';
-import 'package:aookamao/admin/lists/order_list.dart';
-import 'package:aookamao/admin/lists/products_list.dart';
-import 'package:aookamao/app/data/constants/app_colors.dart';
+import 'package:aookamao/admin/modules/products/add_products.dart';
+import 'package:aookamao/admin/modules/orders/order_list.dart';
+import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../modules/products/products_list.dart';
 
 class AdminDrawer extends StatelessWidget {
   const AdminDrawer({super.key});
