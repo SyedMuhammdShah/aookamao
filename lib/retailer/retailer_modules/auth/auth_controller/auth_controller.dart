@@ -22,7 +22,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../../../services/firebase_notification_service.dart';
 import '../../../models/retailer_model.dart';
-import '../../../screens/retailer_dashboard.dart';
+import '../../dashboard/retailer_dashboard.dart';
 
 class RetailerAuthController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;

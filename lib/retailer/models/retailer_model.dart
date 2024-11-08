@@ -48,8 +48,8 @@ class RetailerModel{
   factory RetailerModel.fromMap(Map<String, dynamic> map) {
     return RetailerModel(
       uid: "",
-      name: map['name'],
-      email: map['email'],
+      name: map['user_name'],
+      email: map['user_email'],
       cnic_number: map['cnic_number'],
       cnic_front_image_url: map['cnic_front_image_url'],
       cnic_back_image_url: map['cnic_back_image_url'],
@@ -60,8 +60,8 @@ class RetailerModel{
 
   Map<String, dynamic> toMap() {
     return {
-      'name': name,
-      'email': email,
+      'user_name': name,
+      'user_email': email,
       'cnic_number': cnic_number,
       'cnic_front_image_url': cnic_front_image_url,
       'cnic_back_image_url': cnic_back_image_url,

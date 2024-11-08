@@ -21,7 +21,7 @@ class RetailerAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leadingWidth: 60.w,
-      backgroundColor: AppColors.kPrimary,
+      //backgroundColor: AppColors.kPrimary,
       // leading: GestureDetector(
       //   onTap: () {
       //     Get.to<Widget>(() => const EditProfile());
@@ -34,7 +34,7 @@ class RetailerAppBar extends StatelessWidget implements PreferredSizeWidget {
       //     // You can add a profile image here if available
       //   ),
       // ),
-      title: Column(
+      /*title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
 
         children: [
@@ -47,12 +47,9 @@ class RetailerAppBar extends StatelessWidget implements PreferredSizeWidget {
             style: AppTypography.kLight10.copyWith(color: AppColors.kGrey80),
           ),
         ],
-      ),
+      ),*/
       actions: [
-        // referal reward balance
 
-        referalRewardBalance(),
-        SizedBox(width: 20.w),
         CustomIcons(
           onTap: () {
             Get.to<Widget>(() => const NotificationView());

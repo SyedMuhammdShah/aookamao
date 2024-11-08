@@ -16,7 +16,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../retailer/screens/retailer_dashboard.dart';
+import '../../../../retailer/retailer_modules/dashboard/retailer_dashboard.dart';
 import '../../../../services/firebase_notification_service.dart';
 
 class AuthController extends GetxController {

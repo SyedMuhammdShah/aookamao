@@ -2,6 +2,7 @@ import 'package:aookamao/user/modules/auth/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:aookamao/user/models/user_model.dart';
@@ -72,8 +73,9 @@ class adminAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class CustomIcons extends StatelessWidget {
   final String icon;
+  final FaIcon? ficon;
   final VoidCallback onTap;
-  const CustomIcons({required this.icon, required this.onTap, super.key});
+  const CustomIcons({required this.icon, required this.onTap, super.key, this.ficon});
 
   @override
   Widget build(BuildContext context) {
@@ -87,7 +89,7 @@ class CustomIcons extends StatelessWidget {
           shape: BoxShape.circle,
           color: Color(0xffF6F6F6),
         ),
-        child: SvgPicture.asset(icon),
+        child: ficon ?? SvgPicture.asset(icon),
       ),
     );
   }

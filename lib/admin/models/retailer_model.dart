@@ -26,8 +26,8 @@ class RetailerModel{
 
   RetailerModel.fromMap(Map<String, dynamic> map)
       : uid = map['uid'],
-        name = map['name'],
-        email = map['email'],
+        name = map['user_name'],
+        email = map['user_email'],
         cnic_number = map['cnic_number'],
         cnic_front_image_url = map['cnic_front_image_url'],
         cnic_back_image_url = map['cnic_back_image_url'],
