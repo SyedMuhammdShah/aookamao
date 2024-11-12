@@ -3,13 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../admin/components/adminAppBar.dart';
+import 'controller/referral_controller.dart';
 
-class ReferNow extends StatelessWidget {
+class ReferNow extends StatefulWidget {
   const ReferNow({super.key});
 
+  @override
+  State<ReferNow> createState() => _ReferNowState();
+}
+
+class _ReferNowState extends State<ReferNow> {
+  final _referralController = Get.find<ReferralController>();
+  @override
+  void initState() {
+    super.initState();
+    if(_referralController.referralCode.value.isEmpty) {
+      _referralController.getReferralCode();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,16 +66,17 @@ class ReferNow extends StatelessWidget {
                   ),
                 ],
               ),
-        
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('A123456',style: AppTypography.kMedium16,),
-                  IconButton(
-                    onPressed: (){},
-                    icon: Icon(Icons.copy),
-                  ),
-                ],
+
+              child: Obx(() => Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(_referralController.referralCode.value,style: AppTypography.kMedium16,),
+                    IconButton(
+                      onPressed: (){},
+                      icon: Icon(Icons.copy),
+                    ),
+                  ],
+                ),
               ),
             ),
             SizedBox(
@@ -88,11 +104,12 @@ class ReferNow extends StatelessWidget {
                   SizedBox(
                     height: 0.02.sh,
                   ),
-                  QrImageView(
-                    data: 'A123456',
-                    version: QrVersions.auto,
-                    size: 0.5.sw,
-                    padding: EdgeInsets.all(0.02.sw),
+                  Obx(() => QrImageView(
+                      data: _referralController.referralCode.value,
+                      version: QrVersions.auto,
+                      size: 0.5.sw,
+                      padding: EdgeInsets.all(0.02.sw),
+                    ),
                   ),
                   SizedBox(
                     height: 0.02.sh,

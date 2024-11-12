@@ -11,4 +11,18 @@ class Constants{
     //firebase send notification url
     static String get fcmSendNotificationUrl => "https://fcm.googleapis.com/v1/projects/$projectid/messages:send";
 
+
+    //fireStore collections
+    static String get usersCollection => "user_details";
+    static String get subscriptionsCollection => "subscription";
+    static String get productsCollection => "products";
+    static String get referralsCollection => "referrals";
+    static String get transactionsCollection => "transactions";
+    static String get walletCollection => "wallet";
+    static String get ordersCollection => "orders";
+
+
+
+
+
 }

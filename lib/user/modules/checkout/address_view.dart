@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
-import 'package:aookamao/user/modules/auth/components/components.dart';
 import 'package:aookamao/user/modules/checkout/components/location_card.dart';
 import 'package:aookamao/user/modules/checkout/payment_view.dart';
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
 import 'package:aookamao/user/modules/widgets/textfields/search_field.dart';
+
+import '../../../modules/auth/components/auth_field.dart';
 
 class AddressView extends StatefulWidget {
   const AddressView({super.key});

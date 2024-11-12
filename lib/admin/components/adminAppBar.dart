@@ -1,13 +1,13 @@
-import 'package:aookamao/user/modules/auth/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
-import 'package:aookamao/user/models/user_model.dart';
 import 'package:aookamao/user/modules/checkout/cart_view.dart';
 import 'package:aookamao/user/modules/notification/notification_view.dart';
+
+import '../../models/user_model.dart';
 
 
 class adminAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -39,7 +39,7 @@ class adminAppBar extends StatelessWidget implements PreferredSizeWidget {
         
         children: [
           Text(
-            user.user_name, // Display the user's name dynamically
+            user.name, // Display the user's name dynamically
             style: AppTypography.kSemiBold16.copyWith(color: AppColors.kGrey100),
           ),
           Text(

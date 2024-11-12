@@ -6,11 +6,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 
-import '../../../user/modules/auth/auth/auth_controller.dart';
+import '../../../services/auth_service.dart';
 import '../../components/adminAppBar.dart';
 import '../../components/admin_drawer.dart';
 
 class AdminDashboard extends StatelessWidget {
+
+   AdminDashboard({super.key});
   // Method to get total users count
   Stream<int> getUsersCount() {
     return FirebaseFirestore.instance.collection('users').snapshots().map((snapshot) => snapshot.docs.length);
@@ -55,6 +57,8 @@ class AdminDashboard extends StatelessWidget {
     {'month': 'May', 'orders': 300},
   ];
 
+
+
   // Function to generate sales chart data
   List<FlSpot> _generateSalesChartData() {
     return List.generate(productSalesData.length, (index) {
@@ -81,9 +85,9 @@ class AdminDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AuthController authController = Get.find<AuthController>();
+   final _authService = Get.find<AuthService>();
     return Scaffold(
-      appBar: adminAppBar(user: authController.currentUser.value!,),
+      appBar: adminAppBar(user: _authService.currentUser.value!,),
       drawer: AdminDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

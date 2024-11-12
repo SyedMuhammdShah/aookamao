@@ -2,11 +2,9 @@ import 'package:aookamao/admin/components/adminAppBar.dart';
 import 'package:aookamao/retailer/components/referal_card.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/user/data/constants/app_typography.dart';
-import 'package:aookamao/user/models/user_model.dart';
 import 'package:aookamao/enums/subscription_status.dart';
-import 'package:aookamao/retailer/retailer_modules/auth/auth_controller/auth_controller.dart';
-import 'package:aookamao/retailer/retailer_modules/auth/components/retailer_appbar.dart';
-import 'package:aookamao/retailer/retailer_modules/auth/components/retailer_drawer.dart';
+import 'package:aookamao/modules/auth/controller/auth_controller.dart';
+
 import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 import 'package:aookamao/retailer/retailer_modules/subscription/subscription_screen.dart';
 import 'package:aookamao/user/modules/widgets/buttons/custom_text_button.dart';
@@ -19,8 +17,10 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../../admin/components/admin_drawer.dart';
-import '../../../enums/referal_types.dart';
-import '../../models/subscription_model.dart';
+import '../../../enums/referral_types.dart';
+import '../../../services/auth_service.dart';
+import '../components/retailer_appbar.dart';
+import '../components/retailer_drawer.dart';
 import '../referal/refer_now.dart';
 
 class RetailerDashboard extends StatefulWidget {
@@ -31,12 +31,18 @@ class RetailerDashboard extends StatefulWidget {
 }
 
 class _RetailerDashboardState extends State<RetailerDashboard> {
-  RetailerAuthController authController =  Get.find<RetailerAuthController>();
   SubscriptionController subscriptionController = Get.find<SubscriptionController>();
+  final _authService = Get.find<AuthService>();
+
+  @override
+  void initState() {
+    subscriptionController.getSubscriptionDetails(uid: _authService.currentUser.value!.uid);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: RetailerAppBar(user: authController.retailerUser),
+      appBar: RetailerAppBar(user: _authService.currentUser.value!),
       drawer: RetailerDrawer(),
       body:
       Obx(()=>SingleChildScrollView(
@@ -105,7 +111,7 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                           children: [
                             Text('Welcome To Aoo Kamao',style: AppTypography.kSemiBold20.copyWith(color: Colors.white),),
                             SizedBox(height: 10.h,),
-                            Text(authController.retailerUser.name,style: AppTypography.kBold24.copyWith(color: Colors.white),)
+                            Text(_authService.currentUser.value!.name,style: AppTypography.kBold24.copyWith(color: Colors.white),)
                           ],
                         ),
                      ),

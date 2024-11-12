@@ -1,4 +1,4 @@
-import 'package:aookamao/enums/referal_types.dart';
+import 'package:aookamao/enums/referral_types.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

@@ -1,16 +1,14 @@
 import 'dart:io';
 import 'package:aookamao/admin/components/adminAppBar.dart';
-import 'package:aookamao/admin/components/custom_snackbar.dart';
 import 'package:aookamao/admin/modules/products/controller/product_controller.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/user/data/constants/app_spacing.dart';
-import 'package:aookamao/user/modules/auth/auth/auth_controller.dart';
-import 'package:aookamao/user/modules/widgets/buttons/custom_outlined_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
+import '../../../services/auth_service.dart';
 import '../../../widgets/custom_snackbar.dart';
 
 
@@ -48,11 +46,11 @@ class _EditProductState extends State<EditProduct> {
   }
   @override
   Widget build(BuildContext context) {
-    AuthController authController = Get.find<AuthController>();
+    final _authService = Get.find<AuthService>();
     ProductController productController = Get.find<ProductController>();
 
     return Scaffold(
-      appBar: adminAppBar(user: authController.currentUser.value!),
+      appBar: adminAppBar(user: _authService.currentUser.value!,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

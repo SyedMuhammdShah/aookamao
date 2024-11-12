@@ -3,8 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
-import 'package:aookamao/user/modules/auth/components/components.dart';
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
+
+import '../../../modules/auth/components/auth_field.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});

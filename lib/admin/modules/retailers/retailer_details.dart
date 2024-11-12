@@ -1,5 +1,4 @@
 import 'package:aookamao/admin/models/retailer_model.dart';
-import 'package:aookamao/retailer/models/subscription_model.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
 import 'package:aookamao/widgets/custom_snackbar.dart';
@@ -9,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../../enums/subscription_status.dart';
+import '../../../models/subscription_model.dart';
 import 'controller/retailer_controller.dart';
 
 class RetailerDetailsScreen extends StatelessWidget {

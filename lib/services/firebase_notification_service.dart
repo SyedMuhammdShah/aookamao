@@ -5,27 +5,29 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 
 import '../constants/constants.dart';
+import '../firebase_options.dart';
 import '../models/push_notification_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'get_server_key.dart';
 
-class FirebasePushNotificationService {
+class FirebasePushNotificationService extends GetxService{
 
-  final FirebaseMessaging _fcm = FirebaseMessaging.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  final  FirebaseMessaging _fcm = FirebaseMessaging.instance;
+  final FirebaseAuth _auth= FirebaseAuth.instance;
+  final  FirebaseFirestore _fireStore=  FirebaseFirestore.instance;
   late PushNotification _pushNotification;
   late NotificationSettings _notificationSettings;
-  late String _devicetoken;
-  late AndroidNotificationChannel _androidNotificationChannel;
+  String _devicetoken = "";
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   PushNotification get pushNotification => _pushNotification;
@@ -33,8 +35,16 @@ class FirebasePushNotificationService {
   //String get devicetoken => _devicetoken;
 
 
+
+
+  Future<FirebasePushNotificationService> init() async {
+    await initialise();
+    return this;
+  }
+
   Future initialise() async {
 
+    FirebasePushNotificationService().getDeviceToken();
     ///Configure notification permissions
 
     //Android
@@ -238,7 +248,7 @@ class FirebasePushNotificationService {
     bool isUserLoggedin = await isLoggedIn();
     print("User is logged in $isUserLoggedin");
     if (isUserLoggedin) {
-      await _fireStore.collection('user_details')
+      await _fireStore.collection(Constants.usersCollection)
           .doc(_auth.currentUser!.uid)
           .set({
         'device_token': token,
@@ -247,7 +257,7 @@ class FirebasePushNotificationService {
     // also save if token changes
     _fcm.onTokenRefresh.listen((event) async {
       if (isUserLoggedin) {
-        await _fireStore.collection('user_details')
+        await _fireStore.collection(Constants.usersCollection)
             .doc(_auth.currentUser!.uid)
             .set({
           'device_token': token,

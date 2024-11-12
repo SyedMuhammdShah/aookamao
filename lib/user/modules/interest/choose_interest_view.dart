@@ -3,11 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:aookamao/user/data/helpers/data.dart';
-import 'package:aookamao/user/modules/auth/components/auth_appbar.dart';
 import 'package:aookamao/user/modules/interest/components/interest_card.dart';
 import 'package:aookamao/user/modules/widgets/textfields/search_field.dart';
 import 'package:aookamao/user/modules/landingPage/landing_page.dart';
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
+
+import '../../../modules/auth/components/auth_appbar.dart';
 
 class ChooseInterestView extends StatefulWidget {
   const ChooseInterestView({super.key});

@@ -1,16 +1,14 @@
 import 'package:aookamao/admin/components/adminAppBar.dart';
-import 'package:aookamao/user/modules/auth/auth/auth_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
+import '../../../services/auth_service.dart';
 
 class OrderList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    AuthController authController = Get.find<AuthController>();
-
+    final _authService = Get.find<AuthService>();
     return Scaffold(
-     appBar: adminAppBar(user: authController.currentUser.value!),
+      appBar: adminAppBar(user: _authService.currentUser.value!,),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

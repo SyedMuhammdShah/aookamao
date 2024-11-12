@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
-import 'package:aookamao/user/models/user_model.dart';
 import 'package:aookamao/user/modules/profile/components/fade_animation.dart';
 import 'package:aookamao/user/modules/profile/components/profile_header_card.dart';
 import 'package:aookamao/user/modules/profile/components/setting_tile.dart';
@@ -12,9 +11,10 @@ import 'package:aookamao/user/modules/profile/languages_view.dart';
 import 'package:aookamao/user/modules/profile/notification_settings_view.dart';
 import 'package:aookamao/user/modules/profile/security_view.dart';
 import 'package:aookamao/user/modules/profile/your_card.dart';
-import 'package:aookamao/user/modules/welcome/welcome_view.dart';
 import 'package:aookamao/user/modules/widgets/buttons/custom_text_button.dart';
 import 'package:aookamao/user/modules/widgets/dialogs/logout_dialog.dart';
+
+import '../../../modules/welcome/welcome_view.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});

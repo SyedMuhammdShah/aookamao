@@ -1,14 +1,14 @@
 import 'package:aookamao/enums/subscription_status.dart';
 import 'package:aookamao/enums/user_roles.dart';
 import 'package:aookamao/models/push_notification_model.dart';
-import 'package:aookamao/retailer/models/subscription_model.dart';
-import 'package:aookamao/retailer/retailer_modules/auth/auth_controller/auth_controller.dart';
+import 'package:aookamao/modules/auth/controller/auth_controller.dart';
 import 'package:aookamao/services/firebase_notification_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
+import '../../../../models/subscription_model.dart';
 import '../../../../widgets/custom_snackbar.dart';
 
 class SubscriptionController extends GetxController{

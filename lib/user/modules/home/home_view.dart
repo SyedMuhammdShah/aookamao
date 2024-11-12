@@ -1,11 +1,10 @@
-import 'package:aookamao/user/modules/auth/auth/auth_controller.dart';
+import 'package:aookamao/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:aookamao/user/models/product_model.dart';
-import 'package:aookamao/user/models/user_model.dart';
 import 'package:aookamao/user/modules/home/components/banner_card.dart';
 import 'package:aookamao/user/modules/home/components/home_appbar.dart';
 import 'package:aookamao/user/modules/home/components/product_card.dart';
@@ -13,20 +12,21 @@ import 'package:aookamao/user/modules/widgets/buttons/custom_text_button.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../../modules/auth/controller/auth_controller.dart';
 import '../../data/helpers/product_category.dart';
 import '../../data/helpers/product_filter.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
-  
-  get dummyUser => null;
+
 
   @override
   Widget build(BuildContext context) {
-    final AuthController authController = Get.find<AuthController>();
+    final  _authController = Get.find<AuthController>();
+    final _authService = Get.find<AuthService>();
     return Scaffold(
       appBar: HomeAppBar(
-        user: authController.currentUser.value!,
+        user: _authService.currentUser.value!,
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),

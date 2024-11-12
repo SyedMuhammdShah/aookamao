@@ -1,10 +1,10 @@
 import 'package:aookamao/admin/models/retailer_model.dart';
 import 'package:aookamao/enums/subscription_status.dart';
-import 'package:aookamao/retailer/models/subscription_model.dart';
 import 'package:aookamao/widgets/custom_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
+import '../../../../models/subscription_model.dart';
 import '../../../../retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 
 class RetailerController extends GetxController {

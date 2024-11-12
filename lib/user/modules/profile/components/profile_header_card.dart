@@ -3,8 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
-import 'package:aookamao/user/models/user_model.dart';
 import 'package:aookamao/user/modules/profile/edit_profile.dart';
+
+import '../../../../models/user_model.dart';
 
 class ProfileHeaderCard extends StatelessWidget {
   final UserModel user;

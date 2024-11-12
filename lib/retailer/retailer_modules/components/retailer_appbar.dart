@@ -1,17 +1,16 @@
+import 'package:aookamao/models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
-import 'package:aookamao/user/modules/checkout/cart_view.dart';
 import 'package:aookamao/user/modules/notification/notification_view.dart';
 
-import '../../../../models/user_model.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class RetailerAppBar extends StatelessWidget implements PreferredSizeWidget {
   final UserModel user; // Changed from user_name to user
-  const HomeAppBar({
-     required this.user, // required user data
+  const RetailerAppBar({
+    required this.user, // required user data
     super.key,
   });
 
@@ -19,6 +18,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leadingWidth: 60.w,
+      //backgroundColor: AppColors.kPrimary,
       // leading: GestureDetector(
       //   onTap: () {
       //     Get.to<Widget>(() => const EditProfile());
@@ -31,27 +31,22 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       //     // You can add a profile image here if available
       //   ),
       // ),
-      title: Column(
+      /*title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+
         children: [
           Text(
             user.name, // Display the user's name dynamically
             style: AppTypography.kSemiBold16.copyWith(color: AppColors.kGrey100),
           ),
           Text(
-            'Good Morning',
+            user.email,
             style: AppTypography.kLight10.copyWith(color: AppColors.kGrey80),
           ),
         ],
-      ),
+      ),*/
       actions: [
-        CustomIcons(
-          onTap: () {
-            Get.to<Widget>(CartView.new);
-          },
-          icon: AppAssets.kBag,
-        ),
-        SizedBox(width: 10.0.w),
+
         CustomIcons(
           onTap: () {
             Get.to<Widget>(() => const NotificationView());
@@ -66,6 +61,35 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
+
+//referal reward balance widget
+ Widget referalRewardBalance() {
+    return Container(
+      height: 44.h,
+      //width: 44.w,
+      alignment: Alignment.center,
+      padding: EdgeInsets.symmetric(horizontal: 5.w),
+      decoration: const BoxDecoration(
+        //shape: BoxShape.circle,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Color(0xffF6F6F6),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            Icons.wallet,
+            color: AppColors.kGrey100,
+            size: 20.r,
+          ),
+          SizedBox(width: 5.w),
+          Text(
+            '0.00',
+            style: AppTypography.kSemiBold12.copyWith(color: AppColors.kGrey100),
+          ),
+        ],
+      ),
+    );
+  }
 
 class CustomIcons extends StatelessWidget {
   final String icon;

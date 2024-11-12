@@ -6,20 +6,21 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
+import '../../../models/subscription_model.dart';
+import '../../../services/auth_service.dart';
 import '../../../user/data/constants/app_colors.dart';
 import '../../../user/data/constants/app_typography.dart';
 import '../../../user/modules/widgets/buttons/primary_button.dart';
 import '../../../enums/subscription_status.dart';
 import '../../../widgets/custom_snackbar.dart';
-import '../../models/subscription_model.dart';
-import '../auth/auth_controller/auth_controller.dart';
+import '../../../modules/auth/controller/auth_controller.dart';
 
 class SubscriptionScreen extends StatelessWidget {
   const SubscriptionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final authController = Get.find<RetailerAuthController>();
+    final _authService = Get.find<AuthService>();
     final subscriptionController = Get.find<SubscriptionController>();
     return Scaffold(
       backgroundColor: AppColors.kGrey20,
@@ -96,7 +97,7 @@ class SubscriptionScreen extends StatelessWidget {
             SizedBox(height: 30.h),
             PrimaryButton(
               onTap: ()  {
-              SubscriptionModel subscriptiondetails = SubscriptionModel(uid: authController.retailerUser.uid, subscriptionStatus: SubscriptionStatus.pending,subscriptionDate: Timestamp.now());
+              SubscriptionModel subscriptiondetails = SubscriptionModel(uid:_authService.currentUser.value!.uid, subscriptionStatus: SubscriptionStatus.pending,subscriptionDate: Timestamp.now());
               subscriptionController.activateSubscription(subscriptiondetails: subscriptiondetails);
 
              Get.back();
