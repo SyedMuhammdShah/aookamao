@@ -2,6 +2,7 @@ import 'package:aookamao/admin/modules/products/controller/product_controller.da
 import 'package:aookamao/admin/modules/retailers/controller/retailer_controller.dart';
 import 'package:aookamao/modules/auth/controller/auth_controller.dart';
 import 'package:aookamao/modules/auth/referral_view.dart';
+import 'package:aookamao/retailer/retailer_modules/dashboard/controller/retailer_dashboard_controller.dart';
 import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 import 'package:aookamao/services/auth_service.dart';
 import 'package:aookamao/services/firebase_notification_service.dart';
@@ -14,10 +15,11 @@ import 'package:get/get.dart';
 import 'package:aookamao/user/bindings/home_binding.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'firebase_options.dart';
 import 'modules/splash/splash_view.dart';
-import 'retailer/retailer_modules/referal/controller/referral_controller.dart';
+import 'services/referral_service.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseBackgroundHandler(RemoteMessage message) async {
@@ -28,13 +30,15 @@ Future<void> main() async {
  WidgetsFlutterBinding.ensureInitialized();
  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
+ await GetStorage.init();
  await initServices();
   // Controllers
   Get.put(AuthController());
  Get.put(ProductController());
  Get.put(SubscriptionController());
  Get.put(RetailerController());
- Get.put(ReferralController());
+ Get.put(RetailerDashboardController());
+
 
   SystemChrome.setSystemUIOverlayStyle(defaultOverlay);
   await SystemChrome.setPreferredOrientations(
@@ -53,6 +57,7 @@ initServices() async {
   /// or moor connection, or whatever that's async.
   await Get.putAsync(()=> FirebasePushNotificationService().init());
   await Get.putAsync(() => AuthService().init());
+  await Get.putAsync(() => ReferralService().init());
   print('All services started...');
 }
 class Main extends StatelessWidget {
@@ -80,7 +85,7 @@ class Main extends StatelessWidget {
             defaultTransition: Transition.fadeIn,
             theme: AppTheme.lightTheme,
             initialBinding: HomeBinding(),
-            home: const ReferralView()
+            home: const SplashView(),
           ),
         );
       },

@@ -1,14 +1,14 @@
 enum ReferralAccountType{
   USER,
-  Retailer,
+  RETAILER,
 }
 
 stringToReferralAccountType(String type){
   switch(type){
     case "USER":
       return ReferralAccountType.USER;
-    case "Retailer":
-      return ReferralAccountType.Retailer;
+    case "RETAILER":
+      return ReferralAccountType.RETAILER;
     default:
       return null;
   }
@@ -18,8 +18,8 @@ referralAccountTypeToString(ReferralAccountType type){
   switch(type){
     case ReferralAccountType.USER:
       return "USER";
-    case ReferralAccountType.Retailer:
-      return "Retailer";
+    case ReferralAccountType.RETAILER:
+      return "RETAILER";
     default:
       return "";
   }

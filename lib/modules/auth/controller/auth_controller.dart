@@ -21,11 +21,13 @@ import '../../../models/subscription_model.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/firebase_notification_service.dart';
 import '../../../retailer/retailer_modules/dashboard/retailer_dashboard.dart';
+import '../../../services/referral_service.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
   final _authService = Get.find<AuthService>();
+  final _referralService = Get.find<ReferralService>();
   final GlobalKey<FormState> signup_formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> referral_formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
@@ -34,6 +36,8 @@ class AuthController extends GetxController {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController cnicController = TextEditingController();
+  final TextEditingController referralController = TextEditingController();
+
   Rx<File> cnicFrontFile = File('').obs;
   Rx<File> cnicBackFile = File('').obs;
   Rx<UserRoles> selectedRole = UserRoles.user.obs;
@@ -64,13 +68,13 @@ class AuthController extends GetxController {
   Future<void> registerUser() async {
     isLoading.value = true;
     var userdetail = UserModel(
-        uid: '',
-        name: nameController.text.trim(),
-        email: emailController.text.trim(),
-        role: UserRoles.user,
-        address: addressController.text.trim(),
-        registered_at: Timestamp.now(),
-        password: confirmPasswordController.text.trim(),
+      uid: '',
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      role: UserRoles.user,
+      address: addressController.text.trim(),
+      registered_at: Timestamp.now(),
+      password: confirmPasswordController.text.trim(),
     );
     bool isreg = await _authService.registerUser(
         cnicFrontFile.value, cnicBackFile.value, userdetails: userdetail);
@@ -135,6 +139,18 @@ class AuthController extends GetxController {
       else {
         showErrorSnackbar("Something went wrong please try again!");
       }
+    }
+  }
+
+  Future<void> addUserToReferral() async {
+    isLoading.value = true;
+    bool isvalidcode = await _referralService.validateReferralCode(
+        code: referralController.text.trim());
+    isLoading.value = false;
+    if (isvalidcode) {
+      showSuccessSnackbar(
+          "Your Successfully Added To Aookamao Referral Program.");
+      Get.offAll(() => const LandingPage());
     }
   }
 }

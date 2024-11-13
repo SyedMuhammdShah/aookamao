@@ -8,14 +8,14 @@ import 'package:intl/intl.dart';
 class ReferalCard extends StatelessWidget {
   final String refereeName;
   final ReferalTypes referalType;
-  final String referalAmount;
   final Timestamp referalDate;
+  final String? referedByName;
 
   const ReferalCard({
     required this.refereeName,
     required this.referalType,
-    required this.referalAmount,
     required this.referalDate,
+    this.referedByName,
   });
 
   @override
@@ -35,7 +35,13 @@ class ReferalCard extends StatelessWidget {
         trailing: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(referalAmount),
+            referalType == ReferalTypes.DirectReferal ? Icon(Icons.person,color: AppColors.kPrimary,) :
+            Row(
+              children: [
+                Icon(Icons.people,color: AppColors.kPrimary,),
+                Text(referedByName??''),
+              ],
+            ),
             Text(referalTypeToString(referalType)),
           ],
         ),

@@ -13,6 +13,7 @@ class UserModel {
   String? cnic_back_image_url;
   UserRoles role;
   Timestamp registered_at;
+  String? device_token;
 
 
   UserModel({
@@ -24,6 +25,7 @@ class UserModel {
     this.cnic_number,
     this.cnic_front_image_url,
     this.cnic_back_image_url,
+    this.device_token,
     required this.role,
     required this.registered_at,
   });
@@ -50,6 +52,7 @@ class UserModel {
       cnic_front_image_url: cnic_front_image_url ?? this.cnic_front_image_url,
       cnic_back_image_url: cnic_back_image_url ?? this.cnic_back_image_url,
       role: role ?? this.role,
+      device_token: device_token ?? this.device_token,
       registered_at: registered_at ?? this.registered_at,
     );
   }
@@ -59,9 +62,25 @@ class UserModel {
       uid: "",
       name: map['user_name'],
       email: map['user_email'],
-      address: map['address'],
+      address: map['address']??'',
       role: stringToUserRole(map['role']),
       registered_at: map['registered_at']??Timestamp(0, 0),
+      device_token: map['device_token'] ?? "",
+      cnic_front_image_url: map['cnic_front_image_url'] ?? "",
+      cnic_back_image_url: map['cnic_back_image_url'] ?? "",
+      cnic_number: map['cnic_number'] ?? "",
+    );
+  }
+
+  factory UserModel.fromMapLocalUser(Map<String, dynamic> map) {
+    return UserModel(
+      uid: map['UID'],
+      name: map['user_name'],
+      email: map['user_email'],
+      address: map['address'],
+      role: stringToUserRole(map['role']),
+      registered_at: Timestamp(0,0),
+      device_token: map['device_token'] ?? "",
     );
   }
 
@@ -75,6 +94,7 @@ class UserModel {
       cnic_back_image_url: map['cnic_back_image_url'],
       role: stringToUserRole(map['role']),
       registered_at: map['registered_at'],
+      device_token: map['device_token'] ?? "",
     );
   }
 
@@ -85,6 +105,19 @@ class UserModel {
       'address': address,
       'role': userRoleToString(role),
       'registered_at': registered_at,
+    };
+  }
+
+  Map<String, dynamic> toMapSaveUser() {
+    return {
+      'UID': uid,
+      'user_name': name,
+      'user_email': email,
+      'address': address??'',
+      'role': userRoleToString(role),
+      'cnic_number': cnic_number??'',
+      'cnic_front_image_url': cnic_front_image_url??'',
+      'cnic_back_image_url': cnic_back_image_url??'',
     };
   }
 

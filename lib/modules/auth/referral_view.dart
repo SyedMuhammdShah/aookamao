@@ -2,6 +2,7 @@ import 'package:aookamao/modules/auth/components/auth_appbar.dart';
 import 'package:aookamao/modules/auth/components/auth_field.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/user/data/constants/app_typography.dart';
+import 'package:aookamao/user/modules/landingPage/landing_page.dart';
 import 'package:aookamao/user/modules/widgets/buttons/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,7 +43,7 @@ class ReferralView extends StatelessWidget {
                 SizedBox(height: 0.01.sh),
                 AuthField(
                   title: '',
-                  controller: TextEditingController(),
+                  controller: _authController.referralController,
                   keyboardType: TextInputType.text,
                   maxLength: 6,
                   validator: (value) {
@@ -56,14 +57,32 @@ class ReferralView extends StatelessWidget {
                   }, hintText: 'Enter referral code',
                 ),
                 SizedBox(height: 0.05.sh),
+                Obx(
+                  () =>_authController.isLoading.value
+                      ? const CircularProgressIndicator(color: AppColors.kPrimary,)
+                      : PrimaryButton(
+                   text: 'Submit',
+                    onTap: () {
+                      if (_authController.referral_formKey.currentState!.validate()) {
+                         _authController.addUserToReferral();
+                      }
+                    },
+                  ),
+                ),
                 PrimaryButton(
-                 text: 'Submit',
-                  onTap: () {},
+                  text: 'Submit',
+                  onTap: () {
+                    if (_authController.referral_formKey.currentState!.validate()) {
+                      _authController.addUserToReferral();
+                    }
+                  },
                 ),
                 SizedBox(height: 0.05.sh),
                 CustomTextButton(
                   text: 'Skip for now',
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.offAll(() => const LandingPage());
+                  },
                 )
               ],
             ),

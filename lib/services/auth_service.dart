@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../enums/subscription_status.dart';
 import '../models/push_notification_model.dart';
@@ -21,15 +22,89 @@ class AuthService extends GetxService{
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebasePushNotificationService _firebasePushNotificationService = FirebasePushNotificationService();
+  final GetStorage _getStorage = GetStorage();
   Rx<SubscriptionModel> currentSubscription = Rx<SubscriptionModel>(SubscriptionModel(uid: '', subscriptionStatus: SubscriptionStatus.none));
+  RxBool isAppOpened = false.obs;
+  RxBool isUserLoggedIn = false.obs;
 
 
   Future<AuthService> init() async {
-    await Firebase.initializeApp();
+    await GetStorage.init();
+    await isAppOpenedFirstTime();
+    await checkUserLoggedIn();
+    await getUserFromLocal();
     return this;
   }
 
+  Future<void> isAppOpenedFirstTime() async {
+    try {
+      isAppOpened.value = await _getStorage.read('isAppOpened') ?? false;
+      if(!isAppOpened.value){
+        await _getStorage.write('isAppOpened', true);
+        await _getStorage.save();
+      }
+      print('isAppOpened: ${isAppOpened.value}');
+    }
+    catch(e){
+      print(e);
+    }
+  }
 
+  Future<void> saveUserInLocal(UserModel user) async {
+    try {
+      await _getStorage.write('isUserLoggedIn', true);
+      await _getStorage.write('user', user.toMapSaveUser());
+      await _getStorage.save();
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+  Future<void> getUserFromLocal() async {
+    try {
+      if(isUserLoggedIn.value){
+          currentUser.value = UserModel.fromMapLocalUser(await _getStorage.read('user'));
+      }
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+  Future<void> checkUserLoggedIn() async {
+    try {
+      isUserLoggedIn.value = await _getStorage.read('isUserLoggedIn') ?? false;
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await removeDeviceToken();
+      await _firebaseAuth.signOut();
+      await _getStorage.write('isUserLoggedIn', false);
+      await _getStorage.remove('user');
+      await _getStorage.save();
+      isUserLoggedIn.value = false;
+      showSuccessSnackbar('Logged out successfully');
+    }
+    catch(e){
+      print(e);
+    }
+  }
+
+  //remove logout device token
+  Future<void> removeDeviceToken() async {
+    try {
+      await _firestore.collection(Constants.usersCollection).doc(currentUser.value!.uid).update({'device_token':''});
+    }
+    catch(e){
+      print(e);
+    }
+  }
 
   Future<bool> registerUser(File? cnicFrontFile,File? cnicBackFile,{required UserModel userdetails}) async {
     isLoading.value = true;
@@ -56,6 +131,7 @@ class AuthService extends GetxService{
         await activateSubscription(subscriptiondetails:subscriptiondetails);
         await FirebasePushNotificationService().getDeviceToken();
         currentUser.value = userdetails;
+        saveUserInLocal(userdetails);
         showSuccessSnackbar('Your are registered as a retailer');
         return true;
       }
@@ -66,6 +142,7 @@ class AuthService extends GetxService{
             .set(userdetails.toMapRegisterUser());
         await FirebasePushNotificationService().getDeviceToken();
         currentUser.value = userdetails;
+        saveUserInLocal(userdetails);
         showSuccessSnackbar('Your are registered as a user');
         return true;
       }
@@ -99,6 +176,7 @@ class AuthService extends GetxService{
          if(userDoc.get('role') == userRoleToString(UserRoles.retailer)){
            currentUser.value = UserModel.fromMapRetailer(userDoc.data() as Map<String, dynamic>);
            currentUser.value = currentUser.value!.copyWith(uid: userId);
+           saveUserInLocal(currentUser.value!);
             await getSubscriptionDetails(uid: userId);
             await _firebasePushNotificationService.getDeviceToken();
             showSuccessSnackbar('Login Successful');
@@ -106,6 +184,7 @@ class AuthService extends GetxService{
          }
          currentUser.value = UserModel.fromMapUser(userDoc.data() as Map<String, dynamic>);
          currentUser.value = currentUser.value!.copyWith(uid: userId);
+          saveUserInLocal(currentUser.value!);
          await _firebasePushNotificationService.getDeviceToken();
          showSuccessSnackbar('Login Successful');
          return true;
@@ -255,4 +334,6 @@ class AuthService extends GetxService{
       return;
     }
   }
+
+
 }

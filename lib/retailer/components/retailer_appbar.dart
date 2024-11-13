@@ -9,8 +9,10 @@ import 'package:aookamao/user/modules/notification/notification_view.dart';
 
 class RetailerAppBar extends StatelessWidget implements PreferredSizeWidget {
   final UserModel user; // Changed from user_name to user
+  final String? title;
   const RetailerAppBar({
     required this.user, // required user data
+    this.title,
     super.key,
   });
 
@@ -45,6 +47,12 @@ class RetailerAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),*/
+
+      centerTitle: true,
+      title: Text(
+        title ?? '',
+        style: AppTypography.kSemiBold18.copyWith(color: AppColors.kGrey100),
+      ),
       actions: [
 
         CustomIcons(

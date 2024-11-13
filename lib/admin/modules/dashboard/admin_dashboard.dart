@@ -1,4 +1,6 @@
 
+import 'package:aookamao/constants/constants.dart';
+import 'package:aookamao/enums/user_roles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,12 +17,12 @@ class AdminDashboard extends StatelessWidget {
    AdminDashboard({super.key});
   // Method to get total users count
   Stream<int> getUsersCount() {
-    return FirebaseFirestore.instance.collection('users').snapshots().map((snapshot) => snapshot.docs.length);
+    return FirebaseFirestore.instance.collection(Constants.usersCollection).where('role',isEqualTo: userRoleToString(UserRoles.user)).snapshots().map((snapshot) => snapshot.docs.length);
   }
 
   // Method to get total suppliers count
   Stream<int> getSuppliersCount() {
-    return FirebaseFirestore.instance.collection('suppliers').snapshots().map((snapshot) => snapshot.docs.length);
+    return FirebaseFirestore.instance.collection(Constants.usersCollection).where('role',isEqualTo: userRoleToString(UserRoles.retailer)).snapshots().map((snapshot) => snapshot.docs.length);
   }
 
   // Method to get total orders count
@@ -98,10 +100,10 @@ class AdminDashboard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildStatCard('Users', Icons.person, getUsersCount()),
-                  _buildStatCard('Suppliers', Icons.store, getSuppliersCount()),
-                  _buildStatCard('Orders', Icons.shopping_bag, getOrdersCount()),
-                  //_buildStatCard('Referrals', Icons.people, getReferralsCount()),
+                  _buildStatCard('Customers', Icons.person, getUsersCount()),
+                  _buildStatCard('Retailers', Icons.store, getSuppliersCount()),
+                  //_buildStatCard('Orders', Icons.shopping_bag, getOrdersCount()),
+                  _buildStatCard('Referrals', Icons.people, getReferralsCount()),
                 ],
               ),
               SizedBox(height: 20),

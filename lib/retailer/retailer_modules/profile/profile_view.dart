@@ -1,4 +1,6 @@
 import 'package:aookamao/modules/auth/signin_view.dart';
+import 'package:aookamao/retailer/components/retailer_appbar.dart';
+import 'package:aookamao/retailer/components/retailer_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,14 +27,8 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _authservice = Get.find<AuthService>();
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text(
-          'Profile',
-          style: AppTypography.kSemiBold18.copyWith(color: AppColors.kGrey100),
-        ),
-      ),
+      appBar: RetailerAppBar(user: _authservice.currentUser.value!,title: 'Profile',),
+      drawer: RetailerDrawer(),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
         children: [

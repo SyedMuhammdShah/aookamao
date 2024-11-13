@@ -1,4 +1,5 @@
 
+import 'package:aookamao/retailer/retailer_modules/profile/profile_view.dart';
 import 'package:aookamao/services/auth_service.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/modules/auth/controller/auth_controller.dart';
@@ -24,9 +25,17 @@ class RetailerDrawer extends StatelessWidget {
             onTap: () => {},
           ),
           _buildItem(
-            icon: Icons.settings,
-            title: 'Setting',
+            icon: CupertinoIcons.home,
+            title: 'Referrals',
             onTap: () => {},
+          ),
+          _buildItem(
+            icon: Icons.settings,
+            title: 'Profile',
+            onTap: () => {
+              Scaffold.of(context).closeDrawer(),
+              Get.to<Widget>(() => const ProfileView())
+            },
           )
         ],
       ),

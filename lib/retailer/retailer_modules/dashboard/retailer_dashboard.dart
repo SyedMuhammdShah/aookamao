@@ -1,5 +1,6 @@
 import 'package:aookamao/admin/components/adminAppBar.dart';
 import 'package:aookamao/retailer/components/referal_card.dart';
+import 'package:aookamao/retailer/retailer_modules/dashboard/controller/retailer_dashboard_controller.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/user/data/constants/app_typography.dart';
 import 'package:aookamao/enums/subscription_status.dart';
@@ -19,8 +20,9 @@ import 'package:get/get_core/src/get_main.dart';
 import '../../../admin/components/admin_drawer.dart';
 import '../../../enums/referral_types.dart';
 import '../../../services/auth_service.dart';
-import '../components/retailer_appbar.dart';
-import '../components/retailer_drawer.dart';
+import '../../../services/referral_service.dart';
+import '../../components/retailer_appbar.dart';
+import '../../components/retailer_drawer.dart';
 import '../referal/refer_now.dart';
 
 class RetailerDashboard extends StatefulWidget {
@@ -33,6 +35,7 @@ class RetailerDashboard extends StatefulWidget {
 class _RetailerDashboardState extends State<RetailerDashboard> {
   SubscriptionController subscriptionController = Get.find<SubscriptionController>();
   final _authService = Get.find<AuthService>();
+  final _dashboardController = Get.find<RetailerDashboardController>();
 
   @override
   void initState() {
@@ -44,8 +47,7 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
     return Scaffold(
       appBar: RetailerAppBar(user: _authService.currentUser.value!),
       drawer: RetailerDrawer(),
-      body:
-      Obx(()=>SingleChildScrollView(
+      body: Obx(()=>SingleChildScrollView(
         child: Column(
             children: [
               if(subscriptionController.currentSubscription.value.subscriptionStatus == SubscriptionStatus.none)
@@ -123,7 +125,7 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _dashboardcard(title: 'Wallet', subtitle: '0.00', icon: Icons.wallet),
-                        _dashboardcard(title: 'Referrals', subtitle: '0', icon: Icons.people),
+                        _dashboardcard(title: 'Referrals', subtitle: _dashboardController.totalReferrals.value, icon: Icons.people),
                         _dashboardcard(title: 'Orders', subtitle: '0', icon: Icons.shopping_cart),
                       ],
                     ),
@@ -169,15 +171,16 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                           ),
                           Divider(),
                           ListView.builder(
-                            itemCount: 5,
+                            itemCount: _dashboardController.thisMonthRefereesList.length,
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
                             itemBuilder: (context,index){
+
                               return ReferalCard(
-                                refereeName: "Referral Name",
-                                referalType: ReferalTypes.DirectReferal,
-                                referalAmount: "Referral Amount",
-                                referalDate: Timestamp.now(),
+                                refereeName: _dashboardController.thisMonthRefereesList[index].refereeName??'',
+                                referalType: _dashboardController.thisMonthRefereesList[index].referalType,
+                                referalDate:_dashboardController.thisMonthRefereesList[index].referralDate,
+                                referedByName: _dashboardController.thisMonthRefereesList[index].referedByName,
                               );
 
                             },

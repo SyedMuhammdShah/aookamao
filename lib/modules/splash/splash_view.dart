@@ -1,4 +1,10 @@
+import 'package:aookamao/admin/modules/dashboard/admin_dashboard.dart';
+import 'package:aookamao/enums/user_roles.dart';
+import 'package:aookamao/modules/auth/signin_view.dart';
+import 'package:aookamao/retailer/retailer_modules/dashboard/retailer_dashboard.dart';
+import 'package:aookamao/services/auth_service.dart';
 import 'package:aookamao/services/firebase_notification_service.dart';
+import 'package:aookamao/user/modules/landingPage/landing_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,12 +21,36 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+  final _authService = Get.find<AuthService>();
   @override
   void initState() {
     super.initState();
-
     Future.delayed(const Duration(seconds: 3), () {
+    if(_authService.isAppOpened.isTrue){
+      if(_authService.isUserLoggedIn.value) {
+
+        print('current user name: ${_authService.currentUser.value?.name}');
+        print('current user role: ${_authService.currentUser.value?.role}');
+        switch (_authService.currentUser.value?.role) {
+          case UserRoles.user:
+            Get.offAll<Widget>(() => const LandingPage());
+            break;
+          case UserRoles.admin:
+            Get.offAll<Widget>(() => AdminDashboard());
+            break;
+          case UserRoles.retailer:
+            Get.offAll<Widget>(() => const RetailerDashboard());
+            break;
+          default:
+            Get.offAll<Widget>(() => const SignInView());
+        }
+      }
+      else{
+          Get.offAll<Widget>(() => const SignInView());
+      }
+    }else{
       Get.offAll<Widget>(() => const OnboardingView());
+    }
     });
   }
 

@@ -1,3 +1,4 @@
+import 'package:aookamao/services/referral_service.dart';
 import 'package:aookamao/user/data/constants/app_typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import '../../../admin/components/adminAppBar.dart';
-import 'controller/referral_controller.dart';
 
 class ReferNow extends StatefulWidget {
   const ReferNow({super.key});
@@ -17,12 +17,12 @@ class ReferNow extends StatefulWidget {
 }
 
 class _ReferNowState extends State<ReferNow> {
-  final _referralController = Get.find<ReferralController>();
+  final _referralService = Get.find<ReferralService>();
   @override
   void initState() {
     super.initState();
-    if(_referralController.referralCode.value.isEmpty) {
-      _referralController.getReferralCode();
+    if(_referralService.referralCode.value.isEmpty) {
+      _referralService.getReferralCode();
     }
   }
   @override
@@ -70,7 +70,7 @@ class _ReferNowState extends State<ReferNow> {
               child: Obx(() => Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(_referralController.referralCode.value,style: AppTypography.kMedium16,),
+                    Text(_referralService.referralCode.value,style: AppTypography.kMedium16,),
                     IconButton(
                       onPressed: (){},
                       icon: Icon(Icons.copy),
@@ -105,7 +105,7 @@ class _ReferNowState extends State<ReferNow> {
                     height: 0.02.sh,
                   ),
                   Obx(() => QrImageView(
-                      data: _referralController.referralCode.value,
+                      data: _referralService.referralCode.value,
                       version: QrVersions.auto,
                       size: 0.5.sw,
                       padding: EdgeInsets.all(0.02.sw),
