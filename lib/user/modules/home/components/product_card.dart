@@ -20,7 +20,7 @@ class ProductCard extends StatelessWidget {
       child: Column(
         children: [
           Hero(
-            tag: product.id,
+            tag: product.productId ?? '',
             child: Container(
               height: 167.h,
               width: 153.w,
@@ -42,7 +42,7 @@ class ProductCard extends StatelessWidget {
                         // Handle image change if needed
                       },
                     ),
-                    items: product.imageUrls.map((imageUrl) {
+                    items: product.imageUrls?.map((imageUrl) {
                       return ClipRRect(
                         borderRadius: BorderRadius.circular(10.r),
                         child: Image.network(
@@ -53,7 +53,7 @@ class ProductCard extends StatelessWidget {
                       );
                     }).toList(),
                   ),
-                  Positioned(
+                  /*Positioned(
                     top: 8.h,
                     left: 8.w,
                     child: Transform.rotate(
@@ -73,7 +73,7 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
+                  ),*/
                   Positioned(
                     top: 8.h,
                     right: 8.w,
@@ -90,24 +90,16 @@ class ProductCard extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            product.name,
+            product.name ?? '',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: AppTypography.kSemiBold12,
           ),
           SizedBox(height: AppSpacing.fiveVertical),
-          RichText(
-            text: TextSpan(
-              text: '\$${product.oldPrice.toInt()}  ',
-              style: AppTypography.kLight10.copyWith(color: AppColors.kGrey60),
-              children: [
-                TextSpan(
-                  text: '\$${product.currentPrice.toInt()}',
-                  style: AppTypography.kSemiBold14
-                      .copyWith(color: AppColors.kGrey100),
-                ),
-              ],
-            ),
+          Text(
+            '\$${product.price?.toInt()}',
+            style: AppTypography.kSemiBold14
+                .copyWith(color: AppColors.kGrey100),
           ),
         ],
       ),

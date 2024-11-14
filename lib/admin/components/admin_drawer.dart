@@ -1,18 +1,23 @@
+import 'package:aookamao/admin/modules/dashboard/admin_dashboard.dart';
 import 'package:aookamao/admin/modules/products/add_products.dart';
 import 'package:aookamao/admin/modules/orders/order_list.dart';
+import 'package:aookamao/admin/modules/profile/admin_profile_view.dart';
+import 'package:aookamao/admin/modules/referrals/all_referees_view.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../services/auth_service.dart';
 import '../modules/products/products_list.dart';
 import '../modules/retailers/retailers.dart';
 
 class AdminDrawer extends StatelessWidget {
   const AdminDrawer({super.key});
-
   @override
   Widget build(BuildContext context) {
+
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -21,17 +26,27 @@ class AdminDrawer extends StatelessWidget {
           _buildItem(
             icon: CupertinoIcons.home,
             title: 'Home',
-            onTap: () => {},
+            onTap: () => {
+              Get.to(AdminDashboard()),
+            },
           ),
            _buildItem(
-               icon: CupertinoIcons.person_2,
-               title: 'Suppliers',
+               icon: Icons.store_outlined,
+               title: 'Retailers',
                onTap: () => {
                  Get.to(RetailersScreen()),
                }
            ),
+           //referral
+          _buildItem(
+            icon: CupertinoIcons.person_2,
+            title: 'Referees',
+            onTap: () => {
+              Get.to(AllRefereesView()),
+            }
+          ),
            _buildItem(
-            icon: CupertinoIcons.add_circled_solid,
+            icon: CupertinoIcons.add_circled,
             title: 'Add Products',
             onTap: () => {
               Get.to(AddProducts()),
@@ -54,33 +69,34 @@ class AdminDrawer extends StatelessWidget {
           _buildItem(
             icon: CupertinoIcons.person,
             title: 'Profile',
-            onTap: () => {},
+            onTap: () => {
+              Get.to(AdminProfileView())
+            },
           ),
-          _buildItem(
-            icon: Icons.settings,
-            title: 'Setting',
-            onTap: () => {},
-          )
         ],
       ),
     );
   }
 
   _buildHeader() {
-    return const DrawerHeader(
+    final _authService = Get.find<AuthService>();
+    return  DrawerHeader(
       decoration: BoxDecoration(color: AppColors.kPrimary),
       child: Column(
         children: [
           CircleAvatar(
-            backgroundImage: NetworkImage(
-                'https://media.istockphoto.com/id/1399611777/photo/portrait-of-a-smiling-little-brown-haired-boy-looking-at-the-camera-happy-kid-with-good.jpg?s=612x612&w=0&k=20&c=qZ63xODwrnc81wKK0dwc3tOEf2lghkQQKmotbF11q7Q='),
+            child: Icon(
+              CupertinoIcons.person,
+              size: 50,
+              color: Colors.white,
+            ),
             radius: 40,
           ),
           SizedBox(
             height: 20,
           ),
           Text(
-            'Mahdi Nazmi',
+            _authService.currentUser.value!.name,
             style: TextStyle(color: Colors.white, fontSize: 15),
           )
         ],

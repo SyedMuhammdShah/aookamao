@@ -11,51 +11,35 @@ import '../../models/user_model.dart';
 
 
 class adminAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final UserModel user; // Changed from user_name to user
+  final UserModel? user;// Changed from user_name to user
+  final String? Title;
   const adminAppBar({
-     required this.user, // required user data
-    super.key,
+    this.user, // required user data
+    super.key, this.Title,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leadingWidth: 60.w,
-      backgroundColor: AppColors.kPrimary,
-      // leading: GestureDetector(
-      //   onTap: () {
-      //     Get.to<Widget>(() => const EditProfile());
-      //   },
-      //   child: Padding(
-      //     padding: EdgeInsets.only(
-      //       left: 10.w,
-      //       top: 5.h,
-      //     ),
-      //     // You can add a profile image here if available
-      //   ),
-      // ),
-      title: Column(
+      //leadingWidth: 60.w,
+      title:
+      Title != null ? Text(Title!, style: AppTypography.kSemiBold16.copyWith(color: AppColors.kGrey100),) :
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         
         children: [
           Text(
-            user.name, // Display the user's name dynamically
-            style: AppTypography.kSemiBold16.copyWith(color: AppColors.kGrey100),
-          ),
-          Text(
-          user.email,
+            'Welcome,', // Static text
             style: AppTypography.kLight10.copyWith(color: AppColors.kGrey80),
           ),
+          Text(
+            user!.name, // Display the user's name dynamically
+            style: AppTypography.kSemiBold16.copyWith(color: AppColors.kGrey100),
+          ),
+
         ],
       ),
       actions: [
-        CustomIcons(
-          onTap: () {
-            Get.to<Widget>(CartView.new);
-          },
-          icon: AppAssets.kBag,
-        ),
-        SizedBox(width: 10.0.w),
         CustomIcons(
           onTap: () {
             Get.to<Widget>(() => const NotificationView());

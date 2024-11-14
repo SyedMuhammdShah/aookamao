@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
+import '../../components/adminAppBar.dart';
+import '../../components/admin_drawer.dart';
+
 class ProductsList extends StatelessWidget {
   final ProductController productController = Get.find<ProductController>();
 
@@ -24,13 +27,8 @@ class ProductsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.kPrimary,
-        title: Text(
-          'Products List',
-          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar:const adminAppBar(Title: 'Product List',),
+      drawer: AdminDrawer(),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('products').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

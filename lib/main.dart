@@ -1,3 +1,4 @@
+import 'package:aookamao/admin/modules/dashboard/controller/admin_dashboard_controller.dart';
 import 'package:aookamao/admin/modules/products/controller/product_controller.dart';
 import 'package:aookamao/admin/modules/retailers/controller/retailer_controller.dart';
 import 'package:aookamao/modules/auth/controller/auth_controller.dart';
@@ -34,6 +35,7 @@ Future<void> main() async {
  await initServices();
   // Controllers
   Get.put(AuthController());
+  Get.put(AdminDashboardController());
  Get.put(ProductController());
  Get.put(SubscriptionController());
  Get.put(RetailerController());

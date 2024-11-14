@@ -283,7 +283,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
         child: Stack(
           children: [
             Hero(
-              tag: widget.product.id,
+              tag: widget.product.productId,
               child: Column(
                 children: [
                   CarouselSlider(

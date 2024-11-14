@@ -8,7 +8,7 @@ class CartController extends GetxController {
 
   void addToCart(ProductModel product, int quantity) {
     final existingItem =
-        cartItems.firstWhereOrNull((item) => item.product.id == product.id);
+        cartItems.firstWhereOrNull((item) => item.product.productId == product.productId);
 
     if (existingItem != null) {
       existingItem.quantity += quantity;
@@ -25,7 +25,7 @@ class CartController extends GetxController {
   }
 
   void removeFromCart(ProductModel product) {
-    cartItems.removeWhere((item) => item.product.id == product.id);
+    cartItems.removeWhere((item) => item.product.productId == product.productId);
     showToast('Remove from Cart');
   }
 

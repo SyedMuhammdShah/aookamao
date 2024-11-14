@@ -68,24 +68,6 @@ class HomeView extends StatelessWidget {
                   crossAxisCount: 2,
                   crossAxisSpacing: AppSpacing.tenHorizontal,
                   mainAxisSpacing: AppSpacing.twentyVertical,
-                  /*children: List.generate(
-                    dummyProductList.length,
-                    (index) {
-                      return AnimationConfiguration.staggeredGrid(
-                        columnCount: 2,
-                        position: index,
-                        duration: const Duration(milliseconds: 375),
-                        child: FadeInAnimation(
-                          duration: const Duration(seconds: 1),
-                          child: FadeInAnimation(
-                            child: ProductCard(
-                              product: dummyProductList[index],
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),*/
                   children:List.generate(
                     products.length,
                       (index) =>AnimationConfiguration.staggeredGrid(
@@ -97,16 +79,11 @@ class HomeView extends StatelessWidget {
                           child: FadeInAnimation(
                             child: ProductCard(
                               product: ProductModel(
-                                id: products[index].id,
+                                productId: products[index].id,
                                 name: products[index]['name'],
                                 currentPrice: products[index]['price'],
-                                averageRatings: 0.0,
                                 imageUrls: products[index]['imageUrls'],
                                 description: products[index]['materialComposition'],
-                                oldPrice: 0,
-                                offPercentage: '30% Off',
-                                totalRatings: 0,
-                                ownerName: 'John Doe',
                                 category: ProductCategory.sofa,
                                 filter: ProductFilter.brand,
                               ),

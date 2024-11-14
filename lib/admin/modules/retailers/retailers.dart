@@ -20,13 +20,7 @@ class _RetailersScreenState extends State<RetailersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.kPrimary,
-        title: Text(
-          'Suppliers',
-          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-      ),
+      appBar:const adminAppBar(Title: 'Retailers',),
       drawer: AdminDrawer(),
       body: Obx(() {
         if (_retailerController.isLoading.value) {

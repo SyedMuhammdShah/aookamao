@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 
 import '../../../services/auth_service.dart';
 import '../../../widgets/custom_snackbar.dart';
+import '../../components/admin_drawer.dart';
 
 class AddProducts extends StatefulWidget {
   @override
@@ -33,7 +34,8 @@ class _AddProductsState extends State<AddProducts> {
     ProductController productController = Get.find<ProductController>();
 
     return Scaffold(
-      appBar: adminAppBar(user: _authService.currentUser.value!,),
+      appBar:const adminAppBar(Title: 'Add Products',),
+      drawer: AdminDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

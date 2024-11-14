@@ -24,8 +24,8 @@ class ReferralService extends GetxService{
   RxList<Referee> thisMonthRefereesList = <Referee>[].obs;
   Rx<String> referralCode = Rx<String>('');
   Rx<UserModel?> referralUserDetail = Rx<UserModel?>(null);
-  RxList<ReferralModel> allReferralsList = <ReferralModel>[].obs;
-  RxList<Referee> allrefereesList = <Referee>[].obs;
+  RxList<Referee> allReferessList = <Referee>[].obs;
+
   Future<ReferralService> init() async {
     if(_authService.currentUser.value!.role == UserRoles.retailer) {
       getRetailerReferees();
@@ -292,12 +292,13 @@ class ReferralService extends GetxService{
   }
 
   // Function to get all referees from referralsCollections
-  Future<void> getAllReferrals() async {
+  Future<void> getAllRetailersReferees() async {
     try {
-      final querySnapshot = await _firestore.collection(Constants.referralsCollection).snapshots();
+      final querySnapshot = await _firestore.collection(Constants.referralsCollection).where('accountType',isEqualTo: referralAccountTypeToString(ReferralAccountType.RETAILER)).snapshots();
       querySnapshot.listen((event) {
-        print('All referrals: ${event.docs}');
-        //allReferralsList.value = event.docs.map((e) => ReferralModel.fromMap(e.data() as Map<String, dynamic>)).toList();
+        List<dynamic> data = event.docs.map((e) => e.get('referees')).toList();
+        allReferessList.value = data.expand((element) => element).map((e) => Referee.fromMap(e)).toList();
+        print('All referrals: ${allReferessList.length}');
       });
 
     } catch (e) {
