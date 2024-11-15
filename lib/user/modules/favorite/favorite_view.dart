@@ -1,3 +1,4 @@
+import 'package:aookamao/user/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -70,7 +71,8 @@ class _FavoriteViewState extends State<FavoriteView> {
                             duration: const Duration(seconds: 1),
                             child: FadeInAnimation(
                               child: ProductCard(
-                                product: fc.favorite![index],
+                                product: fc.favorite![index] as Rx<ProductModel>,
+                                productListIndex: index,
                               ),
                             ),
                           ),

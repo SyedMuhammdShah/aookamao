@@ -100,12 +100,12 @@ class _ProductScannerState extends State<ProductScanner>
                   ),
                 ),
               ),
-              Expanded(
+             /* Expanded(
                 flex: 2,
                 child: ScannedProduct(
                   product: dummyProductList[0],
                 ),
-              ),
+              ),*/
             ],
           ),
         ),

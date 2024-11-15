@@ -25,7 +25,7 @@ class _ExploreViewState extends State<ExploreView> {
   int _selectedType = 0;
   ProductCategory _productCategory = ProductCategory.all;
 
-  List<ProductModel> getFilteredProducts() {
+ /* List<ProductModel> getFilteredProducts() {
     if (_productCategory == ProductCategory.all) {
       return dummyProductList;
     } else {
@@ -33,11 +33,11 @@ class _ExploreViewState extends State<ExploreView> {
           .where((product) => product.category == _productCategory)
           .toList();
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
-    final filteredProducts = getFilteredProducts();
+    final filteredProducts = [];
 
     return Scaffold(
       appBar: AppBar(
@@ -139,6 +139,7 @@ class _ExploreViewState extends State<ExploreView> {
                         child: FadeInAnimation(
                           child: ProductCard(
                             product: filteredProducts[index],
+                            productListIndex: index,
                           ),
                         ),
                       ),

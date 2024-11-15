@@ -8,7 +8,7 @@ import '../../services/auth_service.dart';
 
 class HomeController extends GetxController {
   final _authService = Get.find<AuthService>();
-  RxList<ProductModel> productsList = <ProductModel>[].obs;
+  RxList<Rx<ProductModel>> productsList = <Rx<ProductModel>>[].obs;
   ProductModel selectedProduct = ProductModel();
   RxBool isLoading = false.obs;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -17,7 +17,6 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     productsList.bindStream(getProducts());
-   
     getProducts();
     super.onInit();
   }
@@ -33,7 +32,7 @@ class HomeController extends GetxController {
     });
   }*/
 
-  Stream<List<ProductModel>> getProducts() {
-    return _firestore.collection(Constants.productsCollection).snapshots().map((snapshot) => snapshot.docs.map((doc) => ProductModel.fromMap(doc.data())).toList());
+  Stream<RxList<Rx<ProductModel>>> getProducts() {
+    return _firestore.collection(Constants.productsCollection).snapshots().map((snapshot) => snapshot.docs.map((doc) => ProductModel.fromMap(doc.data()).obs).toList().obs);
   }
 }

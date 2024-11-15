@@ -39,12 +39,12 @@ class PaymentView extends StatelessWidget {
             SizedBox(height: AppSpacing.tenVertical),
             const AddressCard(),
             SizedBox(height: AppSpacing.fifteenVertical),
-            Text(
+           /* Text(
               'Products (${dummyProductList.length})',
               style: AppTypography.kSemiBold16,
-            ),
+            ),*/
             SizedBox(height: AppSpacing.fifteenVertical),
-            ListView.separated(
+            /*ListView.separated(
               itemCount: dummyProductList.length,
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -55,7 +55,7 @@ class PaymentView extends StatelessWidget {
                   product: dummyProductList[index],
                 );
               },
-            ),
+            ),*/
             SizedBox(height: AppSpacing.fifteenVertical),
             Text(
               'Payment Method',

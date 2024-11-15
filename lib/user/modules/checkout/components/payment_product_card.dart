@@ -21,7 +21,7 @@ class PaymentProductCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(AppSpacing.radiusTen),
             image: DecorationImage(
-              image: AssetImage(product.imageUrls[0]),
+              image: AssetImage(product.imageUrls?[0]),
               fit: BoxFit.cover,
             ),
           ),
@@ -32,7 +32,7 @@ class PaymentProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                product.name,
+                product.name??'',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.kSemiBold16,
@@ -55,7 +55,7 @@ class PaymentProductCard extends StatelessWidget {
                           .copyWith(color: AppColors.kGrey100,fontSize: 12.sp),
                       children: [
                         TextSpan(
-                          text: product.currentPrice.toString(),
+                          text: product.name.toString(),
                           style: AppTypography.kSemiBold16,
                         ),
                       ],

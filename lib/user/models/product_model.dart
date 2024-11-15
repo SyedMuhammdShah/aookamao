@@ -7,7 +7,6 @@ class ProductModel {
   final List<dynamic>? imageUrls;
   final String? name;
   final double? price;
-  final String? description;
   final String? fabricType;
   final double? fabricLength;
   final double? fabricWidth;
@@ -29,7 +28,6 @@ class ProductModel {
     this.imageUrls,
     this.name,
     this.price,
-    this.description,
     this.fabricType,
     this.fabricLength,
     this.fabricWidth,
@@ -52,7 +50,6 @@ class ProductModel {
       imageUrls: map['imageUrls'],
       name: map['name'],
       price: map['price'],
-      description: map['description'],
       fabricType: map['fabricType'],
       fabricLength: map['fabricLength'],
       fabricWidth: map['fabricWidth'],

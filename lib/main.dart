@@ -18,6 +18,7 @@ import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'bindings/auth_binding.dart';
 import 'firebase_options.dart';
 import 'modules/splash/splash_view.dart';
 import 'services/referral_service.dart';
@@ -33,13 +34,14 @@ Future<void> main() async {
  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
  await GetStorage.init();
  await initServices();
+ Get.put(AuthController());
   // Controllers
-  Get.put(AuthController());
+/*  Get.put(AuthController());
   Get.put(AdminDashboardController());
  Get.put(ProductController());
  Get.put(SubscriptionController());
  Get.put(RetailerController());
- Get.put(RetailerDashboardController());
+ Get.put(RetailerDashboardController());*/
 
 
   SystemChrome.setSystemUIOverlayStyle(defaultOverlay);

@@ -8,8 +8,12 @@ import 'package:aookamao/user/modules/checkout/components/cart_item_card.dart';
 import 'package:aookamao/user/modules/checkout/components/drag_sheet.dart';
 import 'package:aookamao/user/modules/checkout/components/no_item_card.dart';
 
+import '../../controllers/home_controller.dart';
+import '../home/product_detail_view.dart';
+
 class CartView extends StatelessWidget {
   CartController cc = Get.find<CartController>();
+  final _homeController = Get.find<HomeController>();
   CartView({super.key});
 
   @override
@@ -23,8 +27,8 @@ class CartView extends StatelessWidget {
           style: AppTypography.kSemiBold18.copyWith(color: AppColors.kGrey100),
         ),
       ),
-      body: Obx(() {
-        return cc.cartItems.isEmpty
+      body: Obx(() =>
+          cc.cartItems.isEmpty
             ? const NoItemCard()
             : Stack(
                 children: [
@@ -39,9 +43,14 @@ class CartView extends StatelessWidget {
                         SizedBox(height: AppSpacing.twentyVertical),
                     itemBuilder: (context, index) {
                       return CartItemCard(
-                        product: cc.cartItems[index].product,
+                        cartItem: cc.cartItems[index].obs,
                         removeCallback: () {
-                          cc.removeFromCart(cc.cartItems[index].product);
+                          cc.removeFromCart(index);
+                        },
+                        onProductDetail: () {
+                          Get.to<Widget>(() => ProductDetailView(
+                                productListIndex: cc.cartItems[index].productListIndex,
+                              ));
                         },
                       );
                     },
@@ -52,8 +61,7 @@ class CartView extends StatelessWidget {
                     totalAmount: cc.getSubtotal() + 8.00,
                   ),
                 ],
-              );
-      }),
+              )),
     );
   }
 }

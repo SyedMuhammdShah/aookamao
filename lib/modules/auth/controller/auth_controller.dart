@@ -10,7 +10,9 @@ import 'package:aookamao/user/modules/landingPage/landing_page.dart';
 import 'package:aookamao/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_instance/src/bindings_interface.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,6 +24,7 @@ import '../../../services/auth_service.dart';
 import '../../../services/firebase_notification_service.dart';
 import '../../../retailer/retailer_modules/dashboard/retailer_dashboard.dart';
 import '../../../services/referral_service.dart';
+import '../../../user/bindings/home_binding.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;

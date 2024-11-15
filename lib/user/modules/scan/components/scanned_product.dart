@@ -1,3 +1,4 @@
+/*
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
@@ -107,3 +108,4 @@ class ScannedProduct extends StatelessWidget {
     );
   }
 }
+*/

@@ -37,7 +37,7 @@ class MyPurchaseCard extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.r),
                   image: DecorationImage(
-                    image: AssetImage(product.imageUrls[0]),
+                    image: AssetImage(product.imageUrls?[0]),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -48,7 +48,7 @@ class MyPurchaseCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      product.name,
+                      product.name??'',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.kMedium16,
@@ -93,7 +93,7 @@ class MyPurchaseCard extends StatelessWidget {
                         ),
                         children: [
                           TextSpan(
-                            text: product.currentPrice.toString(),
+                            text: product.price.toString(),
                             style: AppTypography.kSemiBold16,
                           ),
                         ],

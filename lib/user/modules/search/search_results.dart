@@ -21,7 +21,7 @@ class _SearchResultsState extends State<SearchResults> {
   int _selectedType = 0;
   ProductFilter _productFilter = ProductFilter.all;
 
-  List<ProductModel> getFilteredProducts() {
+  /*List<ProductModel> getFilteredProducts() {
     if (_productFilter == ProductFilter.all) {
       return widget.searchResults;
     } else {
@@ -29,11 +29,11 @@ class _SearchResultsState extends State<SearchResults> {
           .where((product) => product.filter == _productFilter)
           .toList();
     }
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
-    final filteredProducts = getFilteredProducts();
+    final filteredProducts = [];
     return ListView(
       physics: const BouncingScrollPhysics(),
       children: [
@@ -98,6 +98,7 @@ class _SearchResultsState extends State<SearchResults> {
                       child: FadeInAnimation(
                         child: ProductCard(
                           product: filteredProducts[index],
+                          productListIndex: index,
                         ),
                       ),
                     ),

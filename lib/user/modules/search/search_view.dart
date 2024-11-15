@@ -33,7 +33,7 @@ class _SearchViewState extends State<SearchView> {
       });
       return;
     }
-    setState(() {
+    /*setState(() {
       searchResults = dummyProductList.where((product) {
         final containsKeyword =
             product.name.toLowerCase().contains(keyword.toLowerCase());
@@ -47,7 +47,7 @@ class _SearchViewState extends State<SearchView> {
             matchesPrice &&
             matchesStarRating;
       }).toList();
-    });
+    });*/
   }
 
   @override
