@@ -1,3 +1,5 @@
+import 'package:aookamao/constants/constants.dart';
+import 'package:aookamao/enums/referred_by.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,19 +10,21 @@ import 'package:aookamao/user/modules/checkout/components/dotted_divider.dart';
 import 'package:aookamao/user/modules/search/components/filter_sheet.dart';
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
 
+import '../../../controllers/home_controller.dart';
+
 class DragSheet extends StatelessWidget {
   final double subtotal;
   final double shipping;
   final double totalAmount;
-  const DragSheet({
+   DragSheet({
     required this.shipping,
     required this.subtotal,
     required this.totalAmount,
     super.key,
   });
-
+final _homeController = Get.find<HomeController>();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return DraggableScrollableSheet(
       minChildSize: 0.1,
       maxChildSize: 0.46,
@@ -52,7 +56,47 @@ class DragSheet extends StatelessWidget {
             children: [
               const CustomDivider(),
               SizedBox(height: AppSpacing.twentyVertical),
-              Container(
+              _homeController.isReferralApplied.value
+                  ? Container(
+                      //height: 56.h,
+                      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.kLine),
+                        borderRadius: BorderRadius.circular(20.r),
+                        color: AppColors.kGrey30,
+                      ),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              SvgPicture.asset(AppAssets.kDiscountShape),
+                              SizedBox(width: AppSpacing.tenHorizontal),
+                              Text(
+                                'Referral Applied',
+                                style: AppTypography.kMedium14.copyWith(
+                                  color: AppColors.kGrey70,
+                                ),
+                              ),
+                            ],
+                          ),
+                          if(_homeController.currentReferralDetails.value.referredBy == ReferredBy.Retailer)
+                            Row(
+                              children: [
+                                Text(
+                                  'Your Eligible For Rs.${Constants.customerRewardAmount} Cashback On This Order.',
+                                  style: AppTypography.kSemiBold12.copyWith(
+                                    color: AppColors.kSuccess,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+
+                        ],
+                      ),
+                    )
+                  : SizedBox(),
+              /*Container(
                 height: 56.h,
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 decoration: BoxDecoration(
@@ -77,7 +121,7 @@ class DragSheet extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
+              ),*/
               SizedBox(height: AppSpacing.twentyVertical),
               CustomPaymentDetails(amount: subtotal, heading: 'Subtotal'),
               SizedBox(height: AppSpacing.tenVertical),

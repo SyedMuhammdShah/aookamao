@@ -21,8 +21,9 @@ class Constants{
     static String get walletCollection => "wallet";
     static String get ordersCollection => "orders";
 
-
-
+    //reward amount
+    static int get customerRewardAmount => 500;
+    static int get retailerRewardAmount => 500;
 
 
 }

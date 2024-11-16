@@ -10,6 +10,7 @@ class PrimaryButton extends StatefulWidget {
   final double? borderRadius;
   final double? fontSize;
   final Color? color;
+  final bool? isDisabled;
   const PrimaryButton({
     required this.onTap,
     required this.text,
@@ -18,7 +19,7 @@ class PrimaryButton extends StatefulWidget {
     this.borderRadius,
     this.fontSize,
     this.color,
-    Key? key,
+    Key? key, this.isDisabled,
   }) : super(key: key);
 
   @override
@@ -51,6 +52,7 @@ class _PrimaryButtonState extends State<PrimaryButton>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        if (widget.isDisabled == true) return;
         _controller.forward().then((_) {
           _controller.reverse();
         });
@@ -65,7 +67,7 @@ class _PrimaryButtonState extends State<PrimaryButton>
           ),
         ),
         child: Card(
-          elevation: 5,
+          elevation: widget.isDisabled == true ? 0 : 5,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
           ),

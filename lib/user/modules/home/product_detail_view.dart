@@ -1,3 +1,4 @@
+import 'package:aookamao/widgets/custom_snackbar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expandable_text/expandable_text.dart';
@@ -192,7 +193,8 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                             children: [
                              QuantityCard(
                                quantity: selectedQuantity,
-                               stockQuantity: product.value.stockQuantity??0
+                               stockQuantity: product.value.stockQuantity!.obs,
+                               onChanged: (value) {},
                              ),
                               SizedBox(height: AppSpacing.tenVertical),
                               product.value.stockQuantity == 0
@@ -365,36 +367,44 @@ class _ProductDetailViewState extends State<ProductDetailView> {
           ),
         ),
       ),
-      bottomSheet: Container(
-        color: AppColors.kWhite,
-        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10.h),
-        child: Row(
-          children: [
-            Expanded(
-              child: RichText(
-                text: TextSpan(
-                  text: r'Rs ',
-                  style:
-                  AppTypography.kBold24.copyWith(color: AppColors.kPrimary),
-                  children: [
-                    TextSpan(
-                      text: product.value.price.toString(),
-                      style: AppTypography.kBold24,
-                    ),
-                  ],
+      bottomSheet: Obx(() => Container(
+          color: AppColors.kWhite,
+          padding: EdgeInsets.symmetric(horizontal: 24, vertical: 10.h),
+          child: Row(
+            children: [
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    text: r'Rs ',
+                    style:
+                    AppTypography.kBold24.copyWith(color: AppColors.kPrimary),
+                    children: [
+                      TextSpan(
+                        text: product.value.price.toString(),
+                        style: AppTypography.kBold24,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: PrimaryButton(
-                onTap: () {
-                  print('quantity: ${selectedQuantity.value}');
-                  cc.addToCart(widget.productListIndex, selectedQuantity.value);
-                },
-                text: 'Add To Cart',
+              Expanded(
+                child: PrimaryButton(
+                  onTap: () {
+                    if(selectedQuantity.value == 0) {
+                     showErrorSnackbar('Please select quantity');
+                      return;
+                    }
+                    cc.addToCart(widget.productListIndex, selectedQuantity.value);
+                  },
+                  isDisabled: product.value.stockQuantity == 0,
+                  color: product.value.stockQuantity == 0
+                      ? AppColors.kGrey20
+                      : AppColors.kPrimary,
+                  text: 'Add To Cart',
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

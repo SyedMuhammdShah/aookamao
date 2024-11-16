@@ -22,7 +22,6 @@ class ProductModel {
   final String? createdBy;
   final Timestamp? createdAt;
 
-
   ProductModel({
     this.productId,
     this.imageUrls,
@@ -49,7 +48,7 @@ class ProductModel {
       productId: map['productId'],
       imageUrls: map['imageUrls'],
       name: map['name'],
-      price: map['price'],
+      price: double.parse(map['price'].toString()),
       fabricType: map['fabricType'],
       fabricLength: map['fabricLength'],
       fabricWidth: map['fabricWidth'],

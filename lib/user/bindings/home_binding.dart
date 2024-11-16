@@ -17,10 +17,11 @@ class HomeBinding extends Bindings {
     Get.lazyPut<CartController>(() => CartController());
     Get.lazyPut<ProductController>(() => ProductController());*/
     Get
+      ..put<CartController>(CartController())
       ..put<HomeController>(HomeController())
       ..put<FavoriteController>(FavoriteController())
-      ..put<ProductController>(ProductController())
-      ..put<CartController>(CartController());
+      ..put<ProductController>(ProductController());
+
 
 
   }

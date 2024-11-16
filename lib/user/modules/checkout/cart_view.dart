@@ -43,7 +43,8 @@ class CartView extends StatelessWidget {
                         SizedBox(height: AppSpacing.twentyVertical),
                     itemBuilder: (context, index) {
                       return CartItemCard(
-                        cartItem: cc.cartItems[index].obs,
+                        cartIndex: index,
+                        product: _homeController.productsList[cc.cartItems[index].productListIndex],
                         removeCallback: () {
                           cc.removeFromCart(index);
                         },
@@ -58,7 +59,7 @@ class CartView extends StatelessWidget {
                   DragSheet(
                     shipping: 8.00,
                     subtotal: cc.getSubtotal(),
-                    totalAmount: cc.getSubtotal() + 8.00,
+                    totalAmount: cc.getSubtotal() ,
                   ),
                 ],
               )),

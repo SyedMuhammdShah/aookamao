@@ -6,20 +6,20 @@ import 'package:get/get.dart';
 
 class QuantityCard extends StatelessWidget {
 
-  //final Function(int quantity) onChanged;
+  final Function(int quantity) onChanged;
   final RxInt quantity;
-  final int stockQuantity;
+  final RxInt stockQuantity;
   const QuantityCard({
-   // required this.onChanged,
+    required this.onChanged,
     required this.quantity,
-    super.key, required this.stockQuantity,
+    super.key, required this.stockQuantity
   });
 
   void increment() {
     print('stockQuantity: $stockQuantity');
-    if (quantity < stockQuantity) {
+    if (quantity < stockQuantity.value) {
       quantity.value++;
-     // onChanged(quantity.value);
+     onChanged(quantity.value);
     }
     else{
       showErrorSnackbar('Stock quantity exceeded!');
@@ -29,7 +29,7 @@ class QuantityCard extends StatelessWidget {
   void decrement() {
       if (quantity > 1) {
         quantity.value--;
-      //onChanged(quantity.value);
+        onChanged(quantity.value);
       }
       else{
         showErrorSnackbar('Quantity cannot be less than 1!');
@@ -68,7 +68,7 @@ class QuantityCard extends StatelessWidget {
               ),
             ),
             SizedBox(width: 7.0.w),
-            Text(
+            Text( stockQuantity == 0 ? '0' :
               quantity.value.toString(),
               style: AppTypography.kSemiBold14,
             ),

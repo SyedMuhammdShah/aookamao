@@ -305,4 +305,23 @@ class ReferralService extends GetxService{
       print('Error getting all referrals: $e');
     }
   }
+
+  // Functions get customer referrral details
+  Future<bool> getCustomerReferralDetails() async {
+    try {
+      final querySnapshot = await _firestore.collection(Constants.referralsCollection).doc(_authService.currentUser.value!.uid).get();
+      if(querySnapshot.exists) {
+        currentReferralDetails.value = ReferralModel.fromMapAllReferrals(querySnapshot.data() as Map<String, dynamic>);
+      return true;
+      }
+      else {
+        print('No referral details found');
+        return false;
+      }
+    } catch (e) {
+      print('Error getting customer referral details: $e');
+      return false;
+    }
+  }
+
 }
