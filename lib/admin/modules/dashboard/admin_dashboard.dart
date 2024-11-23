@@ -24,14 +24,7 @@ class AdminDashboard extends StatefulWidget {
 
 class _AdminDashboardState extends State<AdminDashboard> {
   final _adminController = Get.find<AdminDashboardController>();
-  @override
-  void initState() {
-    super.initState();
-    _adminController.getUsersCount();
-    _adminController.getRetailersCount();
-    _adminController.getAllReferess();
 
-  }
 
 
   // Method to get total users count
@@ -58,29 +51,13 @@ class _AdminDashboardState extends State<AdminDashboard> {
     {'month': 'Mar', 'orders': 180},
     {'month': 'Apr', 'orders': 220},
     {'month': 'May', 'orders': 300},
+    {'month': 'Jun', 'orders': 250},
   ];
 
   // Function to generate sales chart data
   List<FlSpot> _generateSalesChartData() {
     return List.generate(productSalesData.length, (index) {
       return FlSpot(index.toDouble(), productSalesData[index]['sales'].toDouble());
-    });
-  }
-
-  // Function to generate orders chart data
-  List<BarChartGroupData> _generateOrdersChartData() {
-    return List.generate(ordersData.length, (index) {
-      return BarChartGroupData(
-        x: index,
-        barRods: [
-          BarChartRodData(
-            toY: ordersData[index]['orders'].toDouble(),
-            color: AppColors.kPrimary,
-            width: 15,
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ],
-      );
     });
   }
 
@@ -177,24 +154,33 @@ class _AdminDashboardState extends State<AdminDashboard> {
                         SizedBox(height: 10),
                         SizedBox(
                           height: 200,
-                          child: BarChart(
-                            BarChartData(
-                              gridData: FlGridData(show: false),
-                              titlesData: FlTitlesData(
-                                bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    getTitlesWidget: (value, meta) {
-                                      // Map the index to month names
-                                      int index = value.toInt();
-                                      return Text(ordersData[index]['month']);
-                                    },
+                          child: Obx(() =>  BarChart(
+                              BarChartData(
+                                gridData: FlGridData(show: false),
+                                titlesData: FlTitlesData(
+                                  bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      getTitlesWidget: (value, meta) {
+                                        // Map the index to month names
+                                        int index = value.toInt();
+                                        return Text(_adminController.orderData[index].month);
+                                      },
+                                    ),
                                   ),
+                                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
                                 ),
-                                leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
+                                alignment: BarChartAlignment.start,
+                                barTouchData: BarTouchData(enabled: true),
+                                borderData: FlBorderData(show: false),
+                                extraLinesData: ExtraLinesData(horizontalLines: [
+                                  HorizontalLine(y: 0, color: Colors.black.withOpacity(0.2)),
+                                ]
+                                ),
+
+                                barGroups: _adminController.ordersChartData.value,
                               ),
-                              borderData: FlBorderData(show: true),
-                              barGroups: _generateOrdersChartData(),
                             ),
                           ),
                         ),

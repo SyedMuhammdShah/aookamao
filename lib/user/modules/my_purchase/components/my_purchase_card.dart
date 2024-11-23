@@ -1,3 +1,6 @@
+import 'package:aookamao/enums/order_status.dart';
+import 'package:aookamao/models/order_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -9,10 +12,10 @@ import 'package:aookamao/user/modules/widgets/buttons/custom_outlined_button.dar
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
 
 class MyPurchaseCard extends StatelessWidget {
-  final ProductModel product;
+  final MyPurchaseModel myPurchase;
   final bool isDetailView;
   const MyPurchaseCard({
-    required this.product,
+    required this.myPurchase,
     this.isDetailView = false,
     super.key,
   });
@@ -31,35 +34,31 @@ class MyPurchaseCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Container(
+            ClipRRect(
+              borderRadius: BorderRadius.circular(5.r),
+              child: CachedNetworkImage(
+                imageUrl: myPurchase.imageUrl??'',
                 height: 71.h,
                 width: 71.w,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5.r),
-                  image: DecorationImage(
-                    image: AssetImage(product.imageUrls?[0]),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                fit: BoxFit.cover,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                     CircularProgressIndicator(value: downloadProgress.progress, color: AppColors.kPrimary),
+                errorWidget: (context, url, error) => const Icon(Icons.error),
               ),
+            ),
               SizedBox(width: AppSpacing.tenHorizontal),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      product.name??'',
+                      myPurchase.productName??'',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.kMedium16,
                     ),
                     Text(
-                      'By Leopar Zega',
-                      style: AppTypography.kMedium14.copyWith(
-                          color: AppColors.kGrey70, fontSize: 12.0.sp),
-                    ),
-                    Text(
-                      'Qty: 1',
+                      'Qty: ${myPurchase.quantity}',
                       style: AppTypography.kMedium14
                           .copyWith(color: AppColors.kGrey70, fontSize: 12.sp),
                     ),
@@ -70,6 +69,49 @@ class MyPurchaseCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    if(myPurchase.orderStatus == OrderStatus.pending)
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0.r),
+                        border: Border.all(color: AppColors.kWarning),
+                      ),
+                      child: Text(
+                        'Processing',
+                        style: AppTypography.kLight10
+                            .copyWith(color: AppColors.kWarning),
+                      ),
+                    ),
+                    if(myPurchase.orderStatus == OrderStatus.delivered)
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0.r),
+                        border: Border.all(color: AppColors.kSuccess),
+                      ),
+                      child: Text(
+                        'Delivered',
+                        style: AppTypography.kLight10
+                            .copyWith(color: AppColors.kSuccess),
+                      ),
+                    ),
+                    if(myPurchase.orderStatus == OrderStatus.cancelled)
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5.0.r),
+                        border: Border.all(color: AppColors.kError),
+                      ),
+                      child: Text(
+                        'Cancelled',
+                        style: AppTypography.kLight10
+                            .copyWith(color: AppColors.kError),
+                      ),
+                    ),
+                    if(myPurchase.orderStatus == OrderStatus.confirmed)
                     Container(
                       padding:
                           EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
@@ -86,14 +128,14 @@ class MyPurchaseCard extends StatelessWidget {
                     SizedBox(height: AppSpacing.twentyVertical),
                     RichText(
                       text: TextSpan(
-                        text: r'$ ',
+                        text: 'Rs.',
                         style: AppTypography.kMedium14.copyWith(
                           color: AppColors.kGrey100,
-                          fontSize: 12..sp,
+                          fontSize: 12.sp,
                         ),
                         children: [
                           TextSpan(
-                            text: product.price.toString(),
+                            text: '${myPurchase.price}',
                             style: AppTypography.kSemiBold16,
                           ),
                         ],
@@ -112,7 +154,8 @@ class MyPurchaseCard extends StatelessWidget {
                   child: CustomOutlinedButton(
                     onTap: () {
                       Get.to<Widget>(() => MyPurchaseDetail(
-                            product: product,
+                         productDetails: myPurchase.obs,
+                        orderIndex: myPurchase.indexOfOrder,
                           ));
                     },
                     width: 115.0.w,
@@ -126,7 +169,7 @@ class MyPurchaseCard extends StatelessWidget {
                 Expanded(
                   child: PrimaryButton(
                     onTap: () {
-                      Get.to<Widget>(() => const TrackingOrder());
+                      Get.to<Widget>(() =>  TrackingOrder(orderIndex:myPurchase.indexOfOrder));
                     },
                     width: 115.w,
                     borderRadius: 30.r,
@@ -144,3 +187,4 @@ class MyPurchaseCard extends StatelessWidget {
     );
   }
 }
+

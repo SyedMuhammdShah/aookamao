@@ -69,14 +69,6 @@ class ReferralView extends StatelessWidget {
                     },
                   ),
                 ),
-                PrimaryButton(
-                  text: 'Submit',
-                  onTap: () {
-                    if (_authController.referral_formKey.currentState!.validate()) {
-                      _authController.addUserToReferral();
-                    }
-                  },
-                ),
                 SizedBox(height: 0.05.sh),
                 CustomTextButton(
                   text: 'Skip for now',

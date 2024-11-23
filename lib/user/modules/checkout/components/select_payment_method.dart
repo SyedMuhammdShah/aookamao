@@ -13,7 +13,7 @@ class SelectPaymentMethod extends StatefulWidget {
 }
 
 class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
-  int selectedIndex = 0;
+  int selectedIndex = 2;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,7 +41,7 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
                 selectedIndex = 0;
               });
             },
-            cardDetails: 'sask****@mail.com',
+            cardDetails: '',
             cardName: 'Paypal',
             icon: AppAssets.kPaypal,
             isSelected: selectedIndex == 0,
@@ -53,10 +53,23 @@ class _SelectPaymentMethodState extends State<SelectPaymentMethod> {
                 selectedIndex = 1;
               });
             },
-            cardDetails: '4827 8472 7424 ****',
+            cardDetails: '',
             cardName: 'Master Card',
             icon: AppAssets.kMasterCardIcon,
             isSelected: selectedIndex == 1,
+          ),
+          SizedBox(height: AppSpacing.twentyVertical),
+          //cod
+          SelectPaymentMethodCard(
+            onTap: () {
+              setState(() {
+                selectedIndex = 2;
+              });
+            },
+            cardDetails: '',
+            cardName: 'Cash on Delivery',
+            icon: AppAssets.kWallet,
+            isSelected: selectedIndex == 2,
           ),
           SizedBox(height: AppSpacing.twentyVertical),
           GestureDetector(

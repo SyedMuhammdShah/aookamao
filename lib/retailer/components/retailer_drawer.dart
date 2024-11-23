@@ -1,4 +1,5 @@
 
+import 'package:aookamao/admin/modules/rewards/rewards_view.dart';
 import 'package:aookamao/retailer/retailer_modules/profile/profile_view.dart';
 import 'package:aookamao/services/auth_service.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
@@ -6,6 +7,9 @@ import 'package:aookamao/modules/auth/controller/auth_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../retailer_modules/Reward/rewards_view.dart';
+import '../retailer_modules/referrals/all_referrals_view.dart';
 
 class RetailerDrawer extends StatelessWidget {
   const RetailerDrawer({super.key});
@@ -25,9 +29,20 @@ class RetailerDrawer extends StatelessWidget {
             onTap: () => {},
           ),
           _buildItem(
-            icon: CupertinoIcons.home,
+            icon:  Icons.people,
             title: 'Referrals',
-            onTap: () => {},
+            onTap: () => {
+              Scaffold.of(context).closeDrawer(),
+              Get.to<Widget>(() => const AllReferralsView())
+            },
+          ),
+          _buildItem(
+            icon:  Icons.wallet_giftcard,
+            title: 'Rewards',
+            onTap: () => {
+              Scaffold.of(context).closeDrawer(),
+              Get.to<Widget>(() => const RetailerRewardsView())
+            },
           ),
           _buildItem(
             icon: Icons.settings,

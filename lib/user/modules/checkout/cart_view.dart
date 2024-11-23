@@ -18,6 +18,7 @@ class CartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         leading: const BackButton(),
@@ -32,34 +33,39 @@ class CartView extends StatelessWidget {
             ? const NoItemCard()
             : Stack(
                 children: [
-                  ListView.separated(
-                    itemCount: cc.cartItems.length,
-                    physics: const BouncingScrollPhysics(),
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 24.w,
-                      vertical: AppSpacing.twentyVertical,
+                  SizedBox(
+                    height: cc.isDragSheetOpen.value
+                        ? Get.height - 0.5.sh
+                        : Get.height,
+                    child: ListView.separated(
+                      itemCount: cc.cartItems.length,
+                      physics: const BouncingScrollPhysics(),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 24.w,
+                        vertical: AppSpacing.twentyVertical,
+                      ),
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: AppSpacing.twentyVertical),
+                      itemBuilder: (context, index) {
+                        return CartItemCard(
+                          cartIndex: index,
+                          product: _homeController.productsList[cc.cartItems[index].productListIndex],
+                          removeCallback: () {
+                            cc.removeFromCart(index);
+                          },
+                          onProductDetail: () {
+                            Get.to<Widget>(() => ProductDetailView(
+                                  productListIndex: cc.cartItems[index].productListIndex,
+                                ));
+                          },
+                        );
+                      },
                     ),
-                    separatorBuilder: (context, index) =>
-                        SizedBox(height: AppSpacing.twentyVertical),
-                    itemBuilder: (context, index) {
-                      return CartItemCard(
-                        cartIndex: index,
-                        product: _homeController.productsList[cc.cartItems[index].productListIndex],
-                        removeCallback: () {
-                          cc.removeFromCart(index);
-                        },
-                        onProductDetail: () {
-                          Get.to<Widget>(() => ProductDetailView(
-                                productListIndex: cc.cartItems[index].productListIndex,
-                              ));
-                        },
-                      );
-                    },
                   ),
                   DragSheet(
-                    shipping: 8.00,
+                    shipping:cc.shippingCharges.value,
                     subtotal: cc.getSubtotal(),
-                    totalAmount: cc.getSubtotal() ,
+                    totalAmount: cc.getTotal() ,
                   ),
                 ],
               )),

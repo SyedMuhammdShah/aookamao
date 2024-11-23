@@ -1,4 +1,5 @@
 import 'package:aookamao/admin/components/adminAppBar.dart';
+import 'package:aookamao/enums/reward_status.dart';
 import 'package:aookamao/retailer/components/referal_card.dart';
 import 'package:aookamao/retailer/retailer_modules/dashboard/controller/retailer_dashboard_controller.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
@@ -38,15 +39,10 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
   final _dashboardController = Get.find<RetailerDashboardController>();
 
   @override
-  void initState() {
-    subscriptionController.getSubscriptionDetails(uid: _authService.currentUser.value!.uid);
-    super.initState();
-  }
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: RetailerAppBar(user: _authService.currentUser.value!),
-      drawer: RetailerDrawer(),
+      appBar: const RetailerAppBar(),
+      drawer: const RetailerDrawer(),
       body: Obx(()=>SingleChildScrollView(
         child: Column(
             children: [
@@ -124,9 +120,9 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _dashboardcard(title: 'Wallet', subtitle: '0.00', icon: Icons.wallet),
-                        _dashboardcard(title: 'Referrals', subtitle: _dashboardController.totalReferrals.value, icon: Icons.people),
-                        _dashboardcard(title: 'Orders', subtitle: '0', icon: Icons.shopping_cart),
+                        _dashboardcard(title: 'Wallet', subtitle: _dashboardController.retailerWallet.value.balance.toString(), icon: Icons.wallet),
+                        _dashboardcard(title: 'Referrals', subtitle: _dashboardController.refereesList.length.toString(), icon: Icons.people),
+                        _dashboardcard(title: 'Rewards', subtitle: _dashboardController.retailerRewards.where((p0) => p0.value.rewardStatus == RewardStatus.approved).length.toString(), icon: Icons.card_giftcard),
                       ],
                     ),
                     SizedBox(
@@ -169,13 +165,16 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                               ],
                             ),
                           ),
-                          Divider(),
+                          const Divider(),
                           ListView.builder(
                             itemCount: _dashboardController.thisMonthRefereesList.length,
                             shrinkWrap: true,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context,index){
-
+                              final DateTime now = DateTime.now();
+                              final referee = _dashboardController.refereesList.where((element) {
+                                return element.referralDate.toDate().month == now.month && element.referralDate.toDate().year == now.year;
+                              }).toList();
                               return ReferalCard(
                                 refereeName: _dashboardController.thisMonthRefereesList[index].refereeName??'',
                                 referalType: _dashboardController.thisMonthRefereesList[index].referalType,

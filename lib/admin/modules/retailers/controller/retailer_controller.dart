@@ -8,21 +8,17 @@ import '../../../../models/subscription_model.dart';
 import '../../../../retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 
 class RetailerController extends GetxController {
-  Rx<RetailerModel> retailerModel = Rx<RetailerModel>(RetailerModel(
-    uid: '',
-    name: '',
-    email: '',
-    registered_at: Timestamp(0,0),
-    subscription_status: SubscriptionStatus.none,
-    cnic_back_image_url: '',
-    cnic_front_image_url: '',
-    cnic_number: '',
-    subscription_date: Timestamp(0,0),
-  ));
   final _subscriptionController = Get.find<SubscriptionController>();
   var retailerList = <RetailerModel>[].obs;
   var isLoading = false.obs;
-  
+
+
+  @override
+  void onInit() {
+    super.onInit();
+    getAllRetailers();
+  }
+
   Future<void> getAllRetailers() async {
     //fetch all retailers with their subscription details
     isLoading(true);
@@ -66,5 +62,12 @@ class RetailerController extends GetxController {
   Future<void> approveRetailer({required SubscriptionModel subdetail}) async {
    await _subscriptionController.activateSubscription(subscriptiondetails: subdetail);
       showSuccessSnackbar('Supplier subscription has been approved successfully');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    retailerList.close();
+    isLoading.close();
   }
 }

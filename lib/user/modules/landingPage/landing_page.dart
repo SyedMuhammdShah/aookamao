@@ -1,3 +1,4 @@
+import 'package:aookamao/user/modules/referrals/my_referrals_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class _LandingPageState extends State<LandingPage> {
   List<Widget> pages = [
     const HomeView(),
     const ExploreView(),
-    const ProductScanner(),
+    const MyReferralsView(),
     const FavoriteView(),
     const ProfileView(),
   ];
@@ -30,9 +31,7 @@ class _LandingPageState extends State<LandingPage> {
     return Scaffold(
       extendBody: true,
       body: pages[_currentIndex],
-      bottomNavigationBar: _currentIndex == 2
-          ? null
-          : BottomNavigationBar(
+      bottomNavigationBar:BottomNavigationBar(
               showSelectedLabels: true,
               showUnselectedLabels: true,
               backgroundColor: AppColors.kWhite,
@@ -57,7 +56,7 @@ class _LandingPageState extends State<LandingPage> {
                   label: 'Explore',
                   activeIcon: SvgPicture.asset(AppAssets.kDiscoveryFilled),
                 ),
-                const BottomNavigationBarItem(icon: CenteredIcon(), label: ''),
+                const BottomNavigationBarItem(icon: CenteredIcon(isSelected: false), label: '', activeIcon: CenteredIcon(isSelected: true,)),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(AppAssets.kHeart),
                   label: 'Favorites',

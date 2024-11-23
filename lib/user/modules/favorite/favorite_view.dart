@@ -23,7 +23,7 @@ class _FavoriteViewState extends State<FavoriteView> {
   FavoriteController fc = Get.find<FavoriteController>();
   @override
   Widget build(BuildContext context) {
-    debugPrint(fc.favorite!.length.toString());
+   //debugPrint(fc.favorite!.length.toString());
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -50,7 +50,7 @@ class _FavoriteViewState extends State<FavoriteView> {
             filterCallback: () {},
           ),
           SizedBox(height: AppSpacing.thirtyVertical),
-          Obx(() => fc.favorite != null && fc.favorite!.isNotEmpty
+          Obx(() => fc.favorite.isNotEmpty
               ? AnimationLimiter(
                   child: GridView.count(
                     shrinkWrap: true,
@@ -61,7 +61,7 @@ class _FavoriteViewState extends State<FavoriteView> {
                     crossAxisSpacing: AppSpacing.tenHorizontal,
                     mainAxisSpacing: AppSpacing.twentyVertical,
                     children: List.generate(
-                      fc.favorite!.length,
+                      fc.favorite.length,
                       (index) {
                         return AnimationConfiguration.staggeredGrid(
                           columnCount: 2,
@@ -71,7 +71,7 @@ class _FavoriteViewState extends State<FavoriteView> {
                             duration: const Duration(seconds: 1),
                             child: FadeInAnimation(
                               child: ProductCard(
-                                product: fc.favorite![index] as Rx<ProductModel>,
+                                product: fc.favorite[index] as Rx<ProductModel>,
                                 productListIndex: index,
                               ),
                             ),

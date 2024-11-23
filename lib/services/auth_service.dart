@@ -21,7 +21,7 @@ class AuthService extends GetxService{
   Rx<UserModel?> currentUser = Rx<UserModel?>(null);
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebasePushNotificationService _firebasePushNotificationService = FirebasePushNotificationService();
+ final _firebasePushNotificationService = Get.find<FirebasePushNotificationService>();
   final GetStorage _getStorage = GetStorage();
   Rx<SubscriptionModel> currentSubscription = Rx<SubscriptionModel>(SubscriptionModel(uid: '', subscriptionStatus: SubscriptionStatus.none));
   RxBool isAppOpened = false.obs;

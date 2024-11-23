@@ -3,32 +3,37 @@ import 'package:get/get.dart';
 import 'package:aookamao/user/models/product_model.dart';
 
 class FavoriteController extends GetxController {
-  List<ProductModel>? get favorite => _favorite.value;
-  Rx<List<ProductModel>?> _favorite = Rx<List<ProductModel>?>([]);
+  RxList<Rx<ProductModel>> favorite = <Rx<ProductModel>>[].obs;
 
   void addToFavorites(ProductModel product) {
-    if (favorite != null) {
+    if (favorite.isNotEmpty) {
       if (!isProductInFavorites(product)) {
-        _favorite.value!.add(product);
-        _favorite.refresh();
+        favorite.add(product.obs);
+        favorite.refresh();
       }
     } else {
-      _favorite..value = [product]
+      favorite..value = [product.obs]
       ..refresh();
     }
-    debugPrint(favorite!.length.toString());
+    //debugPrint(favorite!.length.toString());
   }
 
   void removeFromFavorites(ProductModel product) {
-    if (favorite != null) {
+    if (favorite.isNotEmpty) {
       if (isProductInFavorites(product)) {
-        _favorite.value!.remove(product);
-        _favorite.refresh();
+        favorite.remove(product.obs);
+        favorite.refresh();
       }
     }
   }
 
   bool isProductInFavorites(ProductModel product) {
-    return favorite!.any((p) => p.productId == product.productId);
+    return favorite.any((p) => p?.value.productId == product.productId);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    favorite.close();
   }
 }

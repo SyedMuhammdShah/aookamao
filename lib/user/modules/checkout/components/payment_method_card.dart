@@ -27,18 +27,20 @@ class PaymentMethodCard extends StatelessWidget {
                 color: AppColors.kLine,
                 shape: BoxShape.circle,
               ),
-              child: SvgPicture.asset(AppAssets.kMasterCardIcon),
+              /*child: SvgPicture.asset(AppAssets.kMasterCardIcon),*/
+              child: Icon(Icons.credit_card_outlined),
             ),
             SizedBox(width: AppSpacing.tenHorizontal),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Master Card',
+                  'Cash on Delivery',
                   style: AppTypography.kMedium14,
                 ),
                 SizedBox(height: AppSpacing.fiveVertical),
                 Text(
-                  '**** **** 1234',
+                  'Pay when you receive the product',
                   style: AppTypography.kMedium14
                       .copyWith(color: AppColors.kGrey70, fontSize: 12.sp),
                 ),

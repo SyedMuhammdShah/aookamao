@@ -1,15 +1,21 @@
+import 'package:aookamao/models/order_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 
+import '../../../controllers/cart_controller.dart';
+
 class AddressCard extends StatelessWidget {
   final bool isDetailView;
-  const AddressCard({this.isDetailView = false, super.key});
+  final OrderModel? order;
+  const AddressCard({this.isDetailView = false, super.key, this.order});
 
   @override
   Widget build(BuildContext context) {
+    final _cartController = Get.find<CartController>();
+
     return Container(
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
@@ -36,18 +42,17 @@ class AddressCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Jhone Arent', style: AppTypography.kSemiBold14),
+                Text(isDetailView?order!.customerName??"" :_cartController.nameController.text, style: AppTypography.kSemiBold14, overflow: TextOverflow.ellipsis, maxLines: 1),
                 SizedBox(height: AppSpacing.tenVertical),
-                Text(
-                  '4517 Washington Ave. Manchester, Kentucky 39495',
-                  style: AppTypography.kMedium14.copyWith(
+                Text(isDetailView?order!.customerAddress??"" : _cartController.addressController.text,style: AppTypography.kMedium14.copyWith(
                     color: AppColors.kGrey60,
                     fontSize: 12.sp,
                   ),
+                  textAlign: TextAlign.justify,
                 ),
                 SizedBox(height: AppSpacing.tenVertical),
-                Text(
-                  '(406) 555-0120',
+                Text(isDetailView?order!.customerPhone??"" :
+                  _cartController.phoneController.text,
                   style: AppTypography.kMedium14,
                 ),
               ],

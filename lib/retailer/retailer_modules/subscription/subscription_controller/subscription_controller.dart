@@ -9,13 +9,21 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 
 import '../../../../models/subscription_model.dart';
+import '../../../../services/auth_service.dart';
 import '../../../../widgets/custom_snackbar.dart';
 
 class SubscriptionController extends GetxController{
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
+  final _authService = Get.find<AuthService>();
   final FirebasePushNotificationService _firebasePushNotificationService = FirebasePushNotificationService();
   Rx<SubscriptionModel> currentSubscription = Rx<SubscriptionModel>(SubscriptionModel(uid: '', subscriptionStatus: SubscriptionStatus.none));
+
+  @override
+  void onInit() {
+    super.onInit();
+    getSubscriptionDetails(uid: _authService.currentUser.value!.uid);
+  }
 
   Future activateSubscription({required SubscriptionModel subscriptiondetails,String? retailer_name})async{
     //await Firebase.initializeApp();
@@ -116,4 +124,9 @@ class SubscriptionController extends GetxController{
     }
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    currentSubscription.close();
+  }
 }

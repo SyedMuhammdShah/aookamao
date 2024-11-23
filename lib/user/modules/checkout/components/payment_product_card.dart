@@ -1,14 +1,17 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:aookamao/user/models/product_model.dart';
 import 'package:aookamao/user/modules/home/components/quantity_card.dart';
+import 'package:get/get.dart';
 
 class PaymentProductCard extends StatelessWidget {
-  final ProductModel product;
+  final Rx<ProductModel> product;
+  final int quantity;
   const PaymentProductCard({
     required this.product,
-    super.key,
+    super.key, required this.quantity,
   });
 
   @override
@@ -18,12 +21,16 @@ class PaymentProductCard extends StatelessWidget {
         Container(
           height: 72.h,
           width: 72.w,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppSpacing.radiusTen),
-            image: DecorationImage(
-              image: AssetImage(product.imageUrls?[0]),
-              fit: BoxFit.cover,
+          child: CachedNetworkImage(
+            imageUrl: product.value.imageUrls?[0],
+            fit: BoxFit.cover,
+           progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+              child: CircularProgressIndicator(
+                value: downloadProgress.progress,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.kPrimary),
+              ),
             ),
+            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
         ),
         SizedBox(width: AppSpacing.tenHorizontal),
@@ -32,7 +39,7 @@ class PaymentProductCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                product.name??'',
+                product.value.name??'',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.kSemiBold16,
@@ -42,20 +49,20 @@ class PaymentProductCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'By Leopar Zega',
+                    'x $quantity',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: AppTypography.kMedium14
-                        .copyWith(color: AppColors.kGrey70, fontSize: 10.sp),
+                        .copyWith(color: AppColors.kGrey70),
                   ),
                   RichText(
                     text: TextSpan(
-                      text: r'$ ',
+                      text: r'Rs.',
                       style: AppTypography.kMedium14
                           .copyWith(color: AppColors.kGrey100,fontSize: 12.sp),
                       children: [
                         TextSpan(
-                          text: product.name.toString(),
+                          text: "${product.value.price! * quantity}",
                           style: AppTypography.kSemiBold16,
                         ),
                       ],

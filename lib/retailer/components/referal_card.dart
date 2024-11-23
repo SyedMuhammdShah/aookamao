@@ -32,18 +32,22 @@ class ReferalCard extends StatelessWidget {
         contentPadding: EdgeInsets.symmetric(horizontal: 7.w,vertical: 7.h),
         title: Text(refereeName),
         subtitle: Text(DateFormat('dd MMM,yyyy').format(referalDate.toDate())),
-        trailing: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            referalType == ReferalTypes.DirectReferal ? Icon(Icons.person,color: AppColors.kPrimary,) :
-            Row(
-              children: [
-                Icon(Icons.people,color: AppColors.kPrimary,),
-                Text(referedByName??''),
-              ],
-            ),
-            Text(referalTypeToString(referalType)),
-          ],
+        trailing: SizedBox(
+          width: 0.2.sw,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              referalType == ReferalTypes.DirectReferal
+                  ? Icon(Icons.person,color: AppColors.kPrimary,) :
+              Row(
+                children: [
+                  Icon(Icons.people,color: AppColors.kPrimary,),
+                  Text(referedByName??''),
+                ],
+              ),
+              Text(referalTypeToString(referalType)),
+            ],
+          ),
         ),
       )
     );

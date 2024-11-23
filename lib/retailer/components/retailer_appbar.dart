@@ -8,10 +8,8 @@ import 'package:aookamao/user/modules/notification/notification_view.dart';
 
 
 class RetailerAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final UserModel user; // Changed from user_name to user
   final String? title;
   const RetailerAppBar({
-    required this.user, // required user data
     this.title,
     super.key,
   });
@@ -20,41 +18,11 @@ class RetailerAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leadingWidth: 60.w,
-      //backgroundColor: AppColors.kPrimary,
-      // leading: GestureDetector(
-      //   onTap: () {
-      //     Get.to<Widget>(() => const EditProfile());
-      //   },
-      //   child: Padding(
-      //     padding: EdgeInsets.only(
-      //       left: 10.w,
-      //       top: 5.h,
-      //     ),
-      //     // You can add a profile image here if available
-      //   ),
-      // ),
-      /*title: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
-        children: [
-          Text(
-            user.name, // Display the user's name dynamically
-            style: AppTypography.kSemiBold16.copyWith(color: AppColors.kGrey100),
-          ),
-          Text(
-            user.email,
-            style: AppTypography.kLight10.copyWith(color: AppColors.kGrey80),
-          ),
-        ],
-      ),*/
-
-      centerTitle: true,
       title: Text(
         title ?? '',
         style: AppTypography.kSemiBold18.copyWith(color: AppColors.kGrey100),
       ),
       actions: [
-
         CustomIcons(
           onTap: () {
             Get.to<Widget>(() => const NotificationView());

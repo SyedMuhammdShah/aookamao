@@ -37,9 +37,4 @@ class _RetailersScreenState extends State<RetailersScreen> {
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _retailerController.getAllRetailers();
-  }
 }

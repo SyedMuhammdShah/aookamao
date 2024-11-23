@@ -1,4 +1,6 @@
 import 'package:aookamao/modules/auth/signin_view.dart';
+import 'package:aookamao/user/modules/my_purchase/my_purchase_view.dart';
+import 'package:aookamao/user/modules/tracking/tracking_order.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +17,7 @@ import 'package:aookamao/user/modules/profile/your_card.dart';
 import 'package:aookamao/user/modules/widgets/buttons/custom_text_button.dart';
 import 'package:aookamao/user/modules/widgets/dialogs/logout_dialog.dart';
 
+import '../../../modules/auth/selection_view.dart';
 import '../../../modules/welcome/welcome_view.dart';
 import '../../../services/auth_service.dart';
 
@@ -47,12 +50,14 @@ class ProfileView extends StatelessWidget {
           SizedBox(height: AppSpacing.thirtyVertical),
           FadeAnimation(
             delay: 1,
-            child: Text(
-              'Settings',
-              style: AppTypography.kSemiBold14.copyWith(color: AppColors.kGrey60),
+            child: SettingTile(
+              onTap: () {
+                Get.to<Widget>(() => const MyPurchaseView());
+              },
+              icon: AppAssets.kTruckDelivery,
+              title: 'My Purchase',
             ),
           ),
-          SizedBox(height: AppSpacing.tenVertical),
           FadeAnimation(
             delay: 1,
             child: SettingTile(
@@ -112,7 +117,7 @@ class ProfileView extends StatelessWidget {
                   Get.dialog<void>(LogoutDialog(
                     logoutCallback: () async {
                       await _authservice.signOut();
-                      Get.offAll<Widget>(() => const SignInView());
+                      Get.offAll<Widget>(() => const SelectionScreen());
                     },
                   ));
                 },

@@ -25,7 +25,7 @@ class _AllRefereesViewState extends State<AllRefereesView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const adminAppBar(Title: 'All Referees'),
-      drawer: AdminDrawer(),
+      drawer: const AdminDrawer(),
       body: Obx(() => ListView.builder(
           itemCount: dashboardController.allReferessList.length,
           itemBuilder: (context, index) {

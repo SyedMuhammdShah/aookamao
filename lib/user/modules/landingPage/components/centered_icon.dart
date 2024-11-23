@@ -1,10 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 
 class CenteredIcon extends StatelessWidget {
-  const CenteredIcon({super.key});
+  final bool isSelected;
+  const CenteredIcon({super.key, required this.isSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class CenteredIcon extends StatelessWidget {
           shape: BoxShape.circle,
           color: AppColors.kPrimary,
         ),
-        child: SvgPicture.asset(AppAssets.kScan),
+        child: isSelected?Icon(CupertinoIcons.gift_fill, color: AppColors.kWhite):Icon(CupertinoIcons.gift, color: AppColors.kWhite),
       ),
     );
   }

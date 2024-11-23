@@ -1,4 +1,5 @@
 import 'package:aookamao/admin/components/adminAppBar.dart';
+import 'package:aookamao/modules/auth/selection_view.dart';
 import 'package:aookamao/modules/auth/signin_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -109,7 +110,7 @@ class AdminProfileView extends StatelessWidget {
                   Get.dialog<void>(LogoutDialog(
                     logoutCallback: () async {
                       await _authservice.signOut();
-                      Get.offAll<Widget>(() => const SignInView());
+                      Get.offAll<Widget>(() => const SelectionScreen());
                     },
                   ));
                 },

@@ -7,6 +7,7 @@ import 'package:aookamao/retailer/retailer_modules/dashboard/controller/retailer
 import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 import 'package:aookamao/services/auth_service.dart';
 import 'package:aookamao/services/firebase_notification_service.dart';
+import 'package:aookamao/services/order_service.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -34,14 +35,6 @@ Future<void> main() async {
  FirebaseMessaging.onBackgroundMessage(_firebaseBackgroundHandler);
  await GetStorage.init();
  await initServices();
- Get.put(AuthController());
-  // Controllers
-/*  Get.put(AuthController());
-  Get.put(AdminDashboardController());
- Get.put(ProductController());
- Get.put(SubscriptionController());
- Get.put(RetailerController());
- Get.put(RetailerDashboardController());*/
 
 
   SystemChrome.setSystemUIOverlayStyle(defaultOverlay);
@@ -62,6 +55,7 @@ initServices() async {
   await Get.putAsync(()=> FirebasePushNotificationService().init());
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => ReferralService().init());
+  await Get.putAsync(() => OrderService().init());
   print('All services started...');
 }
 class Main extends StatelessWidget {

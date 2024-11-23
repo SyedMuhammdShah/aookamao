@@ -17,6 +17,7 @@ import 'package:aookamao/user/modules/profile/your_card.dart';
 import 'package:aookamao/user/modules/widgets/buttons/custom_text_button.dart';
 import 'package:aookamao/user/modules/widgets/dialogs/logout_dialog.dart';
 
+import '../../../modules/auth/selection_view.dart';
 import '../../../modules/welcome/welcome_view.dart';
 import '../../../services/auth_service.dart';
 
@@ -27,8 +28,8 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _authservice = Get.find<AuthService>();
     return Scaffold(
-      appBar: RetailerAppBar(user: _authservice.currentUser.value!,title: 'Profile',),
-      drawer: RetailerDrawer(),
+      appBar: const RetailerAppBar(title: 'Profile',),
+      drawer: const RetailerDrawer(),
       body: ListView(
         padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
         children: [
@@ -108,7 +109,7 @@ class ProfileView extends StatelessWidget {
                   Get.dialog<void>(LogoutDialog(
                     logoutCallback: () async {
                       await _authservice.signOut();
-                      Get.offAll<Widget>(() => const SignInView());
+                      Get.offAll<Widget>(() => const SelectionScreen());
                     },
                   ));
                 },

@@ -26,7 +26,7 @@ class ReferralModel{
     return ReferralModel(
       referralId: map['referralId']??'',
       referralCode: map['referralCode']??'',
-      referees: List<Referee>.from(map['referees'].map((x) => Referee.fromMap(x))),
+      referees: List<Referee>.from(map['referees'] != null ? map['referees'].map((x) => Referee.fromMap(x)) : []),
       accountType: stringToReferralAccountType(map['accountType']),
       retailerId: map['retailerId']??'',
       userReferredById: map['userReferredById']??'',

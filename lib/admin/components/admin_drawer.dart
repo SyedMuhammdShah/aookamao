@@ -1,8 +1,9 @@
 import 'package:aookamao/admin/modules/dashboard/admin_dashboard.dart';
 import 'package:aookamao/admin/modules/products/add_products.dart';
-import 'package:aookamao/admin/modules/orders/order_list.dart';
+import 'package:aookamao/admin/modules/orders/orders_view.dart';
 import 'package:aookamao/admin/modules/profile/admin_profile_view.dart';
 import 'package:aookamao/admin/modules/referrals/all_referees_view.dart';
+import 'package:aookamao/admin/modules/rewards/rewards_view.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -53,10 +54,17 @@ class AdminDrawer extends StatelessWidget {
             },
           ),
            _buildItem(
-            icon: CupertinoIcons.list_bullet_below_rectangle,
-            title: 'Order List',
+            icon: CupertinoIcons.shopping_cart,
+            title: 'Order',
             onTap: () => {
-              Get.to(OrderList()),
+              Get.to(OrdersView()),
+            },
+          ),
+          _buildItem(
+            icon: CupertinoIcons.gift,
+            title: 'Rewards',
+            onTap: () => {
+              Get.to(const RewardsView()),
             },
           ),
           _buildItem(

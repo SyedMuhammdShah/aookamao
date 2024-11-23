@@ -20,10 +20,16 @@ class Constants{
     static String get transactionsCollection => "transactions";
     static String get walletCollection => "wallet";
     static String get ordersCollection => "orders";
+    static String get rewardCollection => "rewards";
 
     //reward amount
-    static int get customerRewardAmount => 500;
-    static int get retailerRewardAmount => 500;
+    static double get customerRewardAmount => 500;
+    static double get retailerRewardAmount => 500;
+    static double get referralUserRewardAmount => 500;
+
+    //order cities
+    static List<String> get orderCities => ["Karachi","Lahore","Hydrabad"];
+
 
 
 }

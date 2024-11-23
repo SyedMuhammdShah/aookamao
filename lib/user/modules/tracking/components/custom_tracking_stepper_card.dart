@@ -5,7 +5,8 @@ import 'package:aookamao/user/data/constants/constants.dart';
 class CustomTrackingStepperCard extends StatelessWidget {
   final String icon;
   final Color? color;
-  const CustomTrackingStepperCard({required this.icon, this.color, super.key});
+  final Color? iconColor;
+  const CustomTrackingStepperCard({required this.icon, this.color, super.key, this.iconColor});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class CustomTrackingStepperCard extends StatelessWidget {
           color: AppColors.kLine,
         ),
       ),
-      child: SvgPicture.asset(icon),
+      child: SvgPicture.asset(icon, color:iconColor,),
     );
   }
 }

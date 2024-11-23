@@ -257,4 +257,10 @@ class ProductController extends GetxController {
 Stream<QuerySnapshot> fetchProducts() {
     return _fireStore.collection('products').snapshots();
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+  }
 }

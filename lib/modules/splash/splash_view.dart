@@ -1,5 +1,6 @@
 import 'package:aookamao/admin/modules/dashboard/admin_dashboard.dart';
 import 'package:aookamao/enums/user_roles.dart';
+import 'package:aookamao/modules/auth/selection_view.dart';
 import 'package:aookamao/modules/auth/signin_view.dart';
 import 'package:aookamao/retailer/retailer_modules/dashboard/retailer_dashboard.dart';
 import 'package:aookamao/services/auth_service.dart';
@@ -42,11 +43,11 @@ class _SplashViewState extends State<SplashView> {
             Get.offAll<Widget>(() => const RetailerDashboard());
             break;
           default:
-            Get.offAll<Widget>(() => const SignInView());
+            Get.offAll<Widget>(() => const SelectionScreen());
         }
       }
       else{
-          Get.offAll<Widget>(() => const SignInView());
+          Get.offAll<Widget>(() => const SelectionScreen());
       }
     }else{
       Get.offAll<Widget>(() => const OnboardingView());
