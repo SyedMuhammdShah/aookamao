@@ -1,20 +1,20 @@
 enum PaymentType {
-  creditCard,
-  debitCard,
+  jazzCash,
+  easyPaisa,
   cod,
-  bankTransfer,
+  meezanBank,
 }
 
 PaymentType? stringToPaymentType(String paymentType) {
   switch (paymentType) {
-    case 'creditCard':
-      return PaymentType.creditCard;
-    case 'debitCard':
-      return PaymentType.debitCard;
+    case 'JazzCash':
+      return PaymentType.jazzCash;
+    case 'EasyPaisa':
+      return PaymentType.easyPaisa;
     case 'cod':
       return PaymentType.cod;
-    case 'bankTransfer':
-      return PaymentType.bankTransfer;
+    case 'Meezan Bank':
+      return PaymentType.meezanBank;
     default:
       return null;
   }
@@ -22,14 +22,14 @@ PaymentType? stringToPaymentType(String paymentType) {
 
 String paymentTypeToString(PaymentType paymentType) {
   switch (paymentType) {
-    case PaymentType.creditCard:
-      return 'creditCard';
-    case PaymentType.debitCard:
-      return 'debitCard';
+    case PaymentType.jazzCash:
+      return 'JazzCash';
+    case PaymentType.easyPaisa:
+      return 'EasyPaisa';
     case PaymentType.cod:
       return 'cod';
-    case PaymentType.bankTransfer:
-      return 'bankTransfer';
+    case PaymentType.meezanBank:
+      return 'Meezan Bank';
     default:
       return '';
   }

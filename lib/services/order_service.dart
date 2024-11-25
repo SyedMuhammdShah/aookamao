@@ -36,6 +36,7 @@ class OrderService extends GetxService {
       DocumentReference orderdoc = await _firestore
           .collection(Constants.ordersCollection)
           .add(orderData.toMap());
+
       //reward the Customer if the order is eligible for reward
       print('referralDetails.referredBy: ${referralDetails.referredBy}');
       print('referralDetails.retailerId: ${referralDetails.retailerId}');

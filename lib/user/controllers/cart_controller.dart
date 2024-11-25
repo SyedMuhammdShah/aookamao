@@ -31,6 +31,7 @@ class CartController extends GetxController {
   RxDouble shippingCharges = 300.0.obs;
   RxBool isDragSheetOpen = false.obs;
   RxBool isLoading = false.obs;
+  Rx<PaymentType?> paymentType = Rx<PaymentType?>(null);
 
   @override
   void onInit() {
