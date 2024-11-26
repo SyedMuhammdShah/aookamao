@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:aookamao/constants/constants.dart';
 import 'package:aookamao/enums/payment_type.dart';
 import 'package:aookamao/user/bindings/home_binding.dart';
 import 'package:aookamao/user/modules/home/home_view.dart';
@@ -9,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:aookamao/user/models/cart_model.dart';
 import 'package:aookamao/user/models/product_model.dart';
 import 'package:aookamao/user/modules/widgets/dialogs/custom_toast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../enums/order_status.dart';
 import '../../models/order_model.dart';
@@ -112,6 +116,25 @@ class CartController extends GetxController {
     Get.offAll<Widget>(() => const LandingPage());
     Get.dialog<void>(const OrderConfirmedDialog());
   }
+
+  Future<void> sendPaymentSS() async{
+    try {
+      if (Platform.isAndroid) {
+        String url = 'whatsapp://send?phone="${Constants.whatsAppNumber}"&text=ScreenShot of ${paymentTypeToString(paymentType.value!)} payment receipt for order from ${Constants.appName} App';
+        await launchUrl(Uri.parse(url),mode: LaunchMode.externalNonBrowserApplication).then((value) => Get.back());
+
+      }
+      else if (Platform.isIOS) {
+        String url = 'https://wa.me/"${Constants.whatsAppNumber}"/?text=${Uri.parse('ScreenShot of ${paymentTypeToString(paymentType.value!)} payment receipt for order from ${Constants.appName} App')}';
+        await launchUrl(Uri.parse(url),mode: LaunchMode.externalNonBrowserApplication).then((value) => Get.back());
+      }
+
+    }
+    catch (e) {
+      print(e);
+    }
+  }
+
   void clearCart() {
     cartItems.clear();
   }

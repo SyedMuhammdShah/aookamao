@@ -107,24 +107,18 @@ class SelectPaymentMethod extends StatelessWidget {
             ),*/
             if (_cartController.paymentType.value == PaymentType.cod)
             PrimaryButton(
-              onTap: () {},
+              onTap: () {
+                Get.back();
+              },
               text: 'Confirm Payment',
             ),
-            if (_cartController.paymentType.value != PaymentType.cod)
+            if (_cartController.paymentType.value != PaymentType.cod && _cartController.paymentType.value != null)
               SizedBox(
                 width: double.infinity,
                 height: 50.h,
                 child: ElevatedButton.icon(
 
-                  onPressed: () async {
-                    String url = 'whatsapp://send?phone="03323139353"&text="YOUR_MESSAGE_HERE"';
-                    if (await launchUrl(
-                      Uri.parse(url),
-                    mode: LaunchMode.externalNonBrowserApplication,
-                    )) {
-                    throw Exception('Could not launch ');
-                    }
-                  },
+                  onPressed: ()=>_cartController.sendPaymentSS(),
                   label: Text('Share Screenshot', style: AppTypography.kSemiBold14.copyWith(color: AppColors.kWhite)),
                   icon: FaIcon(FontAwesomeIcons.whatsapp, color: AppColors.kWhite),
                   style: ElevatedButton.styleFrom(

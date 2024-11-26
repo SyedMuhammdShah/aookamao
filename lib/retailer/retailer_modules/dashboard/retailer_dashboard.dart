@@ -1,4 +1,5 @@
 import 'package:aookamao/admin/components/adminAppBar.dart';
+import 'package:aookamao/constants/constants.dart';
 import 'package:aookamao/enums/reward_status.dart';
 import 'package:aookamao/retailer/components/referal_card.dart';
 import 'package:aookamao/retailer/retailer_modules/dashboard/controller/retailer_dashboard_controller.dart';
@@ -107,7 +108,7 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Welcome To Aoo Kamao',style: AppTypography.kSemiBold20.copyWith(color: Colors.white),),
+                            Text('Welcome To ${Constants.appName}',style: AppTypography.kSemiBold20.copyWith(color: Colors.white),),
                             SizedBox(height: 10.h,),
                             Text(_authService.currentUser.value!.name,style: AppTypography.kBold24.copyWith(color: Colors.white),)
                           ],

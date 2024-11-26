@@ -28,34 +28,34 @@ class ProductsList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:const adminAppBar(Title: 'Product List',),
-      drawer: AdminDrawer(),
+      drawer: const AdminDrawer(),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance.collection('products').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           var products = snapshot.data!.docs;
 
           return SingleChildScrollView( // Makes entire grid scrollable
             child: Padding(
-              padding: EdgeInsets.all(12),
+              padding: const EdgeInsets.all(12),
               child: GridView.builder(
                 shrinkWrap: true, // Allows grid to take only the space it needs
-                physics: NeverScrollableScrollPhysics(), // Disables grid's own scrolling
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                physics: const NeverScrollableScrollPhysics(), // Disables grid's own scrolling
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 12,
                   mainAxisSpacing: 12,
-                  childAspectRatio: 0.65,
+                  childAspectRatio: 0.7,
                 ),
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   var product = products[index];
                   String productId = product.id;
                   String name = product['name'] ?? 'Unknown';
-                  double price = product['price'] ?? 0.0;
+                  double price = double.tryParse(product['price'].toString())?? 0.0;
 
                   List<String> imageUrls = [];
                   var productData = product.data() as Map<String, dynamic>?;
@@ -79,7 +79,7 @@ class ProductsList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ClipRRect(
-                            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
                             child: imageUrls.isNotEmpty
                                 ? Image.network(
                                     imageUrls[0],
@@ -91,7 +91,7 @@ class ProductsList extends StatelessWidget {
                                     height: 150,
                                     width: double.infinity,
                                     color: Colors.grey[300],
-                                    child: Icon(Icons.image, size: 50, color: Colors.grey),
+                                    child: const Icon(Icons.image, size: 50, color: Colors.grey),
                                   ),
                           ),
                           Expanded( // Allows content within card to take available space
@@ -102,7 +102,7 @@ class ProductsList extends StatelessWidget {
                                 children: [
                                   Text(
                                     name,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black87,
@@ -110,26 +110,26 @@ class ProductsList extends StatelessWidget {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(height: 5),
+                                  const SizedBox(height: 5),
                                   Text(
                                     '\$${price.toStringAsFixed(2)}',
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 16,
                                       color: AppColors.kPrimary,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  SizedBox(height: 10),
-                                  Row(
+                                  const SizedBox(height: 10),
+                                 /* Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                                         decoration: BoxDecoration(
                                           color: AppColors.kGrey60.withOpacity(0.2),
                                           borderRadius: BorderRadius.circular(10),
                                         ),
-                                        child: Row(
+                                        child: const Row(
                                           children: [
                                             Text(
                                               'Sales: \$200',
@@ -153,16 +153,16 @@ class ProductsList extends StatelessWidget {
                                      
                                     ],
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),*/
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                     decoration: BoxDecoration(
                                       color: AppColors.kPrimary.withOpacity(0.2),
                                       borderRadius: BorderRadius.circular(10),
                                     ),
-                                    child: Text(
-                                      'Stock: 100',
-                                      style: TextStyle(
+                                    child:  Text(
+                                      'Stock: ${product['stockQuantity']}',
+                                      style: const TextStyle(
                                         color: AppColors.kPrimary,
                                         fontWeight: FontWeight.bold,
                                       ),

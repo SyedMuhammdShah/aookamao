@@ -134,7 +134,7 @@ class PaymentMethodCard extends StatelessWidget {
                       color: AppColors.kLine,
                       shape: BoxShape.circle,
                     ),
-                    child: SvgPicture.asset('assets/icons/jazzcash_logo.svg'),
+                    child: SvgPicture.asset('assets/icons/jazz_cash_logo.svg'),
                   ),
                   SizedBox(width: AppSpacing.tenHorizontal),
                   Column(

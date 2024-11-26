@@ -12,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 
+import '../../constants/constants.dart';
 import '../onboarding/onboarding_view.dart';
 
 class SplashView extends StatefulWidget {
@@ -78,7 +79,7 @@ class _SplashViewState extends State<SplashView> {
             ),
             SizedBox(height: AppSpacing.twentyVertical),
             Text(
-              'Aookamao',
+              Constants.appName,
               style: AppTypography.kExtraBold40.copyWith(
                 color: Colors.white,
               ),

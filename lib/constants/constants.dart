@@ -1,6 +1,8 @@
 class Constants{
   Constants._();
 
+  static String get appName => "AAO KAMAO";
+
   //firebase project id
   static String get projectid => "aookamao-e3160";
 
@@ -30,6 +32,7 @@ class Constants{
     //order cities
     static List<String> get orderCities => ["Karachi","Lahore","Hydrabad"];
 
-
+    //WhatsApp Number for ScreenShots
+    static String get whatsAppNumber => "03332906880";
 
 }

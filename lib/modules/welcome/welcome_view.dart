@@ -5,6 +5,7 @@ import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
 import 'package:aookamao/user/modules/widgets/gradients/custom_gradient_card.dart';
 
+import '../../constants/constants.dart';
 import '../auth/selection_view.dart';
 
 class WelcomeView extends StatelessWidget {
@@ -32,7 +33,7 @@ class WelcomeView extends StatelessWidget {
                       .copyWith(color: AppColors.kWhite),
                   children: [
                     TextSpan(
-                      text: 'Aookamao',
+                      text: Constants.appName,
                       style: AppTypography.kSemiBold24
                           .copyWith(color: AppColors.kPrimary),
                     ),

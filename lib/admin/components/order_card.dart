@@ -89,7 +89,6 @@ class OrderCard extends StatelessWidget {
               Icons.keyboard_arrow_down,
               color: Colors.grey,
             ),
-
           ],
         ),
         children: order.value.orderItems.map((item) => _buildOrderItem(item)).toList(),

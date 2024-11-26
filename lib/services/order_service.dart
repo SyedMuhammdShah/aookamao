@@ -196,7 +196,7 @@ try{
   }
 
   Stream<RxList<Rx<OrderModel>>> getAllOrders() {
-    return _firestore.collection(Constants.ordersCollection).snapshots().map(
+    return _firestore.collection(Constants.ordersCollection).orderBy('orderStatus',descending: true).snapshots().map(
         (snapshot) => snapshot.docs
             .map((doc) => OrderModel.fromDoc(doc).obs)
             .toList()
