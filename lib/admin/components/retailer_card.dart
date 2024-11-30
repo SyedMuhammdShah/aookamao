@@ -1,6 +1,7 @@
 import 'package:aookamao/admin/models/retailer_model.dart';
 import 'package:aookamao/enums/subscription_status.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -64,11 +65,18 @@ class RetailerCard extends StatelessWidget {
                           children: [
                             Icon(Icons.email, color: Colors.grey),
                             SizedBox(width: 8),
-                            Text(
-                              retailer.email,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black87,
+                            SizedBox(
+                              width: ScreenUtil().screenWidth * 0.32,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  retailer.email,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black87,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ],

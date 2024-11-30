@@ -122,11 +122,12 @@ class AuthService extends GetxService{
       userdetails = userdetails.copyWith(uid: userCredential.user!.uid);
 
       if(userdetails.role == UserRoles.retailer){
-        await _uploadCnic(userdetails: userdetails,cnicFrontFile:cnicFrontFile!,cnicBackFile: cnicBackFile!);
-        await _firestore
+       UserModel updatedDetails =  await _uploadCnic(userdetails: userdetails,cnicFrontFile:cnicFrontFile!,cnicBackFile: cnicBackFile!);
+       print("retailer data with cnic: ${updatedDetails.toMapRegisterRetailer()}");
+       await _firestore
             .collection(Constants.usersCollection)
-            .doc(userdetails.uid)
-            .set(userdetails.toMapRegisterRetailer());
+            .doc(updatedDetails.uid)
+            .set(updatedDetails.toMapRegisterRetailer());
         var subscriptiondetails = SubscriptionModel(uid:userdetails.uid, subscriptionStatus: SubscriptionStatus.none);
         await activateSubscription(subscriptiondetails:subscriptiondetails);
         await FirebasePushNotificationService().getDeviceToken();

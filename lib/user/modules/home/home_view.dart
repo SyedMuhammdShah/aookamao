@@ -23,7 +23,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final  _authController = Get.find<AuthController>();
     final _authService = Get.find<AuthService>();
     final _homeController = Get.find<HomeController>();
     return Scaffold(

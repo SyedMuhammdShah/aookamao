@@ -107,7 +107,7 @@ class AdminDashboardController extends GetxController{
         barRods: [
           BarChartRodData(
             toY: orderData[index].orders.toDouble(),
-            color: AppColors.kPrimary,
+            color: AppColors.kSecondary,
             width: 15,
             borderRadius: BorderRadius.circular(8),
           ),

@@ -377,7 +377,7 @@ class _ProductDetailViewState extends State<ProductDetailView> {
                   text: TextSpan(
                     text: r'Rs ',
                     style:
-                    AppTypography.kBold24.copyWith(color: AppColors.kPrimary),
+                    AppTypography.kBold24.copyWith(color: AppColors.kSecondary),
                     children: [
                       TextSpan(
                         text: product.value.price.toString(),

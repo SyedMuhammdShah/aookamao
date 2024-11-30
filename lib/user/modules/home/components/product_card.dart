@@ -94,7 +94,9 @@ class ProductCard extends StatelessWidget {
             Text(
               '\Rs ${product.value.price?.toInt()}',
               style: AppTypography.kSemiBold14
-                  .copyWith(color: AppColors.kGrey100),
+                  .copyWith(
+                color:AppColors.kSecondary,
+              ),
             ),
           ],
         ),

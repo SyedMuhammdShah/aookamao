@@ -39,8 +39,8 @@ final _cartController = Get.find<CartController>();
       },
       child: DraggableScrollableSheet(
         minChildSize: 0.1,
-        maxChildSize: 0.46,
-        initialChildSize: 0.45,
+        maxChildSize: 0.5,
+        initialChildSize: 0.5,
         builder: (context, scrollController) {
           return Container(
             padding: EdgeInsets.only(
@@ -144,6 +144,7 @@ final _cartController = Get.find<CartController>();
                 CustomPaymentDetails(
                   amount: totalAmount,
                   heading: 'Total Amount',
+                  isTotal: true,
                 ),
                 SizedBox(height: AppSpacing.twentyVertical),
                 PrimaryButton(
@@ -164,9 +165,11 @@ final _cartController = Get.find<CartController>();
 class CustomPaymentDetails extends StatelessWidget {
   final String heading;
   final double amount;
+  final bool isTotal;
   const CustomPaymentDetails({
     required this.amount,
     required this.heading,
+    this.isTotal = false,
     super.key,
   });
 
@@ -186,11 +189,11 @@ class CustomPaymentDetails extends StatelessWidget {
               text: TextSpan(
                 text: r'Rs.',
                 style: AppTypography.kSemiBold12
-                    .copyWith(color: AppColors.kGrey100, fontSize: 12.sp),
+                    .copyWith(color: AppColors.kSecondary, fontSize: 12.sp),
                 children: [
                   TextSpan(
                     text: amount.toString(),
-                    style: AppTypography.kSemiBold16,
+                    style:isTotal? AppTypography.kSemiBold24: AppTypography.kSemiBold16,
                   ),
                 ],
               ),

@@ -96,6 +96,7 @@ class PaymentView extends StatelessWidget {
                CustomPaymentDetails(
                 heading: 'Total Amount',
                 amount: _cartController.getTotal(),
+                 isTotal: true,
               ),
               SizedBox(height: AppSpacing.fifteenVertical),
               _cartController.isLoading.value
@@ -105,8 +106,10 @@ class PaymentView extends StatelessWidget {
                   ))
                   : PrimaryButton(
                 onTap: () =>_cartController.placeOrder(),
+                color: _cartController.paymentType.value ==null ? AppColors.kGrey40 : AppColors.kPrimary,
                 text: 'Confirm Order',
               ),
+
 
             ],
           ),

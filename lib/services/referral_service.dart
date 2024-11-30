@@ -16,7 +16,7 @@ import '../models/user_model.dart';
 import 'auth_service.dart';
 import 'firebase_notification_service.dart';
 
-class ReferralService extends GetxService{
+class ReferralService extends GetxService {
   final _authService = Get.find<AuthService>();
   final _pushNotificationService = Get.find<FirebasePushNotificationService>();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -32,12 +32,17 @@ class ReferralService extends GetxService{
   String _generateRandomCode(int length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     Random random = Random();
-    return List.generate(length, (index) => characters[random.nextInt(characters.length)]).join();
+    return List.generate(
+            length, (index) => characters[random.nextInt(characters.length)])
+        .join();
   }
 
   // Function to check if the code already exists in the database
   Future<bool> _doesCodeExist(String code) async {
-    final querySnapshot = await _firestore.collection(Constants.referralsCollection).where('referralCode', isEqualTo: code).get();
+    final querySnapshot = await _firestore
+        .collection(Constants.referralsCollection)
+        .where('referralCode', isEqualTo: code)
+        .get();
     return querySnapshot.docs.isNotEmpty;
   }
 
@@ -56,9 +61,12 @@ class ReferralService extends GetxService{
 
   // Function to get the referral code of the current user
   Future<void> getReferralCode() async {
-    final querySnapshot = await _firestore.collection(Constants.referralsCollection).doc(_authService.currentUser.value!.uid).get();
+    final querySnapshot = await _firestore
+        .collection(Constants.referralsCollection)
+        .doc(_authService.currentUser.value!.uid)
+        .get();
     if (querySnapshot.exists) {
-      referralCode.value= querySnapshot.get('referralCode');
+      referralCode.value = querySnapshot.get('referralCode');
       return;
     } else {
       referralCode.value = await generateUniqueReferralCode(6);
@@ -69,42 +77,49 @@ class ReferralService extends GetxService{
 
   // validate the referral code
   Future<bool> validateReferralCode({required String code}) async {
-
-      final querySnapshot = await _firestore.collection(
-          Constants.referralsCollection)
-          .where('referralCode', isEqualTo: code)
-          .get();
-      if(querySnapshot.docs.isNotEmpty) {
-        currentReferralDetails.value = ReferralModel.fromMapAllReferrals(querySnapshot.docs.first.data() as Map<String, dynamic>);
-        print('referralId ID: ${currentReferralDetails.value.referralId}');
-        await fetchDetailsOfReferralUser();
-        await saveReferralCodeToNewUser();
-        await createWallet();
-        return true;
-      }
-      if(querySnapshot.docs.isEmpty) {
-        showErrorSnackbar('Invalid referral code!');
-        return false;
-      }
+    final querySnapshot = await _firestore
+        .collection(Constants.referralsCollection)
+        .where('referralCode', isEqualTo: code)
+        .get();
+    if (querySnapshot.docs.isNotEmpty) {
+      currentReferralDetails.value = ReferralModel.fromMapAllReferrals(
+          querySnapshot.docs.first.data() as Map<String, dynamic>);
+      print('referralId ID: ${currentReferralDetails.value.referralId}');
+      await fetchDetailsOfReferralUser();
+      await saveReferralCodeToNewUser();
+      await createWallet();
+      return true;
+    }
+    if (querySnapshot.docs.isEmpty) {
+      showErrorSnackbar('Invalid referral code!');
+      return false;
+    }
     return false;
   }
 
   //fetch of the referral user
   Future<void> fetchDetailsOfReferralUser() async {
     try {
-      final querySnapshot = await _firestore.collection(Constants.usersCollection).doc(currentReferralDetails.value.referralId).get();
-      if(querySnapshot.exists) {
+      final querySnapshot = await _firestore
+          .collection(Constants.usersCollection)
+          .doc(currentReferralDetails.value.referralId)
+          .get();
+      if (querySnapshot.exists) {
         print('Retailer details: ${querySnapshot.data()}');
-        if(currentReferralDetails.value.accountType == ReferralAccountType.RETAILER) {
-          referralUserDetail.value = UserModel.fromMapRetailer(querySnapshot.data() as Map<String, dynamic>);
-          referralUserDetail.value = referralUserDetail.value!.copyWith(uid: currentReferralDetails.value.referralId);
-        }
-        else if(currentReferralDetails.value.accountType == ReferralAccountType.USER) {
+        if (currentReferralDetails.value.accountType ==
+            ReferralAccountType.RETAILER) {
+          referralUserDetail.value = UserModel.fromMapRetailer(
+              querySnapshot.data() as Map<String, dynamic>);
+          referralUserDetail.value = referralUserDetail.value!
+              .copyWith(uid: currentReferralDetails.value.referralId);
+        } else if (currentReferralDetails.value.accountType ==
+            ReferralAccountType.USER) {
           referralUserDetail.value = UserModel.fromMapUser(
               querySnapshot.data() as Map<String, dynamic>);
-          referralUserDetail.value = referralUserDetail.value!.copyWith(uid: currentReferralDetails.value.referralId);
+          referralUserDetail.value = referralUserDetail.value!
+              .copyWith(uid: currentReferralDetails.value.referralId);
         }
-        if(referralUserDetail.value != null) {
+        if (referralUserDetail.value != null) {
           print('Referral user details: ${referralUserDetail.value!.name}');
           addReferee();
         }
@@ -119,16 +134,17 @@ class ReferralService extends GetxService{
     try {
       referralCode.value = await generateUniqueReferralCode(6);
       var data;
-      if(currentReferralDetails.value.accountType == ReferralAccountType.RETAILER) {
-        data=ReferralModel(
+      if (currentReferralDetails.value.accountType ==
+          ReferralAccountType.RETAILER) {
+        data = ReferralModel(
           referralId: _authService.currentUser.value!.uid,
           referralCode: referralCode.value,
           accountType: ReferralAccountType.USER,
           retailerId: currentReferralDetails.value.referralId,
           referredBy: ReferredBy.Retailer,
         ).toMapSaveUserReferralCodeByRetailer();
-      }
-      else if(currentReferralDetails.value.accountType == ReferralAccountType.USER) {
+      } else if (currentReferralDetails.value.accountType ==
+          ReferralAccountType.USER) {
         data = ReferralModel(
           referralId: _authService.currentUser.value!.uid,
           referralCode: referralCode.value,
@@ -138,7 +154,10 @@ class ReferralService extends GetxService{
           retailerId: currentReferralDetails.value.retailerId,
         ).toMapSaveUserReferralCodeByUser();
       }
-      await _firestore.collection(Constants.referralsCollection).doc(_authService.currentUser.value!.uid).set(data);
+      await _firestore
+          .collection(Constants.referralsCollection)
+          .doc(_authService.currentUser.value!.uid)
+          .set(data);
       return;
     } catch (e) {
       print('Error saving referral code to user: $e');
@@ -148,8 +167,9 @@ class ReferralService extends GetxService{
   //add the user to the referral list of referees
   Future<void> addReferee() async {
     try {
-      if(currentReferralDetails.value.accountType == ReferralAccountType.RETAILER) {
-       /* var data = ReferralModel(
+      if (currentReferralDetails.value.accountType ==
+          ReferralAccountType.RETAILER) {
+        /* var data = ReferralModel(
           referees: [
             Referee(
               refereeId: _authService.currentUser.value!.uid,
@@ -171,10 +191,12 @@ class ReferralService extends GetxService{
           ])
         };
 
-        await _firestore.collection(Constants.referralsCollection).doc(currentReferralDetails.value.referralId).set(data, SetOptions(merge: true));
-      }
-      else if(currentReferralDetails.value.accountType == ReferralAccountType.USER) {
-
+        await _firestore
+            .collection(Constants.referralsCollection)
+            .doc(currentReferralDetails.value.referralId)
+            .set(data, SetOptions(merge: true));
+      } else if (currentReferralDetails.value.accountType ==
+          ReferralAccountType.USER) {
         /*var data = ReferralModel(
           referees: [
             Referee(
@@ -197,10 +219,13 @@ class ReferralService extends GetxService{
           ])
         };
         //add the user to the list of referees of the referral user
-        await _firestore.collection(Constants.referralsCollection).doc(referralUserDetail.value!.uid).set(data, SetOptions(merge: true));
+        await _firestore
+            .collection(Constants.referralsCollection)
+            .doc(referralUserDetail.value!.uid)
+            .set(data, SetOptions(merge: true));
 
         //add the referral user to the list of referees of retailer
-       /* var retailerReferralData = ReferralModel(
+        /* var retailerReferralData = ReferralModel(
           referees: [
             Referee(
               refereeId: _authService.currentUser.value!.uid,
@@ -225,11 +250,13 @@ class ReferralService extends GetxService{
             ).toMapIndirectReferral()
           ])
         };
-        await _firestore.collection(Constants.referralsCollection).doc(currentReferralDetails.value.retailerId).set(retailerReferralData, SetOptions(merge: true));
+        await _firestore
+            .collection(Constants.referralsCollection)
+            .doc(currentReferralDetails.value.retailerId)
+            .set(retailerReferralData, SetOptions(merge: true));
       }
 
       await sendNotificationToReferralUser();
-
     } catch (e) {
       print('Error adding referee to retailer: $e');
       showErrorSnackbar('Error adding referee to retailer');
@@ -240,11 +267,11 @@ class ReferralService extends GetxService{
   Future<void> sendNotificationToReferralUser() async {
     try {
       //send notification to the referral user
-      if(referralUserDetail.value!.device_token != '')
-      {
+      if (referralUserDetail.value!.device_token != '') {
         var notificationdata = PushNotification(
           title: "Your Referral Code Used",
-          body: "${_authService.currentUser.value!.name} has used your referral code to register.",
+          body:
+              "${_authService.currentUser.value!.name} has used your referral code to register.",
           token: referralUserDetail.value!.device_token!,
         ).toJsonNoData();
         await _pushNotificationService.sendNotificationUsingApi(
@@ -253,10 +280,11 @@ class ReferralService extends GetxService{
       print('notification sent to referral user');
       //send notification to the admin
       var adminToken = await _authService.fetchToken(isAdminToken: true);
-      if(adminToken != '') {
+      if (adminToken != '') {
         var notificationdata = PushNotification(
           title: "New User Registered",
-          body: "${_authService.currentUser.value!.name} has registered using a referral code from ${referralUserDetail.value!.name}",
+          body:
+              "${_authService.currentUser.value!.name} has registered using a referral code from ${referralUserDetail.value!.name}",
           token: adminToken,
         ).toJsonNoData();
         await _pushNotificationService.sendNotificationUsingApi(
@@ -265,26 +293,27 @@ class ReferralService extends GetxService{
 
       print('all notifications sent');
       return;
-
     } catch (e) {
       print('Error sending notification to referral user: $e');
     }
   }
 
-
   // Function to save the referral code to the database
   Future<void> saveReferralCode({required String referralCode}) async {
     try {
-      var data =ReferralModel(
-          referralId:_authService.currentUser.value!.uid,
-          referralCode: referralCode,
-          referees: [],
-          accountType: ReferralAccountType.RETAILER,
-          retailerId: '',
-          userReferredById: ''
-      ).toMapSaveRetailerReferralCode();
+      var data = ReferralModel(
+              referralId: _authService.currentUser.value!.uid,
+              referralCode: referralCode,
+              referees: [],
+              accountType: ReferralAccountType.RETAILER,
+              retailerId: '',
+              userReferredById: '')
+          .toMapSaveRetailerReferralCode();
 
-      await _firestore.collection(Constants.referralsCollection).doc(_authService.currentUser.value!.uid).set(data);
+      await _firestore
+          .collection(Constants.referralsCollection)
+          .doc(_authService.currentUser.value!.uid)
+          .set(data);
     } catch (e) {
       print('Error saving referral code: $e');
     }
@@ -293,8 +322,13 @@ class ReferralService extends GetxService{
   //Function to create user wallet
   Future<void> createWallet() async {
     try {
-      var data = WalletModel(walletId: _authService.currentUser.value!.uid, balance: 0.00).toMap();
-      await _firestore.collection(Constants.walletCollection).doc(_authService.currentUser.value!.uid).set(data);
+      var data = WalletModel(
+              walletId: _authService.currentUser.value!.uid, balance: 0.00)
+          .toMap();
+      await _firestore
+          .collection(Constants.walletCollection)
+          .doc(_authService.currentUser.value!.uid)
+          .set(data);
       return;
     } catch (e) {
       print('Error creating user wallet: $e');
@@ -329,22 +363,43 @@ class ReferralService extends GetxService{
     }
   }*/
 
-  Stream<RxList<Referee>> getRetailerReferees(){
-    return _firestore.collection(Constants.referralsCollection).doc(_authService.currentUser.value!.uid).snapshots().map(
-      (event) => List<Referee>.from(event.data()!['referees'].map((referee) => Referee.fromMap(referee)).map((e) => e)).toList().obs,
-    );
+  Stream<RxList<Referee>> getRetailerReferees() {
+    return _firestore
+        .collection(Constants.referralsCollection)
+        .doc(_authService.currentUser.value!.uid)
+        .snapshots()
+        .map(
+          (event) => List<Referee>.from(event
+              .data()!['referees']
+              .map((referee) => Referee.fromMap(referee))
+              .map((e) => e)).toList().obs,
+        );
   }
 
-  // Function to get all referees from referralsCollections
   Future<void> getAllRetailersReferees() async {
     try {
-      final querySnapshot = await _firestore.collection(Constants.referralsCollection).where('accountType',isEqualTo: referralAccountTypeToString(ReferralAccountType.RETAILER)).snapshots();
-      querySnapshot.listen((event) {
-        List<dynamic> data = event.docs.map((e) => e.get('referees')).toList();
-        allReferessList.value = data.expand((element) => element).map((e) => Referee.fromMap(e)).toList();
-        print('All referrals: ${allReferessList.length}');
-      });
+      final querySnapshot = _firestore
+          .collection(Constants.referralsCollection)
+          .where(
+            'accountType',
+            isEqualTo:
+                referralAccountTypeToString(ReferralAccountType.RETAILER),
+          )
+          .snapshots();
 
+      querySnapshot.listen((event) {
+        if (event.docs.isNotEmpty) {
+          List<dynamic> data = event.docs
+              .map((e) =>
+                  e.data().containsKey('referees') ? e.get('referees') : [])
+              .toList();
+          allReferessList.value = data
+              .expand((element) => element)
+              .map((e) => Referee.fromMap(e))
+              .toList();
+          print('All referrals: ${allReferessList.length}');
+        }
+      });
     } catch (e) {
       print('Error getting all referrals: $e');
     }
@@ -353,11 +408,13 @@ class ReferralService extends GetxService{
   // Functions get customer referrral details
   Future<bool> getCustomerReferralDetails() async {
     try {
-      final querySnapshot = await _firestore.collection(Constants.referralsCollection).doc(_authService.currentUser.value!.uid).get();
-      if(querySnapshot.exists) {
-      return true;
-      }
-      else {
+      final querySnapshot = await _firestore
+          .collection(Constants.referralsCollection)
+          .doc(_authService.currentUser.value!.uid)
+          .get();
+      if (querySnapshot.exists) {
+        return true;
+      } else {
         print('No referral details found');
         return false;
       }
@@ -368,8 +425,13 @@ class ReferralService extends GetxService{
   }
 
   Stream<ReferralModel> getReferralDetails() {
-    return _firestore.collection(Constants.referralsCollection).doc(_authService.currentUser.value!.uid).snapshots().map(
-      (event) => ReferralModel.fromMap(event.data() as Map<String, dynamic>),
-    );
+    return _firestore
+        .collection(Constants.referralsCollection)
+        .doc(_authService.currentUser.value!.uid)
+        .snapshots()
+        .map(
+          (event) =>
+              ReferralModel.fromMap(event.data() as Map<String, dynamic>),
+        );
   }
 }

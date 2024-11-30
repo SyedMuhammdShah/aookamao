@@ -4,8 +4,9 @@ class AppColors {
 
   // Primary & Secondary.
   //static const Color kPrimary = Color.fromARGB(255, 238, 127, 41);
-  static const Color kPrimary = Color(0xFFF26522);
-  static const Color kSecondary = Color(0xFF110C1D);
+  //static const Color kSecondary = Color(0xFF110C1D);
+  static const Color kPrimary = Color(0xFF301C13);
+  static const Color kSecondary = Color(0xFFF26522);
 
   // Alerts.
   static const Color kSuccess = Color(0xFF7AC678);

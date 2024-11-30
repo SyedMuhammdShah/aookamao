@@ -1,4 +1,5 @@
 import 'package:aookamao/admin/models/retailer_model.dart';
+import 'package:aookamao/retailer/components/retailer_appbar.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
 import 'package:aookamao/widgets/custom_snackbar.dart';
@@ -19,10 +20,7 @@ class RetailerDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Supplier Details'),
-        backgroundColor: AppColors.kPrimary,
-      ),
+      appBar: const RetailerAppBar(title: 'Retailers',),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -31,7 +29,7 @@ class RetailerDetailsScreen extends StatelessWidget {
             children: [
               // Supplier Card
               Container(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -40,7 +38,7 @@ class RetailerDetailsScreen extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 2,
                       blurRadius: 10,
-                      offset: Offset(0, 4),
+                      offset: const Offset(0, 4),
                     ),
                   ],
                 ),
@@ -50,9 +48,9 @@ class RetailerDetailsScreen extends StatelessWidget {
                     // Supplier Name
                     Text(
                       retailer.name,
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+                      style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blueAccent),
                     ),
-                    SizedBox(height: 12),
+                    const SizedBox(height: 12),
                     //cnic number
                     _buildInfoRow(Icons.badge,  retailer.cnic_number),
 
@@ -84,22 +82,22 @@ class RetailerDetailsScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
 
               // CNIC Images Section
-              Text(
+              const Text(
                 'CNIC Images',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blueAccent),
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Row(
                 children: [
                   _buildImageColumn('Front', retailer.cnic_front_image_url),
-                  SizedBox(width: 16),
+                  const SizedBox(width: 16),
                   _buildImageColumn('Back', retailer.cnic_back_image_url),
                 ],
               ),
-              SizedBox(height: 50),
+              const SizedBox(height: 50),
 
               // Approve Subscription Button
               if(retailer.subscription_status == SubscriptionStatus.pending)
@@ -125,7 +123,7 @@ class RetailerDetailsScreen extends StatelessWidget {
       child: Row(
         children: [
           Icon(icon, color: color),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           Flexible(
             child: Text(
               text,
@@ -142,8 +140,8 @@ class RetailerDetailsScreen extends StatelessWidget {
     return Expanded(
       child: Column(
         children: [
-          Text(label, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-          SizedBox(height: 8),
+          Text(label, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          const SizedBox(height: 8),
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.network(
@@ -164,19 +162,19 @@ class RetailerDetailsScreen extends StatelessWidget {
     final _retailerController = Get.find<RetailerController>();
     Get.dialog(
       AlertDialog(
-        title: Text('Subscription'),
-        icon: Icon(Icons.check_circle, color: Colors.green, size: 40),
-        content: Text('Do you want to approve this supplier subscription?'),
+        title: const Text('Subscription'),
+        icon: const Icon(Icons.check_circle, color: Colors.green, size: 40),
+        content: const Text('Do you want to approve this supplier subscription?'),
         actions: [
           TextButton(
             onPressed: () => Get.back(),
-            child: Text('Cancel', style: TextStyle(color: Colors.red)),
+            child: const Text('Cancel', style: TextStyle(color: Colors.red)),
           ),
           TextButton(
             onPressed: () =>_retailerController.approveRetailer(
               subdetail: SubscriptionModel(uid: retailer.uid,subscriptionStatus: SubscriptionStatus.active,subscriptionDate: Timestamp.now()),
             ),
-            child: Text('Approve', style: TextStyle(color: Colors.green)),
+            child: const Text('Approve', style: TextStyle(color: Colors.green)),
           ),
         ],
       ),

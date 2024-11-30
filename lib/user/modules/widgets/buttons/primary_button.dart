@@ -82,7 +82,7 @@ class _PrimaryButtonState extends State<PrimaryButton>
             child: Text(
               widget.text,
               style: AppTypography.kSemiBold16.copyWith(
-                color: widget.color == null ? AppColors.kWhite : Colors.black,
+                color: AppColors.kWhite,
                 fontSize: widget.fontSize,
               ),
             ),

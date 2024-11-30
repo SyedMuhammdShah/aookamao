@@ -120,11 +120,15 @@ class CartItemCard extends StatelessWidget {
                     text: TextSpan(
                       text: r'Rs. ',
                       style: AppTypography.kMedium14
-                          .copyWith(color: AppColors.kGrey100),
+                      .copyWith(
+                      color:AppColors.kSecondary,
+                    ),
                       children: [
                         TextSpan(
                           text: product.value.price.toString(),
-                          style: AppTypography.kSemiBold24,
+                          style: AppTypography.kSemiBold16.copyWith(
+                            color:AppColors.kSecondary,
+                          ),
                         ),
                       ],
                     ),

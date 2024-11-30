@@ -70,32 +70,23 @@ class _SplashViewState extends State<SplashView> {
           ),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Spacer(),
-            SvgPicture.asset(
-              AppAssets.kShower,
-              height: 64.h,
-              width: 64.w,
-            ),
-            SizedBox(height: AppSpacing.twentyVertical),
-            Text(
-              Constants.appName,
-              style: AppTypography.kExtraBold40.copyWith(
-                color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SvgPicture.asset(
+                'assets/icons/splash_icon.svg',
+                /*height: 64.h,
+                width: 64.w,*/
               ),
             ),
-            SizedBox(height: AppSpacing.tenVertical),
-            Text(
-              'Your personal shopping assistant',
-              style: AppTypography.kMedium14.copyWith(
-                color: Colors.white,
-              ),
-            ),
-            const Spacer(),
+            SizedBox(height: AppSpacing.fiftyVertical),
+            SizedBox(height: AppSpacing.fiftyVertical),
             const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.kWhite),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.kPrimary),
             ),
-            SizedBox(height: 133.h),
+
           ],
         ),
       ),

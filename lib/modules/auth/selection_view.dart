@@ -37,7 +37,7 @@ class UserTypeCard extends StatelessWidget {
           alignment: Alignment.topCenter,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: isSelected ? AppColors.kPrimary : AppColors.kWhite,
+            color: isSelected ? AppColors.kSecondary : AppColors.kWhite,
             boxShadow: [AppColors.defaultShadow],
           ),
           child: Column(

@@ -102,15 +102,17 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                        height: 0.2.sh,
                         width: 0.9.sw,
                         decoration: BoxDecoration(
-                          color: AppColors.kPrimary,
+                          color: AppColors.kWhite,
                           borderRadius: BorderRadius.circular(10.r)
                         ),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Welcome To ${Constants.appName}',style: AppTypography.kSemiBold20.copyWith(color: Colors.white),),
+                            SvgPicture.asset('assets/icons/splash_icon.svg',height: 0.1.sh,),
                             SizedBox(height: 10.h,),
-                            Text(_authService.currentUser.value!.name,style: AppTypography.kBold24.copyWith(color: Colors.white),)
+                            Text('Welcome To ${Constants.appName}',style: AppTypography.kSemiBold20,),
+                            SizedBox(height: 10.h,),
+                            Text(_authService.currentUser.value!.name,style: AppTypography.kBold24)
                           ],
                         ),
                      ),
@@ -205,16 +207,23 @@ Widget _dashboardcard({required String title, required String subtitle, required
     height: 0.15.sh,
     width: 0.28.sw,
     decoration: BoxDecoration(
-        color: AppColors.kPrimary,
-      borderRadius: BorderRadius.circular(10.r)
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.1),
+          blurRadius: 5,
+          offset: const Offset(0, 5),
+        ),
+      ],
     ),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Icon(icon,color: Colors.white,size: 30.sp,),
+        Icon(icon,color: AppColors.kPrimary,size: 30.sp,),
         SizedBox(height: 10.h,),
-        Text(subtitle,style: AppTypography.kSemiBold20.copyWith(color: Colors.white),),
-        Text(title,style: AppTypography.kSemiBold16.copyWith(color: Colors.white),),
+        Text(subtitle,style: AppTypography.kSemiBold20.copyWith(color: AppColors.kSecondary),),
+        Text(title,style: AppTypography.kSemiBold16,),
       ],
     ),
   );

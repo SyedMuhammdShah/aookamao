@@ -4,6 +4,7 @@ import 'package:aookamao/constants/constants.dart';
 import 'package:aookamao/enums/user_roles.dart';
 import 'package:aookamao/user/data/constants/app_typography.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -45,15 +46,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
     {'month': 'May', 'sales': 1200},
   ];
 
-  final List<Map<String, dynamic>> ordersData = [
-    {'month': 'Jan', 'orders': 150},
-    {'month': 'Feb', 'orders': 200},
-    {'month': 'Mar', 'orders': 180},
-    {'month': 'Apr', 'orders': 220},
-    {'month': 'May', 'orders': 300},
-    {'month': 'Jun', 'orders': 250},
-  ];
-
   // Function to generate sales chart data
   List<FlSpot> _generateSalesChartData() {
     return List.generate(productSalesData.length, (index) {
@@ -67,96 +59,115 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
     return Scaffold(
       appBar: adminAppBar(user: _authService.currentUser.value!,),
-      drawer: AdminDrawer(),
+      drawer: const AdminDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Obx(()=> Column(
               children: [
                 // Row for Users, Suppliers, Orders, and Referrals Count
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildStatCard('Customers', Icons.person, _adminController.usersCount.value),
-                    _buildStatCard('Retailers', Icons.store, _adminController.retailerCount.value),
-                    _buildStatCard('Orders', Icons.shopping_bag, _adminController.ordersCount.value),
-                    _buildStatCard('Referrals', Icons.people, _adminController.allReferessList.length),
-                  ],
+                SizedBox(
+                  height: 130,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildStatCard('Customers', Icons.person, _adminController.usersCount.value),
+                      _buildStatCard('Retailers', Icons.store, _adminController.retailerCount.value),
+                      _buildStatCard('Orders', Icons.shopping_bag, _adminController.ordersCount.value),
+                      _buildStatCard('Referrals', Icons.people, _adminController.allReferessList.length),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Section for Sales and Orders Graphs
-                Text('Product Sales & Orders Overview', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
+                const Text('Product Sales & Orders Overview', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
 
                 // Product Sales Graph
-                Card(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Total Product Sales', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        SizedBox(height: 10),
-                        SizedBox(
-                          height: 200,
-                          child: LineChart(
-                            LineChartData(
-                              gridData: FlGridData(show: false),
-                              titlesData: FlTitlesData(
-                                bottomTitles: AxisTitles(
-                                  sideTitles: SideTitles(
-                                    showTitles: true,
-                                    getTitlesWidget: (value, meta) {
-                                      // Map the index to month names
-                                      int index = value.toInt();
-                                      return Text(productSalesData[index]['month']);
-                                    },
-                                  ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 15,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  padding: const EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text('Total Product Sales', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 10),
+                      SizedBox(
+                        height: 200,
+                        child: LineChart(
+                          LineChartData(
+                            gridData: const FlGridData(show: false),
+                            titlesData: FlTitlesData(
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  getTitlesWidget: (value, meta) {
+                                    // Map the index to month names
+                                    int index = value.toInt();
+                                    return Text(productSalesData[index]['month']);
+                                  },
                                 ),
-                                leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: true)),
                               ),
-                              borderData: FlBorderData(show: true),
-                              lineBarsData: [
-                                LineChartBarData(
-                                  spots: _generateSalesChartData(),
-                                  isCurved: true,
-                                  color: AppColors.kPrimary,
-                                  dotData: FlDotData(show: false),
-                                  belowBarData: BarAreaData(
-                                    show: true,
-                                    color: AppColors.kPrimary.withOpacity(0.3),
-                                  ),
-                                ),
-                              ],
+                              leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: true)),
                             ),
+                            borderData: FlBorderData(show: true),
+                            lineBarsData: [
+                              LineChartBarData(
+                                spots: _generateSalesChartData(),
+                                isCurved: true,
+                                color: AppColors.kPrimary,
+                                dotData: const FlDotData(show: false),
+                                belowBarData: BarAreaData(
+                                  show: true,
+                                  color: AppColors.kPrimary.withOpacity(0.3),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
 
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Orders Graph
-                Card(
-                  elevation: 3,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 5,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
+                  ),
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Total Orders', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                        SizedBox(height: 10),
+                        const Text('Total Orders', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 10),
                         SizedBox(
                           height: 200,
                           child: Obx(() =>  BarChart(
                               BarChartData(
-                                gridData: FlGridData(show: false),
+                                gridData: const FlGridData(show: false),
                                 titlesData: FlTitlesData(
                                   bottomTitles: AxisTitles(
                                     sideTitles: SideTitles(
@@ -168,8 +179,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                       },
                                     ),
                                   ),
-                                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                                  leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                                 ),
                                 alignment: BarChartAlignment.start,
                                 barTouchData: BarTouchData(enabled: true),
@@ -188,23 +199,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 // Top Products List
-                Text('Top 5 Products', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                SizedBox(height: 10),
+                const Text('Top 5 Products', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 10),
                 StreamBuilder<List<Map<String, dynamic>>>(
                   stream: getTopProducts(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return Center(child: CircularProgressIndicator());
+                      return const Center(child: CircularProgressIndicator());
                     }
 
                     var topProducts = snapshot.data!;
 
                     return ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: topProducts.length,
                       itemBuilder: (context, index) {
                         var product = topProducts[index];
@@ -214,14 +225,23 @@ class _AdminDashboardState extends State<AdminDashboard> {
                             ? List<String>.from(product['imageUrls'])
                             : [];
 
-                        return Card(
-                          elevation: 3,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                          margin: EdgeInsets.symmetric(vertical: 8),
+                        return Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 5,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          margin: const EdgeInsets.symmetric(vertical: 8),
                           child: ListTile(
                             leading: imageUrls.isNotEmpty
                                 ? Image.network(imageUrls[0], width: 50, height: 50, fit: BoxFit.cover)
-                                : Icon(Icons.image, size: 50),
+                                : const Icon(Icons.image, size: 50),
                             title: Text(name),
                             subtitle: Text('Sales: $salesCount'),
                             onTap: () {
@@ -246,27 +266,42 @@ class _AdminDashboardState extends State<AdminDashboard> {
   Widget _buildStatCard(String title, IconData icon,int count) {
     return Expanded(
       child: SizedBox(
-        child: Card(
-          elevation: 3,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(icon, size: 40, color: AppColors.kPrimary),
-                    SizedBox(height: 5),
-                    Text(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 5,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          margin: const EdgeInsets.symmetric(horizontal: 5),
+          padding: const EdgeInsets.all(10),
+          child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, size: 40, color: AppColors.kPrimary),
+                  const SizedBox(height: 5),
+
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
                       title,
                       style: AppTypography.kSemiBold12,
                     ),
-                    SizedBox(height: 5),
-                    Text(
+                  ),
+                  const SizedBox(height: 5),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
                       count.toString(),
-                      style: AppTypography.kSemiBold16.copyWith(color: AppColors.kPrimary),
+                      style: AppTypography.kSemiBold16.copyWith(color: AppColors.kSecondary),
                     ),
-                  ],
-            ),
+                  ),
+                ],
           ),
         ),
       ),

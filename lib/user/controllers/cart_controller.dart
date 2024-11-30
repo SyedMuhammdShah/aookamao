@@ -6,6 +6,7 @@ import 'package:aookamao/user/bindings/home_binding.dart';
 import 'package:aookamao/user/modules/home/home_view.dart';
 import 'package:aookamao/user/modules/landingPage/landing_page.dart';
 import 'package:aookamao/user/modules/widgets/dialogs/order_confirmed_dialog.dart';
+import 'package:aookamao/widgets/custom_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -86,6 +87,11 @@ class CartController extends GetxController {
   }
 
   Future<void> placeOrder() async {
+    if(paymentType.value ==null)
+      {
+       showErrorSnackbar('Please select payment method');
+        return;
+      }
     isLoading.value = true;
     final _homeController = Get.find<HomeController>();
     final Orderdata = OrderModel(
