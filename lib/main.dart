@@ -1,25 +1,18 @@
-import 'package:aookamao/admin/modules/dashboard/controller/admin_dashboard_controller.dart';
-import 'package:aookamao/admin/modules/products/controller/product_controller.dart';
-import 'package:aookamao/admin/modules/retailers/controller/retailer_controller.dart';
-import 'package:aookamao/modules/auth/controller/auth_controller.dart';
-import 'package:aookamao/modules/auth/referral_view.dart';
-import 'package:aookamao/retailer/retailer_modules/dashboard/controller/retailer_dashboard_controller.dart';
-import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
+
 import 'package:aookamao/services/auth_service.dart';
 import 'package:aookamao/services/firebase_notification_service.dart';
 import 'package:aookamao/services/order_service.dart';
+import 'package:aookamao/services/transaction_service.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:aookamao/user/bindings/home_binding.dart';
+import 'package:aookamao/bindings/home_binding.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_storage/get_storage.dart';
-
-import 'bindings/auth_binding.dart';
 import 'firebase_options.dart';
 import 'modules/splash/splash_view.dart';
 import 'services/referral_service.dart';
@@ -56,6 +49,7 @@ initServices() async {
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => ReferralService().init());
   await Get.putAsync(() => OrderService().init());
+  Get.lazyPut(() => TransactionService(), fenix: true);
   print('All services started...');
 }
 class Main extends StatelessWidget {

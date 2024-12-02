@@ -1,7 +1,12 @@
 
 import 'package:aookamao/admin/modules/dashboard/controller/admin_dashboard_controller.dart';
+import 'package:aookamao/admin/modules/orders/orders_view.dart';
+import 'package:aookamao/admin/modules/referrals/all_referees_view.dart';
+import 'package:aookamao/admin/modules/retailers/retailers.dart';
 import 'package:aookamao/constants/constants.dart';
 import 'package:aookamao/enums/user_roles.dart';
+import 'package:aookamao/modules/auth/referral_view.dart';
+import 'package:aookamao/retailer/retailer_modules/referrals/all_referrals_view.dart';
 import 'package:aookamao/user/data/constants/app_typography.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +22,7 @@ import '../../components/admin_drawer.dart';
 
 class AdminDashboard extends StatefulWidget {
 
-   AdminDashboard({super.key});
+   const AdminDashboard({super.key});
 
   @override
   State<AdminDashboard> createState() => _AdminDashboardState();
@@ -71,10 +76,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _buildStatCard('Customers', Icons.person, _adminController.usersCount.value),
-                      _buildStatCard('Retailers', Icons.store, _adminController.retailerCount.value),
-                      _buildStatCard('Orders', Icons.shopping_bag, _adminController.ordersCount.value),
-                      _buildStatCard('Referrals', Icons.people, _adminController.allReferessList.length),
+                      _buildStatCard('Customers', Icons.person, _adminController.usersCount.value,() {},),
+                      _buildStatCard('Suppliers', Icons.store, _adminController.retailerCount.value,() => Get.to<Widget>(const RetailersScreen())),
+                      _buildStatCard('Orders', Icons.shopping_bag, _adminController.ordersCount.value,() => Get.to<Widget>(OrdersView())),
+                      _buildStatCard('Referrals', Icons.people, _adminController.allReferessList.length,() => Get.to<Widget>(const AllRefereesView())),
                     ],
                   ),
                 ),
@@ -104,8 +109,8 @@ class _AdminDashboardState extends State<AdminDashboard> {
                       const Text('Total Product Sales', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                       const SizedBox(height: 10),
                       SizedBox(
-                        height: 200,
-                        child: LineChart(
+                        height: ScreenUtil().screenHeight * 0.4,
+                       /* child: LineChart(
                           LineChartData(
                             gridData: const FlGridData(show: false),
                             titlesData: FlTitlesData(
@@ -135,7 +140,62 @@ class _AdminDashboardState extends State<AdminDashboard> {
                               ),
                             ],
                           ),
-                        ),
+                        ),*/
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Products Ordered",
+                              //style: Theme.of(context).textTheme.headline6,
+                            ),
+                            const SizedBox(height: 20),
+                            Expanded(
+                              child: PieChart(
+                                PieChartData(
+                                  sections: _adminController.productQuantities.entries
+                                      .map((entry) => PieChartSectionData(
+                                    title: entry.key,
+                                    value: entry.value.toDouble(),
+                                    color: _getColor(entry.key),
+                                    titleStyle: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ))
+                                      .toList(),
+                                  centerSpaceRadius: ScreenUtil().screenWidth * 0.2,
+                                  sectionsSpace: 2,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            // Legend
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 8,
+                              children: _adminController.productQuantities.entries
+                                  .map(
+                                    (entry) => Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 12,
+                                      height: 12,
+                                      decoration: BoxDecoration(
+                                        color: _getColor(entry.key),
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 4),
+                                    Text(entry.key),
+                                  ],
+                                ),
+                              )
+                                  .toList(),
+                            ),
+                          ],
+                        )
                       ),
                     ],
                   ),
@@ -263,48 +323,65 @@ class _AdminDashboardState extends State<AdminDashboard> {
   }
 
   // Widget to build a statistics card
-  Widget _buildStatCard(String title, IconData icon,int count) {
+  Widget _buildStatCard(String title, IconData icon,int count,VoidCallback onTap) {
     return Expanded(
-      child: SizedBox(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 5,
-                offset: const Offset(0, 5),
-              ),
-            ],
-          ),
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          padding: const EdgeInsets.all(10),
-          child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(icon, size: 40, color: AppColors.kPrimary),
-                  const SizedBox(height: 5),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 5,
+                  offset: const Offset(0, 5),
+                ),
+              ],
+            ),
+            //margin: const EdgeInsets.symmetric(horizontal: 5),
+            padding: const EdgeInsets.all(10),
+            child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(icon, size: 40, color: AppColors.kPrimary),
+                    const SizedBox(height: 5),
 
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      title,
-                      style: AppTypography.kSemiBold12,
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        title,
+                        style: AppTypography.kSemiBold12,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 5),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      count.toString(),
-                      style: AppTypography.kSemiBold16.copyWith(color: AppColors.kSecondary),
+                    const SizedBox(height: 5),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        count.toString(),
+                        style: AppTypography.kSemiBold16.copyWith(color: AppColors.kSecondary),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+Color _getColor(String productName) {
+  final colors = [
+    Colors.blue,
+    Colors.red,
+    Colors.green,
+    Colors.orange,
+    Colors.purple,
+    Colors.yellow,
+  ];
+  return colors[productName.hashCode % colors.length];
+}
+

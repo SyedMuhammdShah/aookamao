@@ -1,4 +1,5 @@
 import 'package:aookamao/admin/models/retailer_model.dart';
+import 'package:aookamao/enums/user_bank_type.dart';
 import 'package:aookamao/retailer/components/retailer_appbar.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
@@ -20,7 +21,7 @@ class RetailerDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const RetailerAppBar(title: 'Retailers',),
+      appBar: const RetailerAppBar(title: 'Suppliers',),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -51,19 +52,23 @@ class RetailerDetailsScreen extends StatelessWidget {
                       style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.blueAccent),
                     ),
                     const SizedBox(height: 12),
-                    //cnic number
-                    _buildInfoRow(Icons.badge,  retailer.cnic_number),
-
                     // Email
                     _buildInfoRow(Icons.email, retailer.email),
 
+                    // Account Number
+                    _buildInfoRow(Icons.account_balance, 'Account Number: ${retailer.accountNumber??'N/A'}'),
+
+                    // Account Holder Name
+                    _buildInfoRow(Icons.person, 'Account Holder: ${retailer.accountHolderName??'N/A'}'),
+
+                    // Bank Type
+                    _buildInfoRow(Icons.account_balance, 'Bank: ${userBankTypeToString(retailer.userBankType)??'N/A'}'),
                     // Registration Date with time
                     _buildInfoRow(
                       Icons.calendar_today,
                       'Registered on: ${DateFormat('MMM dd,yyyy hh:mm').format(retailer.registered_at.toDate())}',
                     ),
-                    // Referrals Count
-                    _buildInfoRow(Icons.people, 'Referrals: '),
+
                     // Subscription date
                     if(retailer.subscription_status != SubscriptionStatus.none)
                     _buildInfoRow(
@@ -81,21 +86,6 @@ class RetailerDetailsScreen extends StatelessWidget {
 
                   ],
                 ),
-              ),
-              const SizedBox(height: 24),
-
-              // CNIC Images Section
-              const Text(
-                'CNIC Images',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.blueAccent),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  _buildImageColumn('Front', retailer.cnic_front_image_url),
-                  const SizedBox(width: 16),
-                  _buildImageColumn('Back', retailer.cnic_back_image_url),
-                ],
               ),
               const SizedBox(height: 50),
 

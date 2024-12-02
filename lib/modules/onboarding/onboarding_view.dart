@@ -68,6 +68,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   }
                 },
                 text: 'Continue',
+                color: AppColors.kSecondary,
               ),
               SizedBox(height: AppSpacing.thirtyVertical),
             ],

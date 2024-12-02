@@ -1,21 +1,28 @@
 import 'package:aookamao/constants/constants.dart';
+import 'package:aookamao/models/transaction_model.dart';
 import 'package:aookamao/user/models/product_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
+import '../../enums/transaction_status.dart';
+import '../../enums/transaction_types.dart';
 import '../../models/order_model.dart';
 import '../../models/referral_model.dart';
 import '../../models/wallet_model.dart';
 import '../../services/auth_service.dart';
 import '../../services/order_service.dart';
 import '../../services/referral_service.dart';
+import '../../services/transaction_service.dart';
+import '../modules/widgets/dialogs/confirm_withdraw_dialog.dart';
 import 'cart_controller.dart';
 
 class HomeController extends GetxController {
   final _authService = Get.find<AuthService>();
   final _orderService = Get.find<OrderService>();
   final _referralService = Get.find<ReferralService>();
+  final _transactionService = Get.find<TransactionService>();
   RxList<Rx<ProductModel>> productsList = <Rx<ProductModel>>[].obs;
   ProductModel selectedProduct = ProductModel();
   RxBool isLoading = false.obs;
@@ -24,6 +31,7 @@ class HomeController extends GetxController {
   Rx<ReferralModel>  currentReferralDetails = Rx<ReferralModel>(ReferralModel());
   final RxList<Rx<OrderModel>> customerOrdersList = <Rx<OrderModel>>[].obs;
   final RxList<MyPurchaseModel> myPurchasesList = <MyPurchaseModel>[].obs;
+  final TextEditingController amountController = TextEditingController();
   Rx<WalletModel> userWallet = WalletModel(walletId: '',balance: 0.00).obs;
   RxBool isReferralApplied = false.obs;
 
@@ -91,4 +99,23 @@ class HomeController extends GetxController {
     return _firestore.collection(Constants.ordersCollection).where('customerId', isEqualTo: customerId).snapshots().map((snapshot) => snapshot.docs.map((doc) => OrderModel.fromDoc(doc).obs).toList().obs);
   }
 
+  bool isUserHaveAccount() {
+    print("user bank type: ${_authService.currentUser.value!.userBankType}");
+    return  _authService.currentUser.value!.userBankType != null;
+  }
+
+  Future<void> withDrawMoney() async {
+    TransactionModel transaction = TransactionModel(
+      transactionStatus: TransactionStatus.pending,
+      transactionType: TransactionType.Withdrawal,
+      transactionAmount: double.parse(amountController.text),
+      transactionDate:Timestamp.now(),
+       walletId: userWallet.value.walletId,
+      userName: _authService.currentUser.value!.name,
+      userRole: _authService.currentUser.value!.role,
+    );
+    await _transactionService.addTransaction(transaction);
+    amountController.clear();
+    Get.dialog(const ConfirmWithDrawDialog());
+  }
 }

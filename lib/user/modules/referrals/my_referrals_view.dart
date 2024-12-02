@@ -1,4 +1,6 @@
 import 'package:aookamao/user/data/constants/app_colors.dart';
+import 'package:aookamao/user/modules/widgets/dialogs/confirm_withdraw_dialog.dart';
+import 'package:aookamao/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -6,7 +8,9 @@ import '../../../models/referral_model.dart';
 import '../../../services/auth_service.dart';
 import '../../controllers/home_controller.dart';
 import '../home/components/home_appBar.dart';
+import '../profile/edit_profile.dart';
 import 'package:intl/intl.dart';
+import '../widgets/dialogs/withDraw_dialog.dart';
 class MyReferralsView extends StatelessWidget {
 
 
@@ -40,6 +44,7 @@ class MyReferralsView extends StatelessWidget {
 
   // Reward Balance Card
   Widget _buildRewardBalanceCard(double rewardBalance) {
+    final _controller = Get.find<HomeController>();
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -73,6 +78,28 @@ class MyReferralsView extends StatelessWidget {
                       fontSize: 20),
                 ),
               ],
+            ),
+            const Spacer(),
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: rewardBalance > 100 ? AppColors.kSecondary : Colors.grey,
+                foregroundColor: Colors.white,
+              ),
+              onPressed: () {
+                if(!_controller.isUserHaveAccount())
+                  {
+                    showErrorSnackbar("Please Add Your Bank Details In Profile Section!");
+                    Get.to<Widget>(()=> const EditProfile());
+                    return;
+                  }
+                Get.dialog(
+                    WithDrawDialog(
+                        amountController: _controller.amountController,
+                        withDrawCallBack: () =>_controller.withDrawMoney(),
+                        balance: rewardBalance));
+              },
+              icon: const Icon(Icons.account_balance_wallet),
+              label: const Text("WithDraw"),
             ),
           ],
         ),
@@ -119,7 +146,6 @@ class MyReferralsView extends StatelessWidget {
             const Spacer(),
             IconButton(
               onPressed: () {
-                // Copy referral code to clipboard
               },
               icon: const Icon(Icons.copy),
             ),

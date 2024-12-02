@@ -116,7 +116,7 @@ class _SelectionScreenState extends State<SelectionScreen> {
                           },
                           isSelected: _authController.selectedRole.value == UserRoles.retailer,
                           image: AppAssets.retailerIcon,
-                          text: "Retailer",
+                          text: "Supplier",
                         ),
                       ),
                       Positioned(

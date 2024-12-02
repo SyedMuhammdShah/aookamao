@@ -40,7 +40,7 @@ class RetailerCard extends StatelessWidget {
                 // retailer name with icon
                 Row(
                   children: [
-                    Icon(Icons.business, color: Colors.blueAccent),
+                    Icon(Icons.store, color: Colors.blueAccent),
                     SizedBox(width: 8),
                     Text(
                       retailer.name,
@@ -55,7 +55,6 @@ class RetailerCard extends StatelessWidget {
                 SizedBox(height: 12),
 
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -84,18 +83,20 @@ class RetailerCard extends StatelessWidget {
                         SizedBox(height: 8),
                         Row(
                           children: [
-                            Icon(Icons.people, color: Colors.grey),
+                            Icon(
+                              retailer.subscription_status == SubscriptionStatus.active ? Icons.check_circle : Icons.cancel,
+                              color: retailer.subscription_status == SubscriptionStatus.active ? Colors.green : Colors.red,
+                            ),
                             SizedBox(width: 8),
                             Text(
-                              'Referrals: ',
+                              'Subscription: ${subscriptionStatusToString(retailer.subscription_status)}',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.black54,
+                                color: retailer.subscription_status == SubscriptionStatus.active ? Colors.green : Colors.red,
                               ),
                             ),
                           ],
-                        )
-
+                        ),
                       ],
                     ),
                     Column(
@@ -115,23 +116,7 @@ class RetailerCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(
-                              retailer.subscription_status == SubscriptionStatus.active ? Icons.check_circle : Icons.cancel,
-                              color: retailer.subscription_status == SubscriptionStatus.active ? Colors.green : Colors.red,
-                            ),
-                            SizedBox(width: 8),
-                            Text(
-                              'Subscription: ${subscriptionStatusToString(retailer.subscription_status)}',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: retailer.subscription_status == SubscriptionStatus.active ? Colors.green : Colors.red,
-                              ),
-                            ),
-                          ],
-                        ),
+                        SizedBox(height: 35),
                       ],
                     ),
                   ],

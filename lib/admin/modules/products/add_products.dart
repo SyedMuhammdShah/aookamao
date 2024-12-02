@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:aookamao/admin/components/adminAppBar.dart';
-import 'package:aookamao/admin/components/custom_snackbar.dart';
 import 'package:aookamao/admin/modules/products/controller/product_controller.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/user/data/constants/app_spacing.dart';

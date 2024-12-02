@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:aookamao/user/modules/profile/edit_profile.dart';
 
+import '../../../../enums/user_roles.dart';
 import '../../../../models/user_model.dart';
 
 class ProfileHeaderCard extends StatelessWidget {
@@ -33,7 +34,7 @@ class ProfileHeaderCard extends StatelessWidget {
           Text(user.name, style: AppTypography.kSemiBold18),
           SizedBox(height: AppSpacing.fiveVertical),
           Text(
-            'Customer',
+            user.role == UserRoles.user ? 'Customer' : user.role == UserRoles.retailer ? 'Suppiler':'',
             style: AppTypography.kMedium14.copyWith(
               color: AppColors.kGrey60,
             ),

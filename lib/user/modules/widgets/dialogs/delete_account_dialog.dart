@@ -2,15 +2,20 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:aookamao/user/data/constants/constants.dart';
-import 'package:aookamao/user/modules/widgets/buttons/custom_outlined_button.dart';
-import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
+import 'package:get/get_core/src/get_main.dart';
 
-class LogoutDialog extends StatelessWidget {
-  final VoidCallback logoutCallback;
-  const LogoutDialog({required this.logoutCallback,super.key});
+import '../../../data/constants/app_assets.dart';
+import '../../../data/constants/app_colors.dart';
+import '../../../data/constants/app_spacing.dart';
+import '../../../data/constants/app_typography.dart';
+import '../buttons/custom_outlined_button.dart';
+import '../buttons/primary_button.dart';
+
+class DeleteAccountDialog extends StatelessWidget {
+  final VoidCallback deleteAccountCallback;
+  const DeleteAccountDialog({super.key, required this.deleteAccountCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +33,12 @@ class LogoutDialog extends StatelessWidget {
             Text('Are You Sure?', style: AppTypography.kSemiBold16),
             SizedBox(height: AppSpacing.fiveVertical),
             Text(
-              'Do you want to log out ?',
-              style: AppTypography.kMedium14.copyWith(color: AppColors.kGrey60),
+              'Do you want to Delete This Account ?',
+              style: AppTypography.kSemiBold14.copyWith(color: AppColors.kError),
+            ),
+            Text(
+              'This action cannot be undone!',
+              style: AppTypography.kMedium14.copyWith(color: AppColors.kError),
             ),
             SizedBox(height: AppSpacing.twentyVertical),
             Row(
@@ -48,13 +57,13 @@ class LogoutDialog extends StatelessWidget {
                 ),
                 Expanded(
                   child: PrimaryButton(
-                    onTap: logoutCallback,
+                    onTap: deleteAccountCallback,
+                    color: AppColors.kError,
                     width: 115.w,
                     borderRadius: 30.r,
                     height: 46.h,
                     fontSize: 14.sp,
-                    text: 'Logout',
-                    color: AppColors.kError,
+                    text: 'Delete',
                   ),
                 ),
               ],

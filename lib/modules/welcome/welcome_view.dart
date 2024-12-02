@@ -1,5 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
@@ -26,20 +28,19 @@ class WelcomeView extends StatelessWidget {
           child: Column(
             children: [
               const Spacer(),
-              RichText(
-                text: TextSpan(
-                  text: "Welcome to ",
-                  style: AppTypography.kSemiBold24
-                      .copyWith(color: AppColors.kWhite),
-                  children: [
-                    TextSpan(
-                      text: Constants.appName,
-                      style: AppTypography.kSemiBold24
-                          .copyWith(color: AppColors.kPrimary),
+              Row(
+                children: [
+                  SizedBox(
+                    width: ScreenUtil().screenWidth * 0.32,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text('Welcome to ', style: AppTypography.kSemiBold24
+                          .copyWith(color: AppColors.kWhite),),
                     ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
+                  ),
+                  SizedBox(width: AppSpacing.fiveHorizontal),
+                  SvgPicture.asset('assets/icons/splash_icon2.svg',width: ScreenUtil().screenWidth * 0.5),
+                ],
               ),
               SizedBox(height: AppSpacing.tenVertical),
               Text(
@@ -50,32 +51,13 @@ class WelcomeView extends StatelessWidget {
               ),
               SizedBox(height: AppSpacing.thirtyVertical),
               PrimaryButton(
+                color: AppColors.kSecondary,
                 onTap: () {
                   Get.to<Widget>(() => const SelectionScreen());
                 },
                 text: 'Get Started',
               ),
               SizedBox(height: AppSpacing.twentyVertical),
-              /*RichText(
-                text: TextSpan(
-                  text: 'Don’t have an account? ',
-                  style: AppTypography.kSemiBold16
-                      .copyWith(color: AppColors.kWhite),
-                  children: [
-                    TextSpan(
-                      text: 'Register',
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                           Get.to<Widget>(() => const SignUpView());
-                        },
-                      style: AppTypography.kSemiBold16
-                          .copyWith(color: AppColors.kPrimary),
-                    ),
-                  ],
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: AppSpacing.thirtyVertical),*/
             ],
           ),
         ),

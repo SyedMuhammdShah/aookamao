@@ -10,6 +10,8 @@ import 'package:aookamao/user/data/constants/constants.dart';
 import 'package:aookamao/user/modules/widgets/buttons/primary_button.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../constants/constants.dart';
+import '../../enums/user_bank_type.dart';
 import '../../enums/user_roles.dart';
 import 'components/cnic_textfield.dart';
 import 'components/image_picker.dart';
@@ -40,7 +42,7 @@ class SignUpView extends StatelessWidget {
                   SizedBox(height: AppSpacing.fiveVertical),
                   // Subtitle
                   Text(
-                    'Create an account as a ${_authController.selectedRole.value == UserRoles.retailer ? 'Retailer' : 'User'}',
+                    'Create an account as a ${_authController.selectedRole.value == UserRoles.retailer ? 'Supplier' : 'User'}',
                     style: AppTypography.kMedium14.copyWith(
                       color: AppColors.kGrey60,
                     ),
@@ -133,7 +135,82 @@ class SignUpView extends StatelessWidget {
                     textInputAction: TextInputAction.done,
                   ),
                   SizedBox(height: AppSpacing.fifteenVertical),
-                  if(_authController.selectedRole.value == UserRoles.retailer)
+                  //user bank type
+                  /*if(_authController.selectedRole.value == UserRoles.user)*/
+                  Row(
+                    children: [
+                      Text(
+                        "Select Bank",
+                        style: AppTypography.kMedium16.copyWith(
+                          color:  AppColors.kGrey70,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: AppSpacing.fifteenVertical),
+                  DropdownButtonFormField<UserBankType>(
+
+                    value: _authController.selectedBankType,
+                    onChanged: (UserBankType? value) {
+                      _authController.selectedBankType = value;
+                    },
+                    validator: (value) {
+                      if (value == null) {
+                        return 'Please select a bank';
+                      }
+                      return null;
+                    },
+                    items: Constants.userBankTypes.map<DropdownMenuItem<UserBankType>>((UserBankType value) {
+                      return DropdownMenuItem<UserBankType>(
+                        value: value,
+                        child: Text(userBankTypeToString(value)!, style: AppTypography.kMedium14),
+                      );
+                    }).toList(),
+                    decoration: const InputDecoration(
+                      hintText: 'Select Bank',
+                    ),
+                  ),
+                  SizedBox(height: AppSpacing.fifteenVertical),
+                  AuthField(
+                    title: 'Account Number',
+                    hintText: 'Enter your account number',
+                    controller: _authController.accountNumberController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Account number is required';
+                      }
+                      // Ensure the account number contains only digits
+                      final digitsOnly = RegExp(r'^\d+$');
+                      if (!digitsOnly.hasMatch(value)) {
+                        return 'Please enter a valid account number';
+                      }
+
+                      // Check the length of the account number (between 10 and 16 digits)
+                      if (value.length < 10 || value.length > 16) {
+                        return 'Please enter a valid account number';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                  ),
+                  SizedBox(height: AppSpacing.fifteenVertical),
+                  AuthField(
+                    title: 'Account Holder Name',
+                    hintText: 'Enter your account holder name',
+                    controller: _authController.accountHolderNameController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Account holder name is required';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.next,
+                  ),
+
+
+                 /* if(_authController.selectedRole.value == UserRoles.retailer)
                   Column(
                     children: [
                       CNICTextField(
@@ -177,7 +254,7 @@ class SignUpView extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),
+                  ),*/
                   SizedBox(height: AppSpacing.thirtyVertical),
                   // Submit Button
                   Obx(() =>  _authController.isLoading.value
@@ -186,10 +263,6 @@ class SignUpView extends StatelessWidget {
                       onTap: () async {
                         if(_authController.signup_formKey.currentState!.validate()){
                           if (_authController.selectedRole.value == UserRoles.retailer) {
-                            if(_authController.cnicFrontFile.value.path.isEmpty || _authController.cnicBackFile.value.path.isEmpty){
-                              showErrorSnackbar('Please upload Required Documents');
-                              return;
-                            }
                             await _authController.registerRetailer();
                           }
                           else if(_authController.selectedRole.value == UserRoles.user){

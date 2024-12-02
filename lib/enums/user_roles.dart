@@ -4,7 +4,7 @@ enum UserRoles {
   retailer,
 }
 
-String userRoleToString(UserRoles role) {
+String? userRoleToString(UserRoles? role) {
   switch (role) {
     case UserRoles.admin:
       return 'admin';
@@ -13,7 +13,7 @@ String userRoleToString(UserRoles role) {
     case UserRoles.retailer:
       return 'retailer';
     default:
-      return 'user';
+      return null;
   }
 }
 

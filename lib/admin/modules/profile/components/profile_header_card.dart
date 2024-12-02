@@ -1,11 +1,11 @@
+import 'package:aookamao/enums/user_roles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:aookamao/user/data/constants/constants.dart';
-import 'package:aookamao/user/modules/profile/edit_profile.dart';
-
 import '../../../../models/user_model.dart';
+import '../edit_profile.dart';
 
 class ProfileHeaderCard extends StatelessWidget {
   final UserModel user;
@@ -33,7 +33,7 @@ class ProfileHeaderCard extends StatelessWidget {
           Text(user.name, style: AppTypography.kSemiBold18),
           SizedBox(height: AppSpacing.fiveVertical),
           Text(
-            'Customer',
+            userRoleToString(user.role) ?? '',
             style: AppTypography.kMedium14.copyWith(
               color: AppColors.kGrey60,
             ),

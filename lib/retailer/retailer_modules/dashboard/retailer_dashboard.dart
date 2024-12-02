@@ -3,6 +3,7 @@ import 'package:aookamao/constants/constants.dart';
 import 'package:aookamao/enums/reward_status.dart';
 import 'package:aookamao/retailer/components/referal_card.dart';
 import 'package:aookamao/retailer/retailer_modules/dashboard/controller/retailer_dashboard_controller.dart';
+import 'package:aookamao/retailer/retailer_modules/wallet/wallet_view.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/user/data/constants/app_typography.dart';
 import 'package:aookamao/enums/subscription_status.dart';
@@ -25,7 +26,9 @@ import '../../../services/auth_service.dart';
 import '../../../services/referral_service.dart';
 import '../../components/retailer_appbar.dart';
 import '../../components/retailer_drawer.dart';
+import '../Reward/rewards_view.dart';
 import '../referal/refer_now.dart';
+import '../referrals/all_referrals_view.dart';
 
 class RetailerDashboard extends StatefulWidget {
   const RetailerDashboard({super.key});
@@ -123,9 +126,9 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _dashboardcard(title: 'Wallet', subtitle: _dashboardController.retailerWallet.value.balance.toString(), icon: Icons.wallet),
-                        _dashboardcard(title: 'Referrals', subtitle: _dashboardController.refereesList.length.toString(), icon: Icons.people),
-                        _dashboardcard(title: 'Rewards', subtitle: _dashboardController.retailerRewards.where((p0) => p0.value.rewardStatus == RewardStatus.approved).length.toString(), icon: Icons.card_giftcard),
+                        _dashboardcard(title: 'Wallet', subtitle: _dashboardController.retailerWallet.value.balance.toString(), icon: Icons.wallet,onTap:() => Get.to<Widget>(()=>const WalletView())),
+                        _dashboardcard(title: 'Referrals', subtitle: _dashboardController.refereesList.length.toString(), icon: Icons.people,onTap:() => Get.to<Widget>(()=>const AllReferralsView())),
+                        _dashboardcard(title: 'Rewards', subtitle: _dashboardController.retailerRewards.where((p0) => p0.value.rewardStatus == RewardStatus.approved).length.toString(), icon: Icons.card_giftcard,onTap:() => Get.to<Widget>(()=>const RetailerRewardsView())),
                       ],
                     ),
                     SizedBox(
@@ -164,12 +167,16 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("This Month Referrals",style: AppTypography.kMedium16,),
-                                Text("View All",style: AppTypography.kMedium12.copyWith(color: AppColors.kPrimary),)
                               ],
                             ),
                           ),
                           const Divider(),
-                          ListView.builder(
+                          _dashboardController.thisMonthRefereesList.isEmpty
+                              ? Center(child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text("No Referrals Yet",style: AppTypography.kMedium16.copyWith(color: Colors.grey),),
+                              ))
+                              : ListView.builder(
                             itemCount: _dashboardController.thisMonthRefereesList.length,
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -202,29 +209,39 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
     );
   }
 }
-Widget _dashboardcard({required String title, required String subtitle, required IconData icon}) {
-  return Container(
-    height: 0.15.sh,
-    width: 0.28.sw,
-    decoration: BoxDecoration(
-      color: Colors.white,
+Widget _dashboardcard({required String title, required String subtitle, required IconData icon,required VoidCallback onTap}){
+  {
+    return InkWell(
+      onTap: onTap,
       borderRadius: BorderRadius.circular(10),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(0.1),
-          blurRadius: 5,
-          offset: const Offset(0, 5),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          height: 0.15.sh,
+          width: 0.28.sw,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 5,
+                offset: const Offset(0, 5),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: AppColors.kPrimary, size: 30.sp,),
+              SizedBox(height: 10.h,),
+              Text(subtitle, style: AppTypography.kSemiBold20.copyWith(
+                  color: AppColors.kSecondary),),
+              Text(title, style: AppTypography.kSemiBold16,),
+            ],
+          ),
         ),
-      ],
-    ),
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon,color: AppColors.kPrimary,size: 30.sp,),
-        SizedBox(height: 10.h,),
-        Text(subtitle,style: AppTypography.kSemiBold20.copyWith(color: AppColors.kSecondary),),
-        Text(title,style: AppTypography.kSemiBold16,),
-      ],
-    ),
-  );
+      ),
+    );
+  }
 }

@@ -24,7 +24,7 @@ class CustomDotsIndicator extends StatelessWidget {
         activeShape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.r),
         ),
-        activeColor: AppColors.kPrimary,
+        activeColor: AppColors.kSecondary,
       ),
     );
   }

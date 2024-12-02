@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import '../../services/auth_service.dart';
 import '../modules/products/products_list.dart';
 import '../modules/retailers/retailers.dart';
+import '../modules/transactions/transactions_view.dart';
 
 class AdminDrawer extends StatelessWidget {
   const AdminDrawer({super.key});
@@ -28,14 +29,14 @@ class AdminDrawer extends StatelessWidget {
             icon: CupertinoIcons.home,
             title: 'Home',
             onTap: () => {
-              Get.to(AdminDashboard()),
+              Get.to<Widget>(()=> AdminDashboard()),
             },
           ),
            _buildItem(
                icon: Icons.store_outlined,
-               title: 'Retailers',
+               title: 'Suppliers',
                onTap: () => {
-                 Get.to(RetailersScreen()),
+                 Get.to<Widget>(()=> const RetailersScreen()),
                }
            ),
            //referral
@@ -43,42 +44,49 @@ class AdminDrawer extends StatelessWidget {
             icon: CupertinoIcons.person_2,
             title: 'Referees',
             onTap: () => {
-              Get.to(AllRefereesView()),
+              Get.to<Widget>(()=> const AllRefereesView()),
             }
           ),
            _buildItem(
             icon: CupertinoIcons.add_circled,
             title: 'Add Products',
             onTap: () => {
-              Get.to(AddProducts()),
+              Get.to<Widget>(()=> AddProducts()),
             },
           ),
            _buildItem(
             icon: CupertinoIcons.shopping_cart,
             title: 'Order',
             onTap: () => {
-              Get.to(OrdersView()),
+              Get.to<Widget>(()=> OrdersView()),
             },
           ),
           _buildItem(
             icon: CupertinoIcons.gift,
             title: 'Rewards',
             onTap: () => {
-              Get.to(const RewardsView()),
+              Get.to<Widget>(()=> const RewardsView()),
             },
           ),
           _buildItem(
             icon: CupertinoIcons.list_bullet_below_rectangle,
             title: 'Product List',
             onTap: () => {
-              Get.to(ProductsList())
+            Get.to<Widget>(()=> ProductsList())
+            },
+          ),
+          _buildItem(
+            icon: CupertinoIcons.money_dollar,
+            title: 'Transactions',
+            onTap: () => {
+              Get.to<Widget>(() => const TransactionsView())
             },
           ),
           _buildItem(
             icon: CupertinoIcons.person,
             title: 'Profile',
             onTap: () => {
-              Get.to(AdminProfileView())
+              Get.to<Widget>(()=> const AdminProfileView())
             },
           ),
         ],
@@ -89,10 +97,10 @@ class AdminDrawer extends StatelessWidget {
   _buildHeader() {
     final _authService = Get.find<AuthService>();
     return  DrawerHeader(
-      decoration: BoxDecoration(color: AppColors.kPrimary),
+      decoration: const BoxDecoration(color: AppColors.kPrimary),
       child: Column(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             child: Icon(
               CupertinoIcons.person,
               size: 50,
@@ -100,12 +108,12 @@ class AdminDrawer extends StatelessWidget {
             ),
             radius: 40,
           ),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Text(
             _authService.currentUser.value!.name,
-            style: TextStyle(color: Colors.white, fontSize: 15),
+            style: const TextStyle(color: Colors.white, fontSize: 15),
           )
         ],
       ),

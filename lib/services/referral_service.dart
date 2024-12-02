@@ -108,14 +108,12 @@ class ReferralService extends GetxService {
         print('Retailer details: ${querySnapshot.data()}');
         if (currentReferralDetails.value.accountType ==
             ReferralAccountType.RETAILER) {
-          referralUserDetail.value = UserModel.fromMapRetailer(
-              querySnapshot.data() as Map<String, dynamic>);
+          referralUserDetail.value = UserModel.fromFirestore(querySnapshot);
           referralUserDetail.value = referralUserDetail.value!
               .copyWith(uid: currentReferralDetails.value.referralId);
         } else if (currentReferralDetails.value.accountType ==
             ReferralAccountType.USER) {
-          referralUserDetail.value = UserModel.fromMapUser(
-              querySnapshot.data() as Map<String, dynamic>);
+          referralUserDetail.value = UserModel.fromFirestore(querySnapshot);
           referralUserDetail.value = referralUserDetail.value!
               .copyWith(uid: currentReferralDetails.value.referralId);
         }

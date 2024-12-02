@@ -106,9 +106,8 @@ class AuthService extends GetxService{
     }
   }
 
-  Future<bool> registerUser(File? cnicFrontFile,File? cnicBackFile,{required UserModel userdetails}) async {
+  Future<bool> registerUser({required UserModel userdetails}) async {
     isLoading.value = true;
-
     try {
       UserCredential userCredential = await _firebaseAuth.createUserWithEmailAndPassword(
         email: userdetails.email,
@@ -122,17 +121,18 @@ class AuthService extends GetxService{
       userdetails = userdetails.copyWith(uid: userCredential.user!.uid);
 
       if(userdetails.role == UserRoles.retailer){
-       UserModel updatedDetails =  await _uploadCnic(userdetails: userdetails,cnicFrontFile:cnicFrontFile!,cnicBackFile: cnicBackFile!);
-       print("retailer data with cnic: ${updatedDetails.toMapRegisterRetailer()}");
+       //UserModel updatedDetails =  await _uploadCnic(userdetails: userdetails,cnicFrontFile:cnicFrontFile!,cnicBackFile: cnicBackFile!);
+       //print("retailer data with cnic: ${userdetails.toMapRegisterRetailer()}");
        await _firestore
             .collection(Constants.usersCollection)
-            .doc(updatedDetails.uid)
-            .set(updatedDetails.toMapRegisterRetailer());
+            .doc(userdetails.uid)
+            .set(userdetails.toMapRegisterUser());
         var subscriptiondetails = SubscriptionModel(uid:userdetails.uid, subscriptionStatus: SubscriptionStatus.none);
         await activateSubscription(subscriptiondetails:subscriptiondetails);
         await FirebasePushNotificationService().getDeviceToken();
         currentUser.value = userdetails;
-        saveUserInLocal(userdetails);
+
+          saveUserInLocal(userdetails);
         showSuccessSnackbar('Your are registered as a retailer');
         return true;
       }
@@ -143,7 +143,9 @@ class AuthService extends GetxService{
             .set(userdetails.toMapRegisterUser());
         await FirebasePushNotificationService().getDeviceToken();
         currentUser.value = userdetails;
-        saveUserInLocal(userdetails);
+
+          saveUserInLocal(userdetails);
+
         showSuccessSnackbar('Your are registered as a user');
         return true;
       }
@@ -157,8 +159,9 @@ class AuthService extends GetxService{
     }
   }
 
-  Future<bool> loginUser({required String email,required String password})async{
+  Future<bool> loginUser({required String email,required String password,required bool isremember})async{
     isLoading.value = true;
+    print('isremember: $isremember');
     try {
       await Firebase.initializeApp();
       UserCredential userCredential = await _firebaseAuth.signInWithEmailAndPassword(
@@ -175,17 +178,18 @@ class AuthService extends GetxService{
 
       if (userDoc.exists) {
          if(userDoc.get('role') == userRoleToString(UserRoles.retailer)){
-           currentUser.value = UserModel.fromMapRetailer(userDoc.data() as Map<String, dynamic>);
-           currentUser.value = currentUser.value!.copyWith(uid: userId);
+           currentUser.value = UserModel.fromFirestore(userDoc);
            saveUserInLocal(currentUser.value!);
             await getSubscriptionDetails(uid: userId);
             await _firebasePushNotificationService.getDeviceToken();
             showSuccessSnackbar('Login Successful');
             return true;
          }
-         currentUser.value = UserModel.fromMapUser(userDoc.data() as Map<String, dynamic>);
+         currentUser.value = UserModel.fromFirestore(userDoc);
          currentUser.value = currentUser.value!.copyWith(uid: userId);
-          saveUserInLocal(currentUser.value!);
+         if(isremember) {
+           saveUserInLocal(currentUser.value!);
+         }
          await _firebasePushNotificationService.getDeviceToken();
          showSuccessSnackbar('Login Successful');
          return true;
@@ -203,7 +207,23 @@ class AuthService extends GetxService{
     }
   }
 
-  Future<UserModel> _uploadCnic({required UserModel userdetails,required File cnicFrontFile,required File cnicBackFile})async{
+  Future<void> updateUserDetails({required UserModel userdetails})async{
+    try {
+      await _firestore
+          .collection(Constants.usersCollection)
+          .doc(userdetails.uid)
+          .update(userdetails.toMapUpdateUser());
+      currentUser.value = userdetails;
+      saveUserInLocal(userdetails);
+      return;
+    }
+    catch(e){
+      showErrorSnackbar('Error ${e.toString()}');
+      print(e);
+    }
+  }
+
+/*  Future<UserModel> _uploadCnic({required UserModel userdetails,required File cnicFrontFile,required File cnicBackFile})async{
     try {
       Reference storageRef = FirebaseStorage.instance.ref().child('cnic_images/${userdetails.uid}/cnicfrontimg.jpg');
       TaskSnapshot task = await storageRef.putFile(cnicFrontFile);
@@ -221,7 +241,7 @@ class AuthService extends GetxService{
       print("error in uploadCnic: $e");
       return userdetails;
     }
-  }
+  }*/
 
   Future activateSubscription({required SubscriptionModel subscriptiondetails,String? retailer_name})async{
     //await Firebase.initializeApp();
@@ -336,5 +356,20 @@ class AuthService extends GetxService{
     }
   }
 
+  Future<void> deleteUserAccount() async {
+    try {
+      await _firebaseAuth.currentUser?.reauthenticateWithCredential(EmailAuthProvider.credential(email: currentUser.value!.email, password: currentUser.value!.password!));
+      await _firebaseAuth.currentUser!.delete();
+      await _firestore.collection(Constants.usersCollection).doc(currentUser.value!.uid).delete();
+      await _getStorage.write('isUserLoggedIn', false);
+      await _getStorage.remove('user');
+      await _getStorage.save();
+      isUserLoggedIn.value = false;
+      showSuccessSnackbar('Account deleted successfully');
+    }
+    catch(e){
+      print(e);
+    }
+  }
 
 }

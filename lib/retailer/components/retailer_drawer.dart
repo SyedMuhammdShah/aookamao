@@ -1,9 +1,10 @@
 
 import 'package:aookamao/admin/modules/rewards/rewards_view.dart';
-import 'package:aookamao/retailer/retailer_modules/profile/profile_view.dart';
+import 'package:aookamao/retailer/retailer_modules/wallet/wallet_view.dart';
 import 'package:aookamao/services/auth_service.dart';
 import 'package:aookamao/user/data/constants/app_colors.dart';
 import 'package:aookamao/modules/auth/controller/auth_controller.dart';
+import 'package:aookamao/user/modules/profile/profile_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,6 +43,14 @@ class RetailerDrawer extends StatelessWidget {
             onTap: () => {
               Scaffold.of(context).closeDrawer(),
               Get.to<Widget>(() => const RetailerRewardsView())
+            },
+          ),
+          _buildItem(
+            icon:  Icons.wallet,
+            title: 'Wallet',
+            onTap: () => {
+              Scaffold.of(context).closeDrawer(),
+              Get.to<Widget>(() => const WalletView())
             },
           ),
           _buildItem(

@@ -22,6 +22,14 @@ class WalletModel {
       'balance': FieldValue.increment(balance)
     };
   }
+  Map<String, dynamic> toMapDecrementBalance(){
+    return {
+      'walletId': walletId,
+      'balance': FieldValue.increment(-balance)
+    };
+  }
+
+
 
   Map<String, dynamic> toMap(){
     return {

@@ -23,7 +23,7 @@ class SignInView extends StatefulWidget {
 
 class _SignInViewState extends State<SignInView> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool isRemember = false;
+
   @override
   Widget build(BuildContext context) {
     final _authController = Get.find<AuthController>();
@@ -81,25 +81,23 @@ class _SignInViewState extends State<SignInView> {
                   keyboardType: TextInputType.visiblePassword,
                   textInputAction: TextInputAction.done,
                 ),
-                SizedBox(height: AppSpacing.fiveVertical),
+                SizedBox(height: AppSpacing.tenVertical),
                 Row(
-                  children: [
-                    RememberMeCard(
-                      onChanged: (value) {
-                        setState(() {
-                          isRemember = value;
-                        });
-                      },
-                    ),
-                    const Spacer(),
-                    CustomTextButton(
-                      onPressed: () {
-                        Get.to<Widget>(() => const ForgetPassword());
-                      },
-                      text: 'Forget Password',
-                    ),
-                  ],
-                ),
+                    children: [
+                      RememberMeCard(
+                        onChanged: (value) {
+                          _authController.isRemember.value = value;
+                        },
+                      ),
+                      /*const Spacer(),
+                      CustomTextButton(
+                        onPressed: () {
+                          Get.to<Widget>(() => const ForgetPassword());
+                        },
+                        text: 'Forget Password',
+                      ),*/
+                    ],
+                  ),
                 SizedBox(height: AppSpacing.fifteenVertical),
                Obx(()=> _authController.isLoading.value ?
                const Center(child: CircularProgressIndicator(color: AppColors.kPrimary,)) :

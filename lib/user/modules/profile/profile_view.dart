@@ -17,9 +17,11 @@ import 'package:aookamao/user/modules/profile/your_card.dart';
 import 'package:aookamao/user/modules/widgets/buttons/custom_text_button.dart';
 import 'package:aookamao/user/modules/widgets/dialogs/logout_dialog.dart';
 
+import '../../../enums/user_roles.dart';
 import '../../../modules/auth/selection_view.dart';
 import '../../../modules/welcome/welcome_view.dart';
 import '../../../services/auth_service.dart';
+import '../widgets/dialogs/delete_account_dialog.dart';
 
 class ProfileView extends StatelessWidget {
    const ProfileView({super.key});
@@ -48,6 +50,7 @@ class ProfileView extends StatelessWidget {
             ),
           ),
           SizedBox(height: AppSpacing.thirtyVertical),
+          if(_authservice.currentUser.value!.role == UserRoles.user)
           FadeAnimation(
             delay: 1,
             child: SettingTile(
@@ -107,6 +110,28 @@ class ProfileView extends StatelessWidget {
               icon: AppAssets.kInfo,
               title: 'Help and Support',
             ),
+          ),
+          FadeAnimation(
+            delay: 1,
+            child:  ListTile(
+              onTap: () {
+                Get.dialog<void>(
+                  DeleteAccountDialog(
+                    deleteAccountCallback: () async {
+                      await _authservice.deleteUserAccount();
+                      Get.offAll<Widget>(() => const WelcomeView());
+                    },
+                  ),
+                );
+              },
+              contentPadding: EdgeInsets.zero,
+              leading: const Icon(Icons.delete, color: AppColors.kError),
+              minLeadingWidth: 10.w,
+              title: Padding(
+                padding: EdgeInsets.only(bottom: 5.h),
+                child: Text("Delete Account", style: AppTypography.kSemiBold14.copyWith(color: AppColors.kError)),
+              ),
+            )
           ),
           SizedBox(height: AppSpacing.thirtyVertical),
           FadeAnimation(

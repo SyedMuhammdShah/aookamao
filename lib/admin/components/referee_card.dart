@@ -25,8 +25,16 @@ class RefereeCard extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: 5.w,vertical: 5.h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: AppColors.kPrimary),
+          border: Border.all(color: AppColors.kSecondary.withOpacity(0.2)),
           color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.kSecondary.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 1,
+              offset: Offset(0, 1), // changes position of shadow
+            ),
+          ],
         ),
         child: ListTile(
           contentPadding: EdgeInsets.symmetric(horizontal: 7.w,vertical: 7.h),

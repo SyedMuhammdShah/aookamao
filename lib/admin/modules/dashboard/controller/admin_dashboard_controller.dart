@@ -26,6 +26,7 @@ class AdminDashboardController extends GetxController{
   RxList<Rx<OrderModel>> ordersList = <Rx<OrderModel>>[].obs;
   RxList<OrderSalesModel> orderData = <OrderSalesModel>[].obs;
   RxList<BarChartGroupData> ordersChartData = <BarChartGroupData>[].obs;
+  final RxMap<String, int> productQuantities = <String, int>{}.obs;
   @override
   void onInit() {
     super.onInit();
@@ -35,6 +36,7 @@ class AdminDashboardController extends GetxController{
     getAllReferess();
     getOrders();
     getOrdersData();
+    _fetchOrders();
   }
 
   getUsersCount() {
@@ -98,6 +100,32 @@ class AdminDashboardController extends GetxController{
      ordersChartData.refresh();
     },);
   }
+
+  void _fetchOrders() {
+    FirebaseFirestore.instance
+        .collection(Constants.ordersCollection) // Replace with your collection name
+        .snapshots()
+        .listen((snapshot) {
+      final Map<String, int> tempQuantities = {};
+
+      for (var doc in snapshot.docs) {
+        final data = doc.data();
+        final orderItems = (data['orderItems'] as List<dynamic>)
+            .map((item) => OrderItemModel.fromMap(item))
+            .toList();
+
+        for (var item in orderItems) {
+          if (item.productName != null) {
+            tempQuantities[item.productName!] =
+                (tempQuantities[item.productName!] ?? 0) + (item.quantity ?? 0);
+          }
+        }
+      }
+
+      productQuantities.value = tempQuantities;
+    });
+  }
+
 
   RxList<BarChartGroupData> generateOrdersChartData() {
     print('Generating orders chart data');

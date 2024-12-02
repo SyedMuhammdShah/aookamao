@@ -10,6 +10,7 @@ class AuthField extends StatefulWidget {
   final TextInputAction? textInputAction;
   final TextInputType? keyboardType;
   final bool isPassword;
+  final bool isEnable;
   final String? Function(String?)? validator;
   final int? maxLines;
   const AuthField({
@@ -23,6 +24,7 @@ class AuthField extends StatefulWidget {
     this.keyboardType,
     this.isPassword = false,
     this.maxLength ,
+  this.isEnable = true,
     super.key,
   });
 
@@ -45,11 +47,11 @@ class _AuthFieldState extends State<AuthField> {
         ),
         SizedBox(height: AppSpacing.fiveVertical),
         TextFormField(
+          enabled: widget.isEnable,
           maxLength: widget.maxLength,
           controller: widget.controller,
           validator: widget.validator,
           maxLines: widget.isPassword ? 1 : widget.maxLines,
-          // ignore: avoid_bool_literals_in_conditional_expressions
           obscureText: widget.isPassword ? isObscure : false,
           textInputAction: widget.textInputAction,
           keyboardType: widget.keyboardType,

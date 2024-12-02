@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:aookamao/constants/constants.dart';
 import 'package:aookamao/enums/payment_type.dart';
-import 'package:aookamao/user/bindings/home_binding.dart';
+import 'package:aookamao/bindings/home_binding.dart';
 import 'package:aookamao/user/modules/home/home_view.dart';
 import 'package:aookamao/user/modules/landingPage/landing_page.dart';
 import 'package:aookamao/user/modules/widgets/dialogs/order_confirmed_dialog.dart';

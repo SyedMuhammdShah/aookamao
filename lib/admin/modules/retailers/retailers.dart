@@ -20,7 +20,7 @@ class _RetailersScreenState extends State<RetailersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:const adminAppBar(Title: 'Retailers',),
+      appBar:const adminAppBar(Title: 'Suppliers',),
       drawer: AdminDrawer(),
       body: Obx(() {
         if (_retailerController.isLoading.value) {

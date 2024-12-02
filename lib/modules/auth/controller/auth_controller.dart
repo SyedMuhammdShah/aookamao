@@ -2,6 +2,7 @@ import 'dart:io';
 
 
 import 'package:aookamao/admin/modules/dashboard/admin_dashboard.dart';
+import 'package:aookamao/enums/user_bank_type.dart';
 import 'package:aookamao/enums/user_roles.dart';
 import 'package:aookamao/models/user_model.dart';
 import 'package:aookamao/modules/auth/referral_view.dart';
@@ -24,7 +25,7 @@ import '../../../services/auth_service.dart';
 import '../../../services/firebase_notification_service.dart';
 import '../../../retailer/retailer_modules/dashboard/retailer_dashboard.dart';
 import '../../../services/referral_service.dart';
-import '../../../user/bindings/home_binding.dart';
+import '../../../bindings/home_binding.dart';
 
 class AuthController extends GetxController {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -33,18 +34,24 @@ class AuthController extends GetxController {
   final _referralService = Get.find<ReferralService>();
   final GlobalKey<FormState> signup_formKey = GlobalKey<FormState>();
   final GlobalKey<FormState> referral_formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> update_formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
-  final TextEditingController cnicController = TextEditingController();
+  //final TextEditingController cnicController = TextEditingController();
   final TextEditingController referralController = TextEditingController();
+  final TextEditingController accountNumberController = TextEditingController();
+  final TextEditingController accountHolderNameController = TextEditingController();
+
 
   Rx<File> cnicFrontFile = File('').obs;
   Rx<File> cnicBackFile = File('').obs;
   Rx<UserRoles> selectedRole = UserRoles.user.obs;
   RxBool isLoading = false.obs;
+  RxBool isRemember = false.obs;
+  UserBankType? selectedBankType;
 
   Future<void> registerRetailer() async {
     isLoading.value = true;
@@ -55,12 +62,8 @@ class AuthController extends GetxController {
         role: UserRoles.retailer,
         registered_at: Timestamp.now(),
         password: confirmPasswordController.text.trim(),
-        cnic_number: cnicController.text.trim(),
-        cnic_front_image_url: '',
-        cnic_back_image_url: ''
     );
-    bool isreg = await _authService.registerUser(
-        cnicFrontFile.value, cnicBackFile.value, userdetails: userdetail);
+    bool isreg = await _authService.registerUser( userdetails: userdetail);
     isLoading.value = false;
     if (isreg) {
       clearfields();
@@ -79,8 +82,7 @@ class AuthController extends GetxController {
       registered_at: Timestamp.now(),
       password: confirmPasswordController.text.trim(),
     );
-    bool isreg = await _authService.registerUser(
-        cnicFrontFile.value, cnicBackFile.value, userdetails: userdetail);
+    bool isreg = await _authService.registerUser(userdetails: userdetail);
     isLoading.value = false;
     if (isreg) {
       clearfields();
@@ -115,7 +117,7 @@ class AuthController extends GetxController {
     emailController.clear();
     passwordController.clear();
     confirmPasswordController.clear();
-    cnicController.clear();
+    //cnicController.clear();
     cnicFrontFile.value = File('');
     cnicBackFile.value = File('');
   }
@@ -125,7 +127,8 @@ class AuthController extends GetxController {
     isLoading.value = true;
     bool islogin = await _authService.loginUser(
         email: emailController.text.trim(),
-        password: passwordController.text.trim());
+        password: passwordController.text.trim(),
+        isremember: isRemember.value);
     isLoading.value = false;
     if (islogin) {
       clearfields();
@@ -155,5 +158,32 @@ class AuthController extends GetxController {
           "Your Successfully Added To Aookamao Referral Program.");
       Get.offAll(() => const LandingPage());
     }
+  }
+
+  Future updateUserDetails() async {
+    isLoading.value = true;
+    var userdetail = UserModel(
+      uid: _authService.currentUser.value!.uid,
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      address: addressController.text.trim(),
+      userBankType: selectedBankType,
+      role: _authService.currentUser.value!.role,
+      accountNumber: accountNumberController.text.trim(),
+      accountHolderName: accountHolderNameController.text.trim()
+    );
+     await _authService.updateUserDetails(userdetails: userdetail);
+    isLoading.value = false;
+    Get.back();
+    showSuccessSnackbar("Your Profile Updated Successfully");
+  }
+
+  void populateUserDetails() {
+    nameController.text = _authService.currentUser.value?.name ?? '';
+    emailController.text = _authService.currentUser.value?.email ?? '';
+    addressController.text = _authService.currentUser.value?.address ?? '';
+    selectedBankType = _authService.currentUser.value?.userBankType;
+    accountNumberController.text = _authService.currentUser.value?.accountNumber ?? '';
+    accountHolderNameController.text = _authService.currentUser.value?.accountHolderName ?? '';
   }
 }
