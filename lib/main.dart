@@ -3,7 +3,6 @@ import 'package:aookamao/services/auth_service.dart';
 import 'package:aookamao/services/firebase_notification_service.dart';
 import 'package:aookamao/services/order_service.dart';
 import 'package:aookamao/services/transaction_service.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,23 +33,14 @@ Future<void> main() async {
   await SystemChrome.setPreferredOrientations(
     [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
   );
-  runApp(
-    DevicePreview(
-      enabled: false,
-      builder: (context) => const Main(),
-    ),
-  );
+  runApp(const Main());
 }
 initServices() async {
-  print('starting services ...');
-  /// Here is where you put get_storage, hive, shared_pref initialization.
-  /// or moor connection, or whatever that's async.
   await Get.putAsync(()=> FirebasePushNotificationService().init());
   await Get.putAsync(() => AuthService().init());
   await Get.putAsync(() => ReferralService().init());
   await Get.putAsync(() => OrderService().init());
   Get.lazyPut(() => TransactionService(), fenix: true);
-  print('All services started...');
 }
 class Main extends StatelessWidget {
   const Main({super.key});
@@ -68,11 +58,9 @@ class Main extends StatelessWidget {
             FocusManager.instance.primaryFocus?.unfocus();
           },
           child: GetMaterialApp(
-            title: 'aookamao',
+            title: 'AOO KAMAO',
             debugShowCheckedModeBanner: false,
             useInheritedMediaQuery: true,
-            locale: DevicePreview.locale(context),
-            builder: DevicePreview.appBuilder,
             scrollBehavior: const ScrollBehavior().copyWith(overscroll: false),
             defaultTransition: Transition.fadeIn,
             theme: AppTheme.lightTheme,

@@ -14,7 +14,6 @@ import '../../constants/constants.dart';
 import '../../enums/user_bank_type.dart';
 import '../../enums/user_roles.dart';
 import 'components/cnic_textfield.dart';
-import 'components/image_picker.dart';
 import 'components/agree_terms_text_card.dart';
 import 'components/auth_appbar.dart';
 import 'components/auth_field.dart';
