@@ -1,5 +1,7 @@
 import 'package:aookamao/admin/models/order_sales_model.dart';
 import 'package:aookamao/enums/order_status.dart';
+import 'package:aookamao/models/various_charges_model.dart';
+import 'package:aookamao/widgets/custom_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import '../../../../enums/referral_account_type.dart';
 import '../../../../enums/user_roles.dart';
 import '../../../../models/order_model.dart';
 import '../../../../models/referral_model.dart';
+import '../../../../services/auth_service.dart';
 import '../../../../services/order_service.dart';
 import '../../../../services/referral_service.dart';
 import '../../../../user/data/constants/app_colors.dart';
@@ -19,6 +22,7 @@ class AdminDashboardController extends GetxController{
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final _referralService = Get.find<ReferralService>();
   final _orderService = Get.find<OrderService>();
+  final _authService = Get.find<AuthService>();
   RxInt usersCount = 0.obs;
   RxInt retailerCount = 0.obs;
   RxInt ordersCount = 0.obs;
@@ -26,6 +30,8 @@ class AdminDashboardController extends GetxController{
   RxList<Rx<OrderModel>> ordersList = <Rx<OrderModel>>[].obs;
   RxList<OrderSalesModel> orderData = <OrderSalesModel>[].obs;
   RxList<BarChartGroupData> ordersChartData = <BarChartGroupData>[].obs;
+  Rx<SubcriptionCharges?> supplierSubcriptionCharges = SubcriptionCharges().obs;
+  final isLoading = false.obs;
   final RxMap<String, int> productQuantities = <String, int>{}.obs;
   @override
   void onInit() {
@@ -37,6 +43,7 @@ class AdminDashboardController extends GetxController{
     getOrders();
     getOrdersData();
     _fetchOrders();
+    supplierSubcriptionCharges.bindStream(_authService.getSubscriptionCharges());
   }
 
   getUsersCount() {
@@ -65,6 +72,17 @@ class AdminDashboardController extends GetxController{
       ordersCount.value = event.docs.length;
       print('Orders count: ${event.docs.length}');
     });
+  }
+
+  updateSubcriptionCharges({required double subscriptionCharges}){
+    isLoading.value = true;
+    SubcriptionCharges subcriptionmodel = SubcriptionCharges(amount: subscriptionCharges);
+    _authService.updateSubscriptionCharges(model: subcriptionmodel).then(
+      (value) {
+        isLoading.value = false;
+        showSuccessSnackbar('Subscription charges updated successfully');
+      },
+    );
   }
 
 

@@ -8,6 +8,7 @@ import '../../../../enums/transaction_status.dart';
 import '../../../../enums/transaction_types.dart';
 import '../../../../models/referral_model.dart';
 import '../../../../models/reward_model.dart';
+import '../../../../models/various_charges_model.dart';
 import '../../../../services/auth_service.dart';
 import '../../../../services/order_service.dart';
 import '../../../../services/referral_service.dart';
@@ -26,6 +27,7 @@ class RetailerDashboardController extends GetxController {
   RxList<Referee>  thisMonthRefereesList = <Referee>[].obs;
   RxList<Rx<RewardModel>> retailerRewards = <Rx<RewardModel>>[].obs;
   RxList<TransactionModel> retailerTransactions = <TransactionModel>[].obs;
+  Rx<SubcriptionCharges?> supplierSubcriptionCharges = SubcriptionCharges().obs;
 
 
   @override
@@ -35,6 +37,7 @@ class RetailerDashboardController extends GetxController {
     retailerWallet.bindStream(_orderService.getWalletData());
     retailerRewards.bindStream(_orderService.getRewards());
     retailerTransactions.bindStream(_transactionService.getTransactionsByWallet(walletId: _authService.currentUser.value!.uid));
+    supplierSubcriptionCharges.bindStream(_authService.getSubscriptionCharges());
     ever(refereesList,(callback) {
       final DateTime now = DateTime.now();
       thisMonthRefereesList.value = callback.where((element) {

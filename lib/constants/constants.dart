@@ -26,6 +26,9 @@ class Constants {
   static String get walletCollection => "wallet";
   static String get ordersCollection => "orders";
   static String get rewardCollection => "rewards";
+  static String get variousChargesCollection => "various_charges";
+  static String get  subscriptionChargesDoc=> "subscription_doc";
+
 
   //reward amount
   static double get customerRewardAmount => 500;

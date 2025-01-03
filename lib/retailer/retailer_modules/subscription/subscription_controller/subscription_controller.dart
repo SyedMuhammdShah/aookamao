@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aookamao/enums/subscription_status.dart';
 import 'package:aookamao/enums/user_roles.dart';
 import 'package:aookamao/models/push_notification_model.dart';
@@ -7,7 +9,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../constants/constants.dart';
+import '../../../../enums/payment_type.dart';
 import '../../../../models/subscription_model.dart';
 import '../../../../services/auth_service.dart';
 import '../../../../widgets/custom_snackbar.dart';
@@ -18,6 +23,7 @@ class SubscriptionController extends GetxController{
   final _authService = Get.find<AuthService>();
   final FirebasePushNotificationService _firebasePushNotificationService = FirebasePushNotificationService();
   Rx<SubscriptionModel> currentSubscription = Rx<SubscriptionModel>(SubscriptionModel(uid: '', subscriptionStatus: SubscriptionStatus.none));
+  Rx<PaymentType?> paymentType = Rx<PaymentType?>(null);
 
   @override
   void onInit() {
@@ -123,7 +129,23 @@ class SubscriptionController extends GetxController{
       return;
     }
   }
+  Future<void> sendPaymentSS() async{
+    try {
+      if (Platform.isAndroid) {
+        String url = 'whatsapp://send?phone="${Constants.whatsAppNumber}"&text=ScreenShot of ${paymentTypeToString(paymentType.value!)} payment receipt for order from ${Constants.appName} App';
+        await launchUrl(Uri.parse(url),mode: LaunchMode.externalNonBrowserApplication).then((value) => Get.back());
 
+      }
+      else if (Platform.isIOS) {
+        String url = 'https://wa.me/"${Constants.whatsAppNumber}"/?text=${Uri.parse('ScreenShot of ${paymentTypeToString(paymentType.value!)} payment receipt for order from ${Constants.appName} App')}';
+        await launchUrl(Uri.parse(url),mode: LaunchMode.externalNonBrowserApplication).then((value) => Get.back());
+      }
+
+    }
+    catch (e) {
+      print(e);
+    }
+  }
   @override
   void dispose() {
     super.dispose();

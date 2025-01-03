@@ -14,6 +14,7 @@ import '../enums/subscription_status.dart';
 import '../models/push_notification_model.dart';
 import '../models/subscription_model.dart';
 import '../models/user_model.dart';
+import '../models/various_charges_model.dart';
 import '../widgets/custom_snackbar.dart';
 
 class AuthService extends GetxService{
@@ -223,25 +224,36 @@ class AuthService extends GetxService{
     }
   }
 
-/*  Future<UserModel> _uploadCnic({required UserModel userdetails,required File cnicFrontFile,required File cnicBackFile})async{
+
+  Future updateSubscriptionCharges({required SubcriptionCharges model})async{
     try {
-      Reference storageRef = FirebaseStorage.instance.ref().child('cnic_images/${userdetails.uid}/cnicfrontimg.jpg');
-      TaskSnapshot task = await storageRef.putFile(cnicFrontFile);
-      var cnicFrontUrl = await task.ref.getDownloadURL();
-      print("cnicFrontUrl: $cnicFrontUrl");
-      Reference storageRef2 = FirebaseStorage.instance.ref().child(
-          'cnic_images/${userdetails.uid}/cnicbackimg.jpg');
-      TaskSnapshot task2 = await storageRef2.putFile(cnicBackFile);
-      var cnicBackUrl = await task2.ref.getDownloadURL();
-      print("cnicBackUrl: $cnicBackUrl");
-      return userdetails=userdetails.copyWith(cnic_front_image_url: cnicFrontUrl,cnic_back_image_url: cnicBackUrl);
+      await _firestore
+          .collection(Constants.variousChargesCollection)
+          .doc(Constants.subscriptionChargesDoc)
+          .set(model.toMap());
+      return;
     }
     catch(e){
       showErrorSnackbar('Error ${e.toString()}');
-      print("error in uploadCnic: $e");
-      return userdetails;
+      print(e);
     }
-  }*/
+  }
+
+  Stream<SubcriptionCharges> getSubscriptionCharges() {
+    return _firestore
+        .collection(Constants.variousChargesCollection)
+        .doc(Constants.subscriptionChargesDoc)
+        .snapshots()
+        .map((event) => SubcriptionCharges.fromMap(event.data()??{}));
+  }
+
+  Stream<VariousChargesModel> getVariousCharges() {
+    return _firestore
+        .collection(Constants.variousChargesCollection)
+        .doc()
+        .snapshots()
+        .map((event) => VariousChargesModel.fromMap(event.data()??{}));
+  }
 
   Future activateSubscription({required SubscriptionModel subscriptiondetails,String? retailer_name})async{
     //await Firebase.initializeApp();
@@ -336,6 +348,14 @@ class AuthService extends GetxService{
       print(e);
       return '';
     }
+  }
+
+  Stream<SubscriptionModel> getSubscriptionDetailsStream({required String uid}) {
+    return _firestore
+        .collection(Constants.subscriptionsCollection)
+        .doc(uid)
+        .snapshots()
+        .map((event) => SubscriptionModel.fromMap(event.data()??{}));
   }
 
   Future<void> getSubscriptionDetails({required String uid})async{
