@@ -6,7 +6,6 @@ import 'package:aookamao/enums/user_bank_type.dart';
 import 'package:aookamao/enums/user_roles.dart';
 import 'package:aookamao/models/user_model.dart';
 import 'package:aookamao/modules/auth/referral_view.dart';
-import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 import 'package:aookamao/user/modules/landingPage/landing_page.dart';
 import 'package:aookamao/widgets/custom_snackbar.dart';
 import 'package:flutter/material.dart';

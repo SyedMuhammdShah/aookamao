@@ -261,6 +261,5 @@ Stream<QuerySnapshot> fetchProducts() {
   @override
   void dispose() {
     super.dispose();
-
   }
 }

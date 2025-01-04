@@ -171,6 +171,7 @@ class AdminDashboardController extends GetxController{
     usersCount.close();
     retailerCount.close();
     ordersCount.close();
+    supplierSubcriptionCharges.close();
   }
 }
 

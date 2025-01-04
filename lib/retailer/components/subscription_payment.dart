@@ -17,15 +17,16 @@ import '../../user/data/constants/app_typography.dart';
 import '../../user/modules/search/components/filter_sheet.dart';
 import '../../user/modules/widgets/buttons/primary_button.dart';
 import '../../widgets/custom_snackbar.dart';
-import '../retailer_modules/subscription/subscription_controller/subscription_controller.dart';
+import '../retailer_modules/dashboard/controller/retailer_dashboard_controller.dart';
 
 class SubscriptionPayment extends StatelessWidget {
   const SubscriptionPayment({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _subscriptionController = Get.find<SubscriptionController>();
     final _authService = Get.find<AuthService>();
+    final _retailerDashboardController = Get.find<RetailerDashboardController>();
+
     return Obx(() =>  Container(
       padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
       decoration: BoxDecoration(
@@ -47,30 +48,30 @@ class SubscriptionPayment extends StatelessWidget {
           Text('Note: Please share a screenshot after completing your online payment.',style: AppTypography.kSemiBold12.copyWith(color: AppColors.kError)),
           SizedBox(height: AppSpacing.twentyVertical),
           SelectPaymentMethodCard(
-            onTap: () =>_subscriptionController.paymentType.value=PaymentType.meezanBank,
+            onTap: () =>_retailerDashboardController.paymentType.value=PaymentType.meezanBank,
             accountHolderName: 'Abdul wahab naveed',
             accountNumber: '10170106543780',
             cardName: 'Meezan Bank',
             icon:'assets/icons/meezan_logo.svg',
-            isSelected: _subscriptionController.paymentType.value == PaymentType.meezanBank,
+            isSelected: _retailerDashboardController.paymentType.value == PaymentType.meezanBank,
           ),
           SizedBox(height: AppSpacing.twentyVertical),
           SelectPaymentMethodCard(
-            onTap: () =>_subscriptionController.paymentType.value=PaymentType.easyPaisa,
+            onTap: () =>_retailerDashboardController.paymentType.value=PaymentType.easyPaisa,
             accountHolderName: 'Abdul wahab naveed',
             accountNumber: '03182388024',
             cardName: 'EasyPaisa',
             icon: 'assets/icons/easypaisa_logo.svg',
-            isSelected: _subscriptionController.paymentType.value == PaymentType.easyPaisa,
+            isSelected: _retailerDashboardController.paymentType.value == PaymentType.easyPaisa,
           ),
           SizedBox(height: AppSpacing.twentyVertical),
           SelectPaymentMethodCard(
-            onTap: () =>_subscriptionController.paymentType.value=PaymentType.jazzCash,
+            onTap: () =>_retailerDashboardController.paymentType.value=PaymentType.jazzCash,
             accountHolderName: 'Abdul wahab naveed',
             accountNumber:'03042796791',
             cardName: 'JazzCash',
             icon: 'assets/icons/jazz_cash_logo.svg',
-            isSelected: _subscriptionController.paymentType.value == PaymentType.jazzCash,
+            isSelected: _retailerDashboardController.paymentType.value == PaymentType.jazzCash,
           ),
           SizedBox(height: AppSpacing.twentyVertical),
           SizedBox(
@@ -78,11 +79,11 @@ class SubscriptionPayment extends StatelessWidget {
             height: 50.h,
             child: ElevatedButton.icon(
               onPressed: (){
-                if(_subscriptionController.paymentType.value == null){
+                if(_retailerDashboardController.paymentType.value == null){
                   showErrorSnackbar('Please select a payment method !');
                   return;
                 }
-                _subscriptionController.sendPaymentSS();},
+                _retailerDashboardController.sendPaymentSS();},
               label: Text('Share Screenshot', style: AppTypography.kSemiBold14.copyWith(color: AppColors.kWhite)),
               icon: FaIcon(FontAwesomeIcons.whatsapp, color: AppColors.kWhite),
               style: ElevatedButton.styleFrom(
@@ -98,12 +99,12 @@ class SubscriptionPayment extends StatelessWidget {
 
             PrimaryButton(
               onTap: () {
-                if(_subscriptionController.paymentType.value == null){
+                if(_retailerDashboardController.paymentType.value == null){
                   showErrorSnackbar('Please select a payment method !');
                   return;
                 }
                 SubscriptionModel subscriptiondetails = SubscriptionModel(uid:_authService.currentUser.value!.uid, subscriptionStatus: SubscriptionStatus.pending,subscriptionDate: Timestamp.now());
-                _subscriptionController.activateSubscription(subscriptiondetails: subscriptiondetails);
+                _retailerDashboardController.requestForSubscription(subscription: subscriptiondetails);
 
                 Get.back();
               },

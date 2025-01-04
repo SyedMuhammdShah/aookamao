@@ -368,7 +368,7 @@ class ReferralService extends GetxService {
         .snapshots()
         .map(
           (event) => List<Referee>.from(event
-              .data()!['referees']
+              .data()?['referees'] ??[]
               .map((referee) => Referee.fromMap(referee))
               .map((e) => e)).toList().obs,
         );

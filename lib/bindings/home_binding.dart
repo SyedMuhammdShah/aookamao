@@ -10,7 +10,6 @@ import '../admin/modules/dashboard/controller/admin_dashboard_controller.dart';
 import '../admin/modules/retailers/controller/retailer_controller.dart';
 import '../modules/auth/controller/auth_controller.dart';
 import '../retailer/retailer_modules/dashboard/controller/retailer_dashboard_controller.dart';
-import '../retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 import '../user/controllers/cart_controller.dart';
 import '../user/controllers/favorite_controller.dart';
 import '../user/controllers/home_controller.dart';
@@ -22,7 +21,6 @@ class HomeBinding extends Bindings {
     print('HomeBinding');
     Get.lazyPut<AuthController>(() =>  AuthController(),fenix: true);
     Get.lazyPut<AdminDashboardController>(()=>AdminDashboardController(),fenix: true);
-    Get.lazyPut<SubscriptionController>(()=>SubscriptionController(),fenix: true);
     Get.lazyPut<RetailerController>(()=>RetailerController(),fenix: true);
     Get.lazyPut<RetailerDashboardController>(()=>RetailerDashboardController(),fenix: true);
     Get.lazyPut<CartController>(() => CartController(),fenix: true);

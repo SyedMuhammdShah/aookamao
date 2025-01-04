@@ -11,7 +11,7 @@ class WalletModel {
 
   factory WalletModel.fromMap(Map<String, dynamic> map){
     return WalletModel(
-      walletId: map['walletId'],
+      walletId: map['walletId'] ?? '',
       balance: double.tryParse(map['balance'].toString()) ?? 0.00,
     );
   }

@@ -9,7 +9,6 @@ import 'package:aookamao/user/data/constants/app_typography.dart';
 import 'package:aookamao/enums/subscription_status.dart';
 import 'package:aookamao/modules/auth/controller/auth_controller.dart';
 
-import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 import 'package:aookamao/retailer/retailer_modules/subscription/subscription_screen.dart';
 import 'package:aookamao/user/modules/widgets/buttons/custom_text_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,9 +20,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../../admin/components/admin_drawer.dart';
+import '../../../admin/modules/profile/components/fade_animation.dart';
 import '../../../enums/referral_types.dart';
+import '../../../modules/auth/selection_view.dart';
 import '../../../services/auth_service.dart';
 import '../../../services/referral_service.dart';
+import '../../../user/modules/widgets/dialogs/logout_dialog.dart';
 import '../../components/retailer_appbar.dart';
 import '../../components/retailer_drawer.dart';
 import '../Reward/rewards_view.dart';
@@ -38,45 +40,99 @@ class RetailerDashboard extends StatefulWidget {
 }
 
 class _RetailerDashboardState extends State<RetailerDashboard> {
-  SubscriptionController subscriptionController = Get.find<SubscriptionController>();
   final _authService = Get.find<AuthService>();
   final _dashboardController = Get.find<RetailerDashboardController>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Obx(()=> Scaffold(
       appBar: const RetailerAppBar(),
-      drawer: const RetailerDrawer(),
-      body: Obx(()=>SingleChildScrollView(
+      drawer: _dashboardController.currentSubscription.value.subscriptionStatus == SubscriptionStatus.active ? const RetailerDrawer() : null,
+      body: SingleChildScrollView(
         child: Column(
             children: [
-              if(subscriptionController.currentSubscription.value.subscriptionStatus == SubscriptionStatus.none)
+              if(_dashboardController.currentSubscription.value.subscriptionStatus == SubscriptionStatus.none)
                //half screen
                 Column(
                   children: [
                     SizedBox(
-                      height: 0.4.sh,
+                      height: 0.02.sh,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline,color: Colors.red,size: 30.sp,),
-                        SizedBox(width: 10.w,),
-                        Text("Your subscription is not active!",style:AppTypography.kMedium20),
-                      ],
+                    Center(
+                      child: Container(
+                        height: 0.2.sh,
+                        width: 0.9.sw,
+                        decoration: BoxDecoration(
+                            color: AppColors.kWhite,
+                            borderRadius: BorderRadius.circular(10.r)
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset('assets/icons/splash_icon.svg',height: 0.1.sh,),
+                            SizedBox(height: 10.h,),
+                            Text('Welcome To ${Constants.appName}',style: AppTypography.kSemiBold20,),
+                            SizedBox(height: 10.h,),
+                            Text(_authService.currentUser.value!.name,style: AppTypography.kBold24)
+                          ],
+                        ),
+                      ),
                     ),
-                    SizedBox(height: 10.h,),
+                    SizedBox(
+                      height: 0.2.sh,
+                    ),
                     Text("Activate your subscription to continue using our services",style: AppTypography.kMedium12.copyWith(color: Colors.grey),),
                     TextButton(onPressed: (){
                       Get.to(()=>const SubscriptionScreen());
-                    }, child: Text("Activate Subscription",style: AppTypography.kMedium14.copyWith(color: AppColors.kPrimary),))
+                    }, child: Text("Activate Subscription",style: AppTypography.kMedium14.copyWith(color: AppColors.kPrimary),)),
+                    SizedBox(height: 10.h,),
+                    FadeAnimation(
+                      delay: 1,
+                      child: Center(
+                        child: CustomTextButton(
+                          onPressed: () {
+                            Get.dialog<void>(LogoutDialog(
+                              logoutCallback: () async {
+                                await _authService.signOut();
+                                Get.offAll<Widget>(() => const SelectionScreen());
+                              },
+                            ));
+                          },
+                          text: 'Logout',
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-              if(subscriptionController.currentSubscription.value.subscriptionStatus == SubscriptionStatus.pending)
+              if(_dashboardController.currentSubscription.value.subscriptionStatus == SubscriptionStatus.pending)
                 Column(
                   children: [
                     SizedBox(
-                      height: 0.4.sh,
+                      height: 0.02.sh,
+                    ),
+                    Center(
+                      child: Container(
+                        height: 0.2.sh,
+                        width: 0.9.sw,
+                        decoration: BoxDecoration(
+                            color: AppColors.kWhite,
+                            borderRadius: BorderRadius.circular(10.r)
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset('assets/icons/splash_icon.svg',height: 0.1.sh,),
+                            SizedBox(height: 10.h,),
+                            Text('Welcome To ${Constants.appName}',style: AppTypography.kSemiBold20,),
+                            SizedBox(height: 10.h,),
+                            Text(_authService.currentUser.value!.name,style: AppTypography.kBold24),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 0.2.sh,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -91,10 +147,29 @@ class _RetailerDashboardState extends State<RetailerDashboard> {
                     SizedBox(
                       width: 0.74.sw,
                         child: Text("Your subscription is under review. You will be notified once it is approved.",style: AppTypography.kMedium12.copyWith(color: Colors.grey),textAlign: TextAlign.center,)),
+
+                    SizedBox(height: 10.h,),
+                    FadeAnimation(
+                      delay: 1,
+                      child: Center(
+                        child: CustomTextButton(
+                          onPressed: () {
+                            Get.dialog<void>(LogoutDialog(
+                              logoutCallback: () async {
+                                await _authService.signOut();
+                                Get.offAll<Widget>(() => const SelectionScreen());
+                              },
+                            ));
+                          },
+                          text: 'Logout',
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
         
-              if(subscriptionController.currentSubscription.value.subscriptionStatus == SubscriptionStatus.active)
+              if(_dashboardController.currentSubscription.value.subscriptionStatus == SubscriptionStatus.active)
                Column(
                  children: [
                    SizedBox(

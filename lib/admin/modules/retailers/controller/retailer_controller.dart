@@ -7,11 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 import '../../../../models/subscription_model.dart';
-import '../../../../retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 import '../../../../services/auth_service.dart';
 
 class RetailerController extends GetxController {
-  final _subscriptionController = Get.find<SubscriptionController>();
   final _authService = Get.find<AuthService>();
   var retailerList = <RetailerModel>[].obs;
   var isLoading = false.obs;
@@ -60,7 +58,7 @@ class RetailerController extends GetxController {
   }
 
   Future<void> approveRetailer({required SubscriptionModel subdetail}) async {
-   await _subscriptionController.activateSubscription(subscriptiondetails: subdetail);
+   await _authService.activateSubscription(subscriptiondetails: subdetail);
       showSuccessSnackbar('Supplier subscription has been approved successfully');
   }
 

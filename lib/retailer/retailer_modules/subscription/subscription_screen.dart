@@ -1,7 +1,6 @@
 
 import 'package:aookamao/retailer/components/subscription_payment.dart';
 import 'package:aookamao/retailer/retailer_modules/dashboard/controller/retailer_dashboard_controller.dart';
-import 'package:aookamao/retailer/retailer_modules/subscription/subscription_controller/subscription_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,8 +24,6 @@ class SubscriptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _authService = Get.find<AuthService>();
-    final subscriptionController = Get.find<SubscriptionController>();
     final retailerDashboardController = Get.find<RetailerDashboardController>();
     return Scaffold(
       backgroundColor: AppColors.kGrey20,

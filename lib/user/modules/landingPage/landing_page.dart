@@ -1,4 +1,5 @@
 import 'package:aookamao/user/modules/referrals/my_referrals_view.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -21,7 +22,7 @@ class _LandingPageState extends State<LandingPage> {
   int _currentIndex = 0;
   List<Widget> pages = [
     const HomeView(),
-    const ExploreView(),
+    //const ExploreView(),
     const MyReferralsView(),
     const FavoriteView(),
     const ProfileView(),
@@ -51,12 +52,17 @@ class _LandingPageState extends State<LandingPage> {
                   label: 'Home',
                   activeIcon: SvgPicture.asset(AppAssets.kHomeFilled),
                 ),
-                BottomNavigationBarItem(
+               /* BottomNavigationBarItem(
                   icon: SvgPicture.asset(AppAssets.kDiscovery),
                   label: 'Explore',
                   activeIcon: SvgPicture.asset(AppAssets.kDiscoveryFilled),
+                ),*/
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.gift,color: Color(0xff78828A),),
+                  label: 'Referrals',
+                  activeIcon: Icon(CupertinoIcons.gift_fill,color: Color(0xffD1A661),),
                 ),
-                const BottomNavigationBarItem(icon: CenteredIcon(isSelected: false), label: '', activeIcon: CenteredIcon(isSelected: true,)),
+                //const BottomNavigationBarItem(icon: CenteredIcon(isSelected: false), label: '', activeIcon: CenteredIcon(isSelected: true,)),
                 BottomNavigationBarItem(
                   icon: SvgPicture.asset(AppAssets.kHeart),
                   label: 'Favorites',
